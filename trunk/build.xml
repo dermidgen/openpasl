@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="openpasl" default="all" basedir="./">
+	<description>
+		Openpasl is a collection of PHP libraries to simplify tedious, complex,
+		and/or repetitive tasks with clean, light, loosely-coupled code.
+	</description>
+
+
+
+</project>
