@@ -18,18 +18,20 @@
                 Loading...
             </div>
         </div>
-        
+
         <!-- Include everything after the loading indicator -->
         <script type="text/javascript" src="scripts/extjs/adapter/ext/ext-base.js"></script>
         <script type="text/javascript" src="scripts/extjs/ext-all.js"></script>
+        <script type="text/javascript" src="scripts/extjs/ext-basex.js"></script>
+        <script type="text/javascript" src="scripts/extjs/ext-basex-min.js"></script>
         <script type="text/javascript" src="scripts/TabCloseMenu.js"></script>
         <script type="text/javascript" src="scripts/docs.js"></script>
         <script type="text/javascript" src="scripts/nav_data.js"></script>
-        
+
         <div id="header">
           	<div class="api-title">{$title}</div>
         </div>
-        
+
         <div id="classes"></div>
         <div id="main"></div>
     </body>
