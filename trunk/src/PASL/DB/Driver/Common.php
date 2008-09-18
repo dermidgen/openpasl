@@ -33,7 +33,7 @@ require_once("../Utility.php");
 /**
  * Base abstract for raw driver implementation of MDB2 common API for MySQL
  *
- * @package PASL
+ * @package PASL_DB
  * @subpackage PASL_DB_Driver
  * @category Database
  * @author Danny Graham <good.midget@gmail.com>
