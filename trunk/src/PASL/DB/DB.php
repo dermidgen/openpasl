@@ -46,9 +46,6 @@
  * @category Database
  * @author Danny Graham <good.midget@gmail.com>
  */
-
-require_once("MDB2.php");
-
 class PASL_DB
 {
 	/**
@@ -69,9 +66,6 @@ class PASL_DB
 	private static $drivers = Array();
 
 	//TODO: Refactor to support mdb2 style dsn for raw driver connections
-
-	private static $dsn = 'mysql://red_web_admin:jim@dgraham-nixdev/red_web_admin';
-
 	//TODO: Refactor to implement factories for raw drivers and mdb2 connections
 
 	/**
@@ -81,10 +75,11 @@ class PASL_DB
 	 */
 	public static function connect()
 	{
+		include_once("MDB2.php");
 		//TODO: implement factory for db objects
 		if (!is_null(PASL_DB::$mdb2)) return PASL_DB::$mdb2;
 
-		PASL_DB::$mdb2 = MDB2::singleton(PASL_DB::$dsn);
+		PASL_DB::$mdb2 = MDB2::singleton();
 		if (PEAR::isError(PASL_DB::$mdb2)) die(PASL_DB::$mdb2->getMessage());
 
 		return PASL_DB::$mdb2;

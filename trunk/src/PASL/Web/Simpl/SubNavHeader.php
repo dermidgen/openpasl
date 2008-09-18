@@ -28,6 +28,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+require_once("NavItem.php");
+
 /**
  * SubNavHeader provides a header menu item for SubNav
 
@@ -37,8 +39,6 @@
  * @author Danny Graham <good.midget@gmail.com>
  */
 
-require_once("NavItem.php");
-
 class PASL_Web_Simpl_SubNavHeader extends PASL_Web_Simpl_NavItem
 {
 	public function __construct($title)
@@ -46,6 +46,9 @@ class PASL_Web_Simpl_SubNavHeader extends PASL_Web_Simpl_NavItem
 		$this->title = $title;
 	}
 
+	/**
+	 * @return String
+	 */
 	public function __toString()
 	{
 		return "<h3>{$this->title}</h3>";

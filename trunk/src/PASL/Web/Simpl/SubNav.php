@@ -28,6 +28,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+require_once("NavMenu.php");
+
 /**
  * SubNav provides a Menu of NavItems for display in a page template
 
@@ -36,8 +38,6 @@
  * @category Web
  * @author Danny Graham <good.midget@gmail.com>
  */
-
-require_once("NavMenu.php");
 
 class PASL_Web_Simpl_SubNav extends PASL_Web_Simpl_NavMenu
 {

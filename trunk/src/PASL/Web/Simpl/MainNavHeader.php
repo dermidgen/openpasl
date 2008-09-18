@@ -28,6 +28,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+require_once("NavItem.php");
+
 /**
  * MainNavHeader provides a Header menu item
 
@@ -37,8 +39,6 @@
  * @author Danny Graham <good.midget@gmail.com>
  */
 
-require_once("NavItem.php");
-
 class PASL_Web_Simpl_MainNavHeader extends PASL_Web_Simpl_NavItem
 {
 	public function __construct($title)
@@ -46,6 +46,9 @@ class PASL_Web_Simpl_MainNavHeader extends PASL_Web_Simpl_NavItem
 		$this->title = $title;
 	}
 
+	/**
+	 * @return String
+	 */
 	public function __toString()
 	{
 		return "<h2>{$this->title}</h2>";

@@ -28,6 +28,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+include_once("lib/DB/Driver/Common.php");
+
 /**
  * Provides RAW driver implementation of MDB2 common API for MySQL
  *
@@ -36,15 +38,12 @@
  * @category Database
  * @author Danny Graham <good.midget@gmail.com>
  */
-
-require_once("lib/DB/Driver/Common.php");
-
-//TODO: Implement abstract methods from DB_Driver_Common
-//TODO: Implement raw driver support for queries
-//TODO: Implement raw driver connections via mdb2 style dsn
-
 class PASL_DB_Driver_MySQL extends PASL_DB_Driver_Common
 {
+	//TODO: Implement abstract methods from DB_Driver_Common
+	//TODO: Implement raw driver support for queries
+	//TODO: Implement raw driver connections via mdb2 style dsn
+
 	/**
 	* @var PASL_DB_Driver_MySQL
 	*/

@@ -57,6 +57,14 @@ class PASL_Web_Simpl_NavItem
 	 */
 	public $selected = false;
 
+	/**
+	 * Basic constructor
+	 *
+	 * @param String $title
+	 * @param String $caption
+	 * @param String $link
+	 * @param PASL_Web_Simpl_NavItem $parent
+	 */
 	public function __construct($title, $caption, $link, $parent)
 	{
 		$this->title = $title;

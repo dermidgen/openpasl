@@ -28,6 +28,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+require_once("NavItem.php");
+
 /**
  * SubNavItem provides creates an item for the SubNav
 
@@ -37,10 +39,16 @@
  * @author Danny Graham <good.midget@gmail.com>
  */
 
-require_once("NavItem.php");
-
 class PASL_Web_Simpl_SubNavItem extends PASL_Web_Simpl_NavItem
 {
+	/**
+	 * Basic constructor
+	 *
+	 * @param String $title
+	 * @param String $caption
+	 * @param String $link
+	 * @param PASL_Web_Simpl_NavItem $parent
+	 */
 	public function __construct($title, $caption, $link, $parent)
 	{
 		$this->title = $title;
@@ -49,6 +57,9 @@ class PASL_Web_Simpl_SubNavItem extends PASL_Web_Simpl_NavItem
 		$this->parent = $parent;
 	}
 
+	/**
+	 * @return String
+	 */
 	function __toString()
 	{
 		$requestURI = ltrim($_SERVER['REQUEST_URI'],"/");

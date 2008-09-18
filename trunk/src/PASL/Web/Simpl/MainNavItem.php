@@ -28,6 +28,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+require_once("NavItem.php");
+
 /**
  * NavMenu provides a Menu of NavItems for display in a page template
 
@@ -37,8 +39,6 @@
  * @author Danny Graham <good.midget@gmail.com>
  */
 
-require_once("NavItem.php");
-
 class PASL_Web_Simpl_MainNavItem extends PASL_Web_Simpl_NavItem
 {
 	/**
@@ -47,7 +47,7 @@ class PASL_Web_Simpl_MainNavItem extends PASL_Web_Simpl_NavItem
 	 * @param String $title
 	 * @param String $caption
 	 * @param String $link
-	 * @param NavItem $parent
+	 * @param PASL_Web_Simpl_NavItem $parent
 	 */
 	public function __construct($title, $caption, $link, $parent)
 	{
@@ -57,6 +57,9 @@ class PASL_Web_Simpl_MainNavItem extends PASL_Web_Simpl_NavItem
 		$this->parent = $parent;
 	}
 
+	/**
+	 * @return String
+	 */
 	function __toString()
 	{
 		$requestURI = ltrim($_SERVER['REQUEST_URI'],"/");

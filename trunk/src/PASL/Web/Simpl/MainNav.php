@@ -28,6 +28,10 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+require_once("NavMenu.php");
+require_once("MainNavItem.php");
+require_once("MainNavHeader.php");
+
 /**
  * Main nav implements the main nav interface for the page
 
@@ -36,10 +40,6 @@
  * @category Web
  * @author Danny Graham <good.midget@gmail.com>
  */
-
-require_once("NavMenu.php");
-require_once("MainNavItem.php");
-require_once("MainNavHeader.php");
 
 class PASL_Web_Simpl_MainNav extends PASL_Web_Simpl_NavMenu
 {
