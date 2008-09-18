@@ -85,7 +85,7 @@ class PASL_DB
 		if (!is_null(PASL_DB::$mdb2)) return PASL_DB::$mdb2;
 
 		PASL_DB::$mdb2 = MDB2::singleton(PASL_DB::$dsn);
-		if (PEAR::isError(DB::$mdb2)) die(PASL_DB::$mdb2->getMessage());
+		if (PEAR::isError(PASL_DB::$mdb2)) die(PASL_DB::$mdb2->getMessage());
 
 		return PASL_DB::$mdb2;
 	}

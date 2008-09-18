@@ -50,21 +50,6 @@ class PASL_Web_Simpl_MainNav extends PASL_Web_Simpl_NavMenu
 
 	public function __construct()
 	{
-		$this->addMenuItem(new MainNavItem("Dashboard", "Admin Dashboard", "/", null));
-		$this->addMenuItem(new MainNavItem("Reports", "Reports", "?actn=reports", null));
-		$this->addMenuItem(new MainNavItem("Orders", "Orders", "?actn=orders", null));
-		$this->addMenuItem(new MainNavItem("Web Accounts", "Web Accounts", "?actn=web_accounts", null));
-		$this->addMenuItem(new MainNavItem("PayFlowPro", "PayFlowPro", "?actn=payflowpro", null));
-		$this->addMenuItem(new MainNavItem("Products", "Products", "?actn=products", null));
-		$this->addMenuItem(new MainNavItem("Packages", "Packages", "?actn=packages", null));
-		$this->addMenuItem(new MainNavItem("Downloads", "Downloads", "?actn=downloads", null));
-		$this->addMenuItem(new MainNavItem("Agreements", "Agreements", "?actn=agreements", null));
-		$this->addMenuItem(new MainNavItem("Email Blasts", "Email Blasts", "?actn=email_blasts", null));
-		$this->addMenuItem(new MainNavItem("Mail Templates", "Mail Templates", "?actn=mail_templates", null));
-
-		$this->addMenuHeader(new MainNavHeader("Accounts"));
-		$this->addMenuItem(new MainNavItem("Manage Accounts", "Manage Accounts", "?actn=manage_accounts", null));
-		$this->addMenuItem(new MainNavItem("Add New Account", "Add New Account", "?actn=add_new_account", null));
 	}
 
 	/**
