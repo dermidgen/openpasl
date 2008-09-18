@@ -1,6 +1,7 @@
 <?php
 /**
- * @license <http://www.opensource.org/licenses/bsd-license.php> BSD License
+ * OpenPASL
+ *
  * Copyright (c) 2008, Danny Graham, Scott Thundercloud
  * All rights reserved.
  *
@@ -26,11 +27,15 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
+
 
 	/**
 	 * A utility class housing functions related to databases.
-	 * 
+	 *
 	 * @package PASL
 	 * @subpackage PASL_DB
 	 * @category Database
@@ -41,14 +46,14 @@
 	{
 		/**
 		 * Function for parsing DSN strings.
-		 * 
-		 * 
+		 *
+		 *
 		 * @param String DSN string supporting:
 		 * + DBType://username:password@host/database
 		 * + DBType://username@host/database
 		 * + DBType://host/database
 		 * + DBType://host/
-		 * 
+		 *
 		 * @return Array An associative array with the keys:
 		 * + DBType
 		 * + Host
@@ -59,16 +64,16 @@
 		public static function ParseDSN($DSN)
 		{
 			$Matches = Array();
-			
+
 			if(!preg_match("/(^[a-zA-Z]*)\:[\/|\\\]{2}(.*)\:?(.*)\@?(.*)\/(.*)/i", $DSN, $Matches)) return false;
-			
+
 			// If username and password or a username exists.
-			if(preg_match("/:|@/i", $Matches[2])) 
+			if(preg_match("/:|@/i", $Matches[2]))
 			{
-				$Username = ''; 
-				$Password = ''; 
+				$Username = '';
+				$Password = '';
 				$Host = '';
-				
+
 				$SplitUserPass = preg_split("/:|@/", $Matches[2]);
 
 				$Username = $SplitUserPass[0];
@@ -80,7 +85,7 @@
 					$Host = $SplitUserPass[2];
 				}
 			}
-			
+
 			$Array = Array();
 			$Array["DBType"] = $Matches[1];
 			$Array["Host"] = ($Host) ? $Host : $Matches[2];
@@ -88,7 +93,7 @@
 			$Array["DSN"] = $Matches[0];
 			$Array["Username"] = $Username;
 			$Array["Password"] = $Password;
-			
+
 			return $Array;
 		}
 	}
