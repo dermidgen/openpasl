@@ -38,44 +38,105 @@
  */
 class PASL_Web_Simpl_Page
 {
+	/**
+	 * @var Array
+	 */
 	public $TOKENS = Array();
+
+	/**
+	 * @var String
+	 */
 	public $Theme = "default";
+
+	/**
+	 * @var String
+	 */
 	public $TemplateBasePath = "themes/default/templates/";
 
 	/**
 	 * References MainNav
 	 *
-	 * @var MainNav
+	 * @var PASL_Web_Simpl_MainNav
 	 */
 	public $MainNav;
+
 	/**
 	 * References SubNav
 	 *
-	 * @var SubNav
+	 * @var PASL_Web_Simpl_SubNav
 	 */
 	public $SubNav;
+
 	/**
 	 * References UserNav
 	 *
-	 * @var UserNav
+	 * @var PASL_Web_Simpl_UserNav
 	 */
 	public $UserNav;
 
+	/**
+	 * @var String
+	 */
 	public $PageTitle;
+
+	/**
+	 * @var String
+	 */
 	public $SectionTitle;
+
+	/**
+	 * @var String
+	 */
 	public $PageTemplate = "body_template.html";
+
+	/**
+	 * @var String
+	 */
 	public $Body;
+
+	/**
+	 * @var String
+	 */
 	public $JSPayload;
+
+	/**
+	 * @var String
+	 */
 	public $JSScriptPayload;
+
+	/**
+	 * @var String
+	 */
 	public $CSSPayload;
+
+	/**
+	 * @var String
+	 */
 	public $CSSScriptPayload;
 
+	/**
+	 * @var Array
+	 */
 	private $JSPackages = Array();
+
+	/**
+	 * @var Array
+	 */
 	private $JSScriptPackages = Array();
 
+	/**
+	 * @var Array
+	 */
 	private $CSSPackages = Array();
+
+	/**
+	 * @var Array
+	 */
 	private $CSSScriptPackages = Array();
 
+	/**
+	 * Updates the JSPlayload with all included scripts
+	 */
 	private function updateJSPayload()
 	{
 		$JSPayload = "";
@@ -85,12 +146,19 @@ class PASL_Web_Simpl_Page
 		}
 	}
 
+	/**
+	 * Adds a path for inclusion via <script> tags
+	 * @param String $url
+	 */
 	public function addJSPackage($url)
 	{
 		array_push($this->JSPackages, $url);
 		$this->updateJSPayload();
 	}
 
+	/**
+	 * Updates JavaScript blocks
+	 */
 	public function updateJSScriptPayload()
 	{
 		$this->JSScriptPayload = '<script type="text/javascript">'."\n";
@@ -103,12 +171,19 @@ class PASL_Web_Simpl_Page
 		$this->JSScriptPayload .= "</script>\n";
 	}
 
+	/**
+	 * Adds block of JavaScript code surrounded by <script> tags
+	 * @param String $script
+	 */
 	public function addJSScriptPackage($script)
 	{
 		array_push($this->JSScriptPackages, $script);
 		$this->updateJSScriptPayload();
 	}
 
+	/**
+	 * Updates the CSS Script Payload containing CSS markup
+	 */
 	public function updateCSSScriptPayload()
 	{
 		$this->CSSScriptPayload = '<style type="text/css">'."\n";
@@ -121,14 +196,22 @@ class PASL_Web_Simpl_Page
 		$this->CSSScriptPayload .= "</style>\n";
 	}
 
+	/**
+	 * Add CSS script block for inclusion
+	 * @param String $script
+	 */
 	public function addCSSScriptPackage($script)
 	{
 		array_push($this->CSSScriptPackages, $script);
 		$this->updateCSSScriptPayload();
 	}
 
-
-	// Global Token Replacement For Specified Data
+	/**
+	 * Global Token Replacement For Specified Data
+	 *
+	 * @param String $data
+	 * @return String
+	 */
 	private function parseData($data)
 	{
 		$body = $data;
@@ -144,7 +227,13 @@ class PASL_Web_Simpl_Page
 		return $body;
 	}
 
-	// Return local files that do not contain PHP or do not require execution.
+	/**
+	 * Return files parsed for Tokens.
+	 *
+	 * @param String $url Path to the doc fragment that needs to be parsed
+	 * @param Bool $template Is the path to a template that requires the TemplateBasePath.  Defaults to true
+	 * @return String
+	 */
 	public function loadAndParse($url, $template=true)
 	{
 		ereg("http://",$url) ? $local = FALSE : $local = TRUE;
@@ -170,6 +259,9 @@ class PASL_Web_Simpl_Page
 		return $body;
 	}
 
+	/**
+	 * Displays the page
+	 */
 	public function display()
 	{
 		print '<?xml version="1.0" encoding="UTF-8" ?>';
