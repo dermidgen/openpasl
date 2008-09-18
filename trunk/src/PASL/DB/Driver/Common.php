@@ -28,6 +28,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+require_once("../Utility.php");
+
 /**
  * Base abstract for raw driver implementation of MDB2 common API for MySQL
  *
@@ -37,14 +39,12 @@
  * @author Danny Graham <good.midget@gmail.com>
  */
 
-require_once("../Utility.php");
-
 abstract class PASL_DB_Driver_Common
 {
 	//TODO: implement mdb2 style dsn parsing
 	//TODO: add abstract methods for basic querying mdb2 style
 	//TODO: implement common driver methods following mdb2 style (queryAll,queryOne,etc)
-	
+
 	/**
 	 * @see PASL_DB_Utility
 	 */
