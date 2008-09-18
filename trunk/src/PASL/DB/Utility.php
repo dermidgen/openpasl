@@ -28,31 +28,68 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * Base abstract for raw driver implementation of MDB2 common API for MySQL
- *
- * @package PASL
- * @subpackage PASL_DB_Driver
- * @category Database
- * @author Danny Graham <good.midget@gmail.com>
- */
-
-require_once("../Utility.php");
-
-abstract class PASL_DB_Driver_Common
-{
-	//TODO: implement mdb2 style dsn parsing
-	//TODO: add abstract methods for basic querying mdb2 style
-	//TODO: implement common driver methods following mdb2 style (queryAll,queryOne,etc)
-	
 	/**
-	 * @see PASL_DB_Utility
+	 * A utility class housing functions related to databases.
+	 * 
+	 * @package PASL
+	 * @subpackage PASL_DB
+	 * @category Database
+	 * @static
+	 * @author Scott Thundercloud <scott.tc@gmail.com>
 	 */
-	public function ParseDSN($DSN)
+	class PASL_DB_Utility
 	{
-		$DSNParsed = PASL_DB_Utility::ParseDSN($DSN);
-		return $DSNParsed;
-	}
-}
+		/**
+		 * Function for parsing DSN strings.
+		 * 
+		 * 
+		 * @param String DSN string supporting:
+		 * + DBType://username:password@host/database
+		 * + DBType://username@host/database
+		 * + DBType://host/database
+		 * + DBType://host/
+		 * 
+		 * @return Array An associative array with the keys:
+		 * + DBType
+		 * + Host
+		 * + Database
+		 * + Username
+		 * + Password
+		 */
+		public static function ParseDSN($DSN)
+		{
+			$Matches = Array();
+			
+			if(!preg_match("/(^[a-zA-Z]*)\:[\/|\\\]{2}(.*)\:?(.*)\@?(.*)\/(.*)/i", $DSN, $Matches)) return false;
+			
+			// If username and password or a username exists.
+			if(preg_match("/:|@/i", $Matches[2])) 
+			{
+				$Username = ''; 
+				$Password = ''; 
+				$Host = '';
+				
+				$SplitUserPass = preg_split("/:|@/", $Matches[2]);
 
+				$Username = $SplitUserPass[0];
+
+				if(count($SplitUserPass) == 2) $Host = $SplitUserPass[1];
+				elseif(count($SplitUserPass) == 3)
+				{
+					$Password = $SplitUserPass[1];
+					$Host = $SplitUserPass[2];
+				}
+			}
+			
+			$Array = Array();
+			$Array["DBType"] = $Matches[1];
+			$Array["Host"] = ($Host) ? $Host : $Matches[2];
+			$Array["Database"] = $Matches[5];
+			$Array["DSN"] = $Matches[0];
+			$Array["Username"] = $Username;
+			$Array["Password"] = $Password;
+			
+			return $Array;
+		}
+	}
 ?>
