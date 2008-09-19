@@ -58,6 +58,30 @@ class PASL_DB_Driver_mysql extends PASL_DB_Driver_Common
 
 	}
 
+	public function query($query)
+	{
+	}
+
+	public function free($result)
+	{
+	}
+
+	public function fetchOne($result,$colnum)
+	{
+	}
+
+	public function fetchRow($result)
+	{
+	}
+
+	public function fetchCol($result,$colnum)
+	{
+	}
+
+	public function fetchAll($result)
+	{
+	}
+
 	/**
 	 * Returns an instance of PASL_DB_Driver_mysql (singleton)
 	 *

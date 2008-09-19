@@ -75,28 +75,28 @@ class PASL_DB
 
 	/**
 	 * Function for parsing DSN strings.
-     *
+	 *
 	 * @param String DSN string supporting:
-     *  phptype://username:password@protocol+hostspec:110//usr/db_file.db?mode=0644
-     *  phptype://username:password@hostspec/database_name
-     *  phptype://username:password@hostspec
-     *  phptype://username@hostspec
-     *  phptype://hostspec/database
-     *  phptype://hostspec
-     *  phptype(dbsyntax)
-     *  phptype
+	 *  phptype://username:password@protocol+hostspec:110//usr/db_file.db?mode=0644
+	 *  phptype://username:password@hostspec/database_name
+	 *  phptype://username:password@hostspec
+	 *  phptype://username@hostspec
+	 *  phptype://hostspec/database
+	 *  phptype://hostspec
+	 *  phptype(dbsyntax)
+	 *  phptype
 	 *
 	 * @return Array An associative array with the keys:
-     *  + phptype:  Database backend used in PHP (mysql, odbc etc.)
-     *  + dbsyntax: Database used with regards to SQL syntax etc.
-     *  + protocol: Communication protocol to use (tcp, unix etc.)
-     *  + hostspec: Host specification (hostname[:port])
-     *  + database: Database to use on the DBMS server
-     *  + username: User name for login
-     *  + password: Password for login
-     *
-     * @author Scott Thundercloud <scott.tc@gmail.com>
-     * @see MDB2::parseDSN
+	 *  + phptype:  Database backend used in PHP (mysql, odbc etc.)
+	 *  + dbsyntax: Database used with regards to SQL syntax etc.
+	 *  + protocol: Communication protocol to use (tcp, unix etc.)
+	 *  + hostspec: Host specification (hostname[:port])
+	 *  + database: Database to use on the DBMS server
+	 *  + username: User name for login
+	 *  + password: Password for login
+	 *
+	 * @author Scott Thundercloud <scott.tc@gmail.com>
+	 * @see MDB2::parseDSN
 	 */
 	public static function ParseDSN($DSN)
 	{

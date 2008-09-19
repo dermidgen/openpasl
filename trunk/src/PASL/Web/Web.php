@@ -32,9 +32,16 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-
 /**
  * @package PASL
  * @subpackage PASL_Web
+ * @category Web
+ * @author Danny Graham <good.midget@gmail.com>
  */
+
+class PASL_Web
+{
+
+}
+
 ?>
