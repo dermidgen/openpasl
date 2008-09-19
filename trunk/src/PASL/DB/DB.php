@@ -116,12 +116,15 @@ class PASL_DB
 		}
 
 		$Array = Array();
-		$Array["DBType"] = $Matches[1];
-		$Array["Host"] = ($Host) ? $Host : $Matches[2];
-		$Array["Database"] = $Matches[5];
-		$Array["DSN"] = $Matches[0];
-		$Array["Username"] = $Username;
-		$Array["Password"] = $Password;
+		$Array["phptype"] = $Matches[1];
+		$Array["hostspec"] = ($Host) ? $Host : $Matches[2];
+		$Array["database"] = $Matches[5];
+		$Array["dsn"] = $Matches[0];
+		$Array["username"] = $Username;
+		$Array["password"] = $Password;
+		$Array["dbsyntax"] = null;
+		$Array["protocol"] = 'tcp';
+		
 
 		return $Array;
 	}
