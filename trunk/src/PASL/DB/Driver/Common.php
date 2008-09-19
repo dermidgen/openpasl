@@ -32,8 +32,6 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-require_once("../Utility.php");
-
 /**
  * Base abstract for raw driver implementation of MDB2 common API for MySQL
  *

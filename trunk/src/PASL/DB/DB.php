@@ -48,6 +48,7 @@
  * @package PASL
  * @subpackage PASL_DB
  * @category Database
+ * @static
  * @author Danny Graham <good.midget@gmail.com>
  */
 class PASL_DB
@@ -73,20 +74,136 @@ class PASL_DB
 	//TODO: Refactor to implement factories for raw drivers and mdb2 connections
 
 	/**
-	 * Intializes and connects an instance of MDB2
+	 * Function for parsing DSN strings.
 	 *
-	 * @return MDB2_Driver_mysql
+	 *
+	 * @param String DSN string supporting:
+	 * + DBType://username:password@host/database
+	 * + DBType://username@host/database
+	 * + DBType://host/database
+	 * + DBType://host/
+	 *
+	 * @return Array An associative array with the keys:
+	 * + DBType
+	 * + Host
+	 * + Database
+	 * + Username
+	 * + Password
 	 */
-	public static function connect()
+	public static function ParseDSN($DSN)
 	{
-		include_once("MDB2.php");
-		//TODO: implement factory for db objects
-		if (!is_null(PASL_DB::$mdb2)) return PASL_DB::$mdb2;
+		$Matches = Array();
 
-		PASL_DB::$mdb2 = MDB2::singleton();
-		if (PEAR::isError(PASL_DB::$mdb2)) die(PASL_DB::$mdb2->getMessage());
+		if(!preg_match("/(^[a-zA-Z]*)\:[\/|\\\]{2}(.*)\:?(.*)\@?(.*)\/(.*)/i", $DSN, $Matches)) return false;
 
-		return PASL_DB::$mdb2;
+		// If username and password or a username exists.
+		if(preg_match("/:|@/i", $Matches[2]))
+		{
+			$Username = '';
+			$Password = '';
+			$Host = '';
+
+			$SplitUserPass = preg_split("/:|@/", $Matches[2]);
+
+			$Username = $SplitUserPass[0];
+
+			if(count($SplitUserPass) == 2) $Host = $SplitUserPass[1];
+			elseif(count($SplitUserPass) == 3)
+			{
+				$Password = $SplitUserPass[1];
+				$Host = $SplitUserPass[2];
+			}
+		}
+
+		$Array = Array();
+		$Array["DBType"] = $Matches[1];
+		$Array["Host"] = ($Host) ? $Host : $Matches[2];
+		$Array["Database"] = $Matches[5];
+		$Array["DSN"] = $Matches[0];
+		$Array["Username"] = $Username;
+		$Array["Password"] = $Password;
+
+		return $Array;
+	}
+
+	/**
+	 * Get an instance of native/custom driver from PASL
+	 *
+	 * @param Array $dsn
+	 * @param Bool $singleton
+	 * @return PASL_DB_Driver_MySQL
+	 */
+	private static function PASL_Factory($dsn, $singleton=false)
+	{
+		switch($dsn['DBType'])
+		{
+			case "mysql":
+				require_once("Driver/MySQL.php");
+				$db = (!$singleton) ? new PASL_DB_Driver_MySQL() : PASL_DB_Driver_MySQL::GetInstance();
+			break;
+			default:
+				$db = null;
+		}
+
+		return $db;
+	}
+
+	/**
+	 * Get a fresh instance of DB Connection Driver
+	 *
+	 * @param String|Array $dsn
+	 * @param mixed $options
+	 * @param Bool $portable
+	 * @return MDB2_Driver_mysql|PASL_DB_Driver_MySQL
+	 */
+	public static function factory($dsn,$options=false,$portable=false)
+	{
+		// Ensure that the DSN is in Array format
+		if (!is_array($dsn)) $dsn = PASL_DB::ParseDSN($dsn);
+
+		$driverIndex = $dsn['DBType'] . '_' . $dsn['Host'];
+
+		if ($portable) // Kick out MDB2 Driver
+		{
+			require_once("MDB2.php");
+			$db = MDB2::factory($dsn, $options);
+		}
+		else // We'll go with a native/custom driver
+		{
+			$db = PASL_DB::PASL_Factory($dsn, false);
+		}
+
+		PASL_DB::$drivers[$driverIndex] = $db;
+		return $db;
+	}
+
+	/**
+	 * Get a singleton instance of DB Connection Driver
+	 *
+	 * @param String|Array $dsn
+	 * @param mixed $options
+	 * @param Bool $portable
+	 * @return MDB2_Driver_mysql|PASL_DB_Driver_MySQL
+	 */
+	public static function singleton($dsn,$options=false,$portable=false)
+	{
+		// Ensure that the DSN is in Array format
+		if (!is_array($dsn)) $dsn = PASL_DB::ParseDSN($dsn);
+
+		$driverIndex = $dsn['DBType'] . '_' . $dsn['Host'];
+
+		if ($portable) // Kick out MDB2 Driver
+		{
+			require_once("MDB2.php");
+			$db = MDB2::singleton($dsn, $options);
+		}
+		else // We'll go with a native/custom driver
+		{
+			$db = PASL_DB::PASL_Factory($dsn, true);
+		}
+
+		PASL_DB::$drivers[$driverIndex] = $db;
+		return $db;
 	}
 }
 
