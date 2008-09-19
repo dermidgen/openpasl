@@ -122,8 +122,9 @@ class PASL_DB
 		$Array["dsn"] = $Matches[0];
 		$Array["username"] = $Username;
 		$Array["password"] = $Password;
-		$Array["dbsyntax"] = null;
+		$Array["dbsyntax"] = '';
 		$Array["protocol"] = 'tcp';
+		
 		
 
 		return $Array;
@@ -138,7 +139,7 @@ class PASL_DB
 	 */
 	private static function PASL_Factory($dsn, $singleton=false)
 	{
-		switch($dsn['DBType'])
+		switch($dsn['phptype'])
 		{
 			case "mysql":
 				require_once("Driver/MySQL.php");
@@ -164,7 +165,7 @@ class PASL_DB
 		// Ensure that the DSN is in Array format
 		if (!is_array($dsn)) $dsn = PASL_DB::ParseDSN($dsn);
 
-		$driverIndex = $dsn['DBType'] . '_' . $dsn['Host'];
+		$driverIndex = $dsn['phptype'] . '_' . $dsn['hostspec'];
 
 		if ($portable) // Kick out MDB2 Driver
 		{
@@ -175,7 +176,7 @@ class PASL_DB
 		{
 			$db = PASL_DB::PASL_Factory($dsn, false);
 		}
-
+		
 		PASL_DB::$drivers[$driverIndex] = $db;
 		return $db;
 	}
@@ -192,8 +193,8 @@ class PASL_DB
 	{
 		// Ensure that the DSN is in Array format
 		if (!is_array($dsn)) $dsn = PASL_DB::ParseDSN($dsn);
-
-		$driverIndex = $dsn['DBType'] . '_' . $dsn['Host'];
+		
+		$driverIndex = $dsn['phptype'] . '_' . $dsn['hostspec'];
 
 		if ($portable) // Kick out MDB2 Driver
 		{
@@ -209,5 +210,7 @@ class PASL_DB
 		return $db;
 	}
 }
+
+//print_r(PASL_DB::ParseDSN("mysql://username:password@hostname.com/default_schema"));
 
 ?>
