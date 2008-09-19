@@ -7,7 +7,14 @@ require_once(SRCPATH . 'DB/DB.php');
 
 class PASL_DBTest extends UnitTestCase
 {
+	/**
+	 * @var String
+	 */
 	public $strMyDsn;
+
+	/**
+	 * @var Array
+	 */
 	public $aMyDsn = Array();
 
 	public function __construct()
@@ -22,9 +29,6 @@ class PASL_DBTest extends UnitTestCase
 		$this->aMyDsn["password"] = "password";
 		$this->aMyDsn["dbsyntax"] = '';
 		$this->aMyDsn["protocol"] = 'tcp';
-		
-
-		
 	}
 
 	function testDSNParsing()
@@ -50,11 +54,18 @@ class PASL_DBTest extends UnitTestCase
 
 	function testMDB2Drivers()
 	{
-		// Test new instance factory for a portable MDB2 driver
 		/* !!! CANNOT RUN THIS TEST WITHOUT POINTING AT A LIVE DSN !!! */
-//		$dbDriver = PASL_DB::factory($dsn, false, true);
-//		$this->assertIsA($dbDriver, 'MDB2_Driver_common');
-//		$this->assertIsA($dbDriver, 'MDB2_Driver_mysql');
+		$strLiveDsn = "mysql://openpasl_test:openpasl_test@localhost/openpasl_test";
+
+		// Test new instance factory for a portable MDB2 driver
+		$dbDriver = PASL_DB::factory($strLiveDsn, false, true);
+		$this->assertIsA($dbDriver, 'MDB2_Driver_common');
+		$this->assertIsA($dbDriver, 'MDB2_Driver_mysql');
+
+		// Test new instance factory for a portable MDB2 driver
+		$dbDriver = PASL_DB::singleton($strLiveDsn, false, true);
+		$this->assertIsA($dbDriver, 'MDB2_Driver_common');
+		$this->assertIsA($dbDriver, 'MDB2_Driver_mysql');
 	}
 }
 
