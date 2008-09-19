@@ -42,14 +42,14 @@ include_once("Common.php");
  * @category Database
  * @author Danny Graham <good.midget@gmail.com>
  */
-class PASL_DB_Driver_MySQL extends PASL_DB_Driver_Common
+class PASL_DB_Driver_mysql extends PASL_DB_Driver_Common
 {
 	//TODO: Implement abstract methods from DB_Driver_Common
 	//TODO: Implement raw driver support for queries
 	//TODO: Implement raw driver connections via mdb2 style dsn
 
 	/**
-	* @var PASL_DB_Driver_MySQL
+	* @var PASL_DB_Driver_mysql
 	*/
 	private static $instance = null;
 
@@ -59,14 +59,14 @@ class PASL_DB_Driver_MySQL extends PASL_DB_Driver_Common
 	}
 
 	/**
-	 * Returns an instance of PASL_DB_Driver_MySQL (singleton)
+	 * Returns an instance of PASL_DB_Driver_mysql (singleton)
 	 *
-	 * @return PASL_DB_Driver_MySQL
+	 * @return PASL_DB_Driver_mysql
 	 */
 	public static function GetInstance()
 	{
-		if (PASL_DB_Driver_MySQL::$instance == null) PASL_DB_Driver_MySQL::$instance = new PASL_DB_Driver_MySQL();
-		return PASL_DB_Driver_MySQL::$instance;
+		if (PASL_DB_Driver_mysql::$instance == null) PASL_DB_Driver_mysql::$instance = new PASL_DB_Driver_mysql();
+		return PASL_DB_Driver_mysql::$instance;
 	}
 }
 

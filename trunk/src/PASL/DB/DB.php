@@ -75,20 +75,28 @@ class PASL_DB
 
 	/**
 	 * Function for parsing DSN strings.
-	 *
-	 *
+     *
 	 * @param String DSN string supporting:
-	 * + DBType://username:password@host/database
-	 * + DBType://username@host/database
-	 * + DBType://host/database
-	 * + DBType://host/
+     *  phptype://username:password@protocol+hostspec:110//usr/db_file.db?mode=0644
+     *  phptype://username:password@hostspec/database_name
+     *  phptype://username:password@hostspec
+     *  phptype://username@hostspec
+     *  phptype://hostspec/database
+     *  phptype://hostspec
+     *  phptype(dbsyntax)
+     *  phptype
 	 *
 	 * @return Array An associative array with the keys:
-	 * + DBType
-	 * + Host
-	 * + Database
-	 * + Username
-	 * + Password
+     *  + phptype:  Database backend used in PHP (mysql, odbc etc.)
+     *  + dbsyntax: Database used with regards to SQL syntax etc.
+     *  + protocol: Communication protocol to use (tcp, unix etc.)
+     *  + hostspec: Host specification (hostname[:port])
+     *  + database: Database to use on the DBMS server
+     *  + username: User name for login
+     *  + password: Password for login
+     *
+     * @author Scott Thundercloud <scott.tc@gmail.com>
+     * @see MDB2::parseDSN
 	 */
 	public static function ParseDSN($DSN)
 	{
@@ -124,8 +132,6 @@ class PASL_DB
 		$Array["password"] = $Password;
 		$Array["dbsyntax"] = '';
 		$Array["protocol"] = 'tcp';
-		
-		
 
 		return $Array;
 	}
@@ -135,20 +141,25 @@ class PASL_DB
 	 *
 	 * @param Array $dsn
 	 * @param Bool $singleton
-	 * @return PASL_DB_Driver_MySQL
+	 * @return PASL_DB_Driver_mysql
 	 */
 	private static function PASL_Factory($dsn, $singleton=false)
 	{
-		switch($dsn['phptype'])
+		$driver = $dsn['phptype'];
+		$className = "PASL_DB_Driver_" . $driver;
+
+		if(!class_exists($className, false))
 		{
-			case "mysql":
-				require_once("Driver/MySQL.php");
-				$db = (!$singleton) ? new PASL_DB_Driver_MySQL() : PASL_DB_Driver_MySQL::GetInstance();
-			break;
-			default:
-				$db = null;
+			$dPath = dirname(__FILE__)."/Driver/{$driver}.php";
+
+			if (!file_exists($dPath)) throw new Exception("Driver not found at path {$dPath}");
+			require_once($dPath);
 		}
 
+		// TODO: Kill the eval and get instantiation a little mo' betta
+		$db = (!$singleton) ? eval("return new PASL_DB_Driver_{$driver}();") : eval("return PASL_DB_Driver_{$driver}::GetInstance();");
+
+		if (!$db) return null;
 		return $db;
 	}
 
@@ -158,7 +169,7 @@ class PASL_DB
 	 * @param String|Array $dsn
 	 * @param mixed $options
 	 * @param Bool $portable
-	 * @return MDB2_Driver_mysql|PASL_DB_Driver_MySQL
+	 * @return MDB2_Driver_mysql|PASL_DB_Driver_mysql
 	 */
 	public static function factory($dsn,$options=false,$portable=false)
 	{
@@ -176,7 +187,7 @@ class PASL_DB
 		{
 			$db = PASL_DB::PASL_Factory($dsn, false);
 		}
-		
+
 		PASL_DB::$drivers[$driverIndex] = $db;
 		return $db;
 	}
@@ -187,13 +198,13 @@ class PASL_DB
 	 * @param String|Array $dsn
 	 * @param mixed $options
 	 * @param Bool $portable
-	 * @return MDB2_Driver_mysql|PASL_DB_Driver_MySQL
+	 * @return MDB2_Driver_mysql|PASL_DB_Driver_mysql
 	 */
 	public static function singleton($dsn,$options=false,$portable=false)
 	{
 		// Ensure that the DSN is in Array format
 		if (!is_array($dsn)) $dsn = PASL_DB::ParseDSN($dsn);
-		
+
 		$driverIndex = $dsn['phptype'] . '_' . $dsn['hostspec'];
 
 		if ($portable) // Kick out MDB2 Driver
