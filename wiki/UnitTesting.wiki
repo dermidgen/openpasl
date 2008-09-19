@@ -1,4 +1,0 @@
-#summary Should we hook up a test bed?
-#labels Phase-Design
-
-So it's a big question.  I know that best practices would dictate some sort of unit testing or at least some basic test bed.  Now comes the big question.  How much do we care?  Will a lack of testing through unit tests limit adoption?  Will it save us pain and heartache in the long run? 
