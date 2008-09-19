@@ -211,6 +211,4 @@ class PASL_DB
 	}
 }
 
-//print_r(PASL_DB::ParseDSN("mysql://username:password@hostname.com/default_schema"));
-
 ?>
