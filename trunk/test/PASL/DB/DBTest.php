@@ -14,12 +14,17 @@ class PASL_DBTest extends UnitTestCase
 	{
 		$this->strMyDsn = "mysql://username:password@hostname.com/default_schema";
 
-		$this->aMyDsn["DBType"] = "mysql";
-		$this->aMyDsn["Host"] = "hostname.com";
-		$this->aMyDsn["Database"] = "default_schema";
-		$this->aMyDsn["DSN"] = $this->strMyDsn;
-		$this->aMyDsn["Username"] = "username";
-		$this->aMyDsn["Password"] = "password";
+		$this->aMyDsn["phptype"] = "mysql";
+		$this->aMyDsn["hostspec"] = "hostname.com";
+		$this->aMyDsn["database"] = "default_schema";
+		$this->aMyDsn["dsn"] = $this->strMyDsn;
+		$this->aMyDsn["username"] = "username";
+		$this->aMyDsn["password"] = "password";
+		$this->aMyDsn["dbsyntax"] = '';
+		$this->aMyDsn["protocol"] = 'tcp';
+		
+
+		
 	}
 
 	function testDSNParsing()
