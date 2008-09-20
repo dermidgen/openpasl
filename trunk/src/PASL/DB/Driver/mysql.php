@@ -35,7 +35,9 @@
 include_once("Common.php");
 
 /**
- * Provides RAW driver implementation of MDB2 common API for MySQL
+ * Provides RAW driver implementation of MDB2 common API for MySQL.
+ * By default, all fetch methods return associative arrays which is
+ * equal to the MDB2_FETCHMODE_ASSOC flag in MDB2.
  *
  * @package PASL_DB
  * @subpackage PASL_DB_Driver
@@ -133,7 +135,7 @@ class PASL_DB_Driver_mysql extends PASL_DB_Driver_Common
 		// TODO: Type checking on colnum
 		$AssocNew = Array();
 		
-		while($AssocArray = mysql_fetch_array($result, MYSQL_NUM))
+		while($AssocArray = mysql_fetch_array($result, MYSQL_ASSOC))
 		{
 			$AssocNew[] = $AssocArray[$colnum];
 		}
@@ -150,7 +152,7 @@ class PASL_DB_Driver_mysql extends PASL_DB_Driver_Common
 	public function fetchAll($result)
 	{
 		$AssocNew = Array();
-		while($AssocArray = mysql_fetch_array($result, MYSQL_NUM))
+		while($AssocArray = mysql_fetch_array($result, MYSQL_ASSOC))
 		{
 			$AssocNew[] = $AssocArray;
 		}
