@@ -48,6 +48,12 @@ class PASL_DBTest extends UnitTestCase
 		$result = $dbObject->queryCol($sql, 'name');
 		$this->assertEqual($result[0], $expectedRecord['name']);
 
+		$result = $dbObject->queryCol($sql, 1);
+		$this->assertEqual($result[0], $expectedRecord['name']);
+
+		$result = $dbObject->queryOne($sql, 'name');
+		$this->assertEqual($result, $expectedRecord['name']);
+
 		$result = $dbObject->queryOne($sql, 1);
 		$this->assertEqual($result, $expectedRecord['name']);
 
