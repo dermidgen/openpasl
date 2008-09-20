@@ -42,6 +42,9 @@ include_once("Common.php");
  * @category Database
  * @author Danny Graham <good.midget@gmail.com>
  */
+
+// TODO: Error checking
+
 class PASL_DB_Driver_mysql extends PASL_DB_Driver_Common
 {
 	//TODO: Implement abstract methods from DB_Driver_Common
@@ -52,34 +55,107 @@ class PASL_DB_Driver_mysql extends PASL_DB_Driver_Common
 	* @var PASL_DB_Driver_mysql
 	*/
 	private static $instance = null;
-
-	public function __construct()
+	
+	private $Link = null;
+	
+	/**
+	 * Connects to a MySQL database
+	 * 
+	 * @param string $Host
+	 * @param string $Username
+	 * @param string $Password
+	 * @param string $Database
+	 */
+	public function __construct($Host, $Username, $Password, $Database)
 	{
-
+		
+		$this->Link = mysql_connect($Host, $Username, $Password);
+		mysql_select_db($Database, $this->Link);
 	}
 
+	/**
+	 * Query a MySQL database
+	 * 
+	 * @param string Query
+	 * @return MySQLResult
+	 */
 	public function query($query)
 	{
+		return mysql_query($query, $this->Link);
 	}
 
+	/**
+	 * Free a MySQL result
+	 * 
+	 * @param MySQLResult
+	 */
 	public function free($result)
 	{
+		mysql_free_result($result);
 	}
-
-	public function fetchOne($result,$colnum)
+	
+	
+    /**
+     * Fetch a single column from a result
+     * 
+     * @param MySQLResult The query result
+     * @param int Column number
+     * @return mixed
+     */
+	public function fetchOne($result, $colnum)
 	{
+		// TODO: Type checking on colnum
+		$One = mysql_fetch_array($result, MYSQL_NUM);
+		$One = $One[$colnum];
+		return $One;
 	}
 
+	/**
+	 * Fetch the first row of a result
+	 * 
+	 * @param MySQLResult 
+	 * @return array
+	 */
 	public function fetchRow($result)
 	{
+		return mysql_fetch_row($result);
 	}
 
-	public function fetchCol($result,$colnum)
+	/**
+	 * Fetch a single column from a result
+	 * 
+	 * @param MySQLResult MySQL query result
+	 * @param int Column number
+	 * @return array
+	 */
+	public function fetchCol($result, $colnum)
 	{
+		// TODO: Type checking on colnum
+		$AssocNew = Array();
+		
+		while($AssocArray = mysql_fetch_array($result, MYSQL_NUM))
+		{
+			$AssocNew[] = $AssocArray[$colnum];
+		}
+		
+		return $AssocNew;
 	}
 
+	/**
+	 * Fetch a whole result
+	 * 
+	 * @param MySQLResult MySQL query result
+	 * @return array
+	 */
 	public function fetchAll($result)
 	{
+		$AssocNew = Array();
+		while($AssocArray = mysql_fetch_array($result, MYSQL_NUM))
+		{
+			$AssocNew[] = $AssocArray;
+		}
+		
+		return $AssocNew;
 	}
 
 	/**
@@ -89,7 +165,7 @@ class PASL_DB_Driver_mysql extends PASL_DB_Driver_Common
 	 */
 	public static function GetInstance()
 	{
-		if (PASL_DB_Driver_mysql::$instance == null) PASL_DB_Driver_mysql::$instance = new PASL_DB_Driver_mysql();
+		if (PASL_DB_Driver_mysql::$instance == null) PASL_DB_Driver_mysql::$instance = new PASL_DB_Driver_mysql(self::$host, self::$username, self::$password, self::$database);
 		return PASL_DB_Driver_mysql::$instance;
 	}
 }

@@ -146,6 +146,11 @@ class PASL_DB
 	private static function PASL_Factory($dsn, $singleton=false)
 	{
 		$driver = $dsn['phptype'];
+		$dbUsername = $dsn['username'];
+		$dbPassword = $dsn['password'];
+		$dbHostSpec = $dsn['hostspec'];
+		$dbDatabase = $dsn['database'];
+		
 		$className = "PASL_DB_Driver_" . $driver;
 
 		if(!class_exists($className, false))
@@ -156,14 +161,31 @@ class PASL_DB
 			require_once($dPath);
 		}
 
-		// TODO: Kill the eval and get instantiation a little mo' betta
-		$db = (!$singleton) ? eval("return new PASL_DB_Driver_{$driver}();") : eval("return PASL_DB_Driver_{$driver}::GetInstance();");
+		if(!$singleton) return new $className($dbHostSpec, $dbUsername, $dbPassword, $dbDatabase); 
+		else 
+		{
+			// TODO: Clean up on how singletons are called
+			$ReflectedClass = new ReflectionClass($className);
+
+			$Host = $ReflectedClass->getProperty("host");
+			$Username = $ReflectedClass->getProperty("username");
+			$Password = $ReflectedClass->getProperty("password");
+			$Database = $ReflectedClass->getProperty("database");
+
+			$Host->setValue(NULL, $dbHostSpec);
+			$Username->setValue(NULL, $dbUsername);
+			$Password->setValue(NULL, $dbPassword);
+			$Database->setValue(NULL, $dbDatabase);
+
+			$GetInstance = $ReflectedClass->getMethod("GetInstance");
+			return $GetInstance->invoke(NULL);
+		}
 
 		if (!$db) return null;
 		return $db;
 	}
 
-	/**
+	/** 
 	 * Get a fresh instance of DB Connection Driver
 	 *
 	 * @param String|Array $dsn

@@ -43,7 +43,6 @@
 
 abstract class PASL_DB_Driver_Common
 {
-	//TODO: implement common driver methods following mdb2 style (queryAll,queryOne,etc)
 
 	/**
 	 * Send a query to the database and return any results
@@ -64,6 +63,34 @@ abstract class PASL_DB_Driver_Common
 	abstract public function fetchCol($result,$colnum);
 	abstract public function fetchAll($result);
 
+	/**
+	 * Username for the database if singleton pattern is called.
+	 * 
+	 * @var string
+	 */
+	static public $username = null;
+	
+	/**
+	 * Password for the database if singleton pattern is called.
+	 * 
+	 * @var string
+	 */
+	static public $password = null;
+	
+	/**
+	 * Host for the database if singleton pattern is called.
+	 * 
+	 * @var string
+	 */
+	static public $host = null;
+	
+	/**
+	 * Database name for the database if singleton pattern is called.
+	 * 
+	 * @var string
+	 */
+	static public $database = null;
+	
 	/**
 	 * Execute the specified query, fetch the value from the first column of
 	 * the first row of the result set and then frees
