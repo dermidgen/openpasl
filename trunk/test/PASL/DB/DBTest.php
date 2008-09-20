@@ -38,8 +38,26 @@ class PASL_DBTest extends UnitTestCase
 	private function testBasicQueryMethods($dbObject)
 	{
 		$sql = "SELECT * FROM pasl_query_tests";
+
+		$expectedRecord = Array();
+		$expectedRecord['id'] = 1;
+		$expectedRecord['name'] = 'db_test';
+		$expectedRecord['sequence'] = 'primary';
+		$expectedRecord['timestamp'] = '0000-00-00 00:00:00';
+
+		$result = $dbObject->queryCol($sql, 1);
+		$this->assertEqual($result[0], $expectedRecord['name']);
+
+		$result = $dbObject->queryOne($sql, 1);
+		$this->assertEqual($result, $expectedRecord['name']);
+
+		$result = $dbObject->queryRow($sql);
+		$this->assertIsA($result, 'Array');
+		$this->assertIdentical($result, $expectedRecord);
+
 		$result = $dbObject->queryAll($sql);
 		$this->assertIsA($result, 'Array');
+		$this->assertIdentical($result[0], $expectedRecord);
 	}
 
 	private function testPASLMySQL()
