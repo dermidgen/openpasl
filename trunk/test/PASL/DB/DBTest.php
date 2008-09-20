@@ -40,12 +40,12 @@ class PASL_DBTest extends UnitTestCase
 		$sql = "SELECT * FROM pasl_query_tests";
 
 		$expectedRecord = Array();
-		$expectedRecord['id'] = 1;
+		$expectedRecord['id'] = "1";
 		$expectedRecord['name'] = 'db_test';
 		$expectedRecord['sequence'] = 'primary';
 		$expectedRecord['timestamp'] = '0000-00-00 00:00:00';
 
-		$result = $dbObject->queryCol($sql, 1);
+		$result = $dbObject->queryCol($sql, 'name');
 		$this->assertEqual($result[0], $expectedRecord['name']);
 
 		$result = $dbObject->queryOne($sql, 1);

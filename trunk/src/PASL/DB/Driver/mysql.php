@@ -57,12 +57,12 @@ class PASL_DB_Driver_mysql extends PASL_DB_Driver_Common
 	* @var PASL_DB_Driver_mysql
 	*/
 	private static $instance = null;
-	
+
 	private $Link = null;
-	
+
 	/**
 	 * Connects to a MySQL database
-	 * 
+	 *
 	 * @param string $Host
 	 * @param string $Username
 	 * @param string $Password
@@ -70,14 +70,14 @@ class PASL_DB_Driver_mysql extends PASL_DB_Driver_Common
 	 */
 	public function __construct($Host, $Username, $Password, $Database)
 	{
-		
+
 		$this->Link = mysql_connect($Host, $Username, $Password);
 		mysql_select_db($Database, $this->Link);
 	}
 
 	/**
 	 * Query a MySQL database
-	 * 
+	 *
 	 * @param string Query
 	 * @return MySQLResult
 	 */
@@ -88,64 +88,66 @@ class PASL_DB_Driver_mysql extends PASL_DB_Driver_Common
 
 	/**
 	 * Free a MySQL result
-	 * 
+	 *
 	 * @param MySQLResult
 	 */
 	public function free($result)
 	{
 		mysql_free_result($result);
 	}
-	
-	
+
+
     /**
      * Fetch a single column from a result
-     * 
+     *
      * @param MySQLResult The query result
-     * @param int Column number
+     * @param int|String Column identifier
      * @return mixed
      */
-	public function fetchOne($result, $colnum)
+	public function fetchOne($result, $column)
 	{
 		// TODO: Type checking on colnum
-		$One = mysql_fetch_array($result, MYSQL_NUM);
-		$One = $One[$colnum];
+		$fetchMode = (!is_int($column)) ? MYSQL_ASSOC : MYSQL_NUM;
+		$One = mysql_fetch_array($result, $fetchMode);
+		$One = $One[$column];
 		return $One;
 	}
 
 	/**
 	 * Fetch the first row of a result
-	 * 
-	 * @param MySQLResult 
+	 *
+	 * @param MySQLResult
 	 * @return array
 	 */
 	public function fetchRow($result)
 	{
-		return mysql_fetch_row($result);
+		return mysql_fetch_assoc($result);
 	}
 
 	/**
 	 * Fetch a single column from a result
-	 * 
+	 *
 	 * @param MySQLResult MySQL query result
-	 * @param int Column number
+	 * @param int|String Column identifier
 	 * @return array
 	 */
-	public function fetchCol($result, $colnum)
+	public function fetchCol($result, $column)
 	{
 		// TODO: Type checking on colnum
 		$AssocNew = Array();
-		
-		while($AssocArray = mysql_fetch_array($result, MYSQL_ASSOC))
+
+		$fetchMode = (!is_int($column)) ? MYSQL_ASSOC : MYSQL_NUM;
+		while($AssocArray = mysql_fetch_array($result, $fetchMode))
 		{
-			$AssocNew[] = $AssocArray[$colnum];
+			$AssocNew[] = $AssocArray[$column];
 		}
-		
+
 		return $AssocNew;
 	}
 
 	/**
 	 * Fetch a whole result
-	 * 
+	 *
 	 * @param MySQLResult MySQL query result
 	 * @return array
 	 */
@@ -156,7 +158,7 @@ class PASL_DB_Driver_mysql extends PASL_DB_Driver_Common
 		{
 			$AssocNew[] = $AssocArray;
 		}
-		
+
 		return $AssocNew;
 	}
 
