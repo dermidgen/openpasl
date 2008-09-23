@@ -1,9 +1,13 @@
 <?php
 
-if(!defined('SRCPATH')) define('SRCPATH', '../../../src/PASL/');
+if(!defined('SRCPATH'))
+{
+	define('SRCPATH', realpath(dirname(__FILE__).'/../../../src/PASL'));
+	ini_set('include_path', get_include_path().PATH_SEPARATOR . SRCPATH);
+}
 
 require_once('simpletest/autorun.php');
-require_once(SRCPATH . 'DB/DB.php');
+require_once('DB/DB.php');
 
 class PASL_DBTest extends UnitTestCase
 {
@@ -82,7 +86,7 @@ class PASL_DBTest extends UnitTestCase
 
 		// Test the basic query response type
 		$result = $dbDriver->query($sql);
-		// TODO: Assert that the query type is a resource and the right type
+		$this->assertIsA($result, 'resource');
 
 		// Test basic query methods (should be compatible with MDB2 api)
 		$this->testBasicQueryMethods($dbDriver);

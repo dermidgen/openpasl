@@ -28,21 +28,25 @@
      Override a property in build.properties
 -->
 
-<project name="openpasl documentation builder" default="all" basedir="./">
+<project name="openpasl package builds" default="all" basedir=".">
 
-	<target name="all" depends="api">
+	<propertyfile file="../build.properties"/>
+	<propertyfile file="./build.properties"/>
+
+	<target name="all" depends="deb, tar, zip">
 	</target>
 
-	<target name="api">
-		<!-- TODO: Check for phpdoc, and extjs output extension -->
+	<target name="deb" depends="docs">
+	</target>
 
-        <phpdoc title="OpenPASL API Documentation" target="release" output="HTML:frames/Extjs:default" quiet="true">
-            <fileset dir="../../src/PASL">
-                <include name="*.php" />
-                <include name="**/*.php" />
-            </fileset>
-        </phpdoc>
+	<target name="tar" depends="docs">
+	</target>
 
+	<target name="zip" depends="docs">
+	</target>
+
+	<target name="docs">
+		<phing phingfile="../doc/api/build.xml" target="all"/>
 	</target>
 
 
