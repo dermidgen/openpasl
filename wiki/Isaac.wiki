@@ -1,0 +1,14 @@
+#summary Discussion of needed tools for Isaac
+#labels Discussion
+
+= Your Needed Tools =
+
+Hey Isaac.  Danny and I want to know what the most important tools you may need for developing sites so we can prioritize accordingly.
+
+Some tools to think about would be: 
+ * Navigation controller
+ * Template component 
+ * Form controller
+ * Basic MySQL authentication
+
+If you can think of anything else let us know.  Thanks!
