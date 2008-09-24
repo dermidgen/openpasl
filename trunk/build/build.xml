@@ -36,6 +36,7 @@
 	<target name="all" depends="clean, deb, tar, zip">
 	</target>
 
+
 	<target name="clean">
 		<delete dir="${path.tmp.release.archive}" includeemptydirs="true" verbose="true" failonerror="true" />
 		<delete verbose="true" failonerror="true">
@@ -44,6 +45,19 @@
 			</fileset>
 		</delete>
 		<phing phingfile="${path.doc}/build.xml" target="clean"/>
+	</target>
+
+	<target name="upload-release" depends="all">
+
+		<exec command="${path.lib}/googlecode_upload.py
+						-p ${svn.project.name}
+						-s ${build.bin.release.summary}
+						-l ${build.bin.release.labels}
+						-u ${svn.auth.user}
+						-P ${svn.auth.password}
+						${build.bin.tar}"
+		passthru="true"/>
+
 	</target>
 
 	<target name="deb" depends="preflight">
