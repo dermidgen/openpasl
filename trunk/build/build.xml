@@ -71,9 +71,9 @@
 		<phing phingfile="${path.doc}/build.xml" target="all"/>
 
 		<!-- Build /tmp target for archives -->
-		<mkdir dir="${path.tmp.release.archive}"/>
+		<mkdir dir="${path.tmp.release.archive}/library"/>
 		<mkdir dir="${path.tmp.release.archive}/doc/api"/>
-		<copy todir="${path.tmp.release.archive}">
+		<copy todir="${path.tmp.release.archive}/library">
 			<fileset dir="${path.src}">
 				<include name="**/**"/>
 			</fileset>
