@@ -28,25 +28,62 @@
      Override a property in build.properties
 -->
 
-<project name="openpasl package builds" default="all" basedir=".">
+<project name="openpasl package builds" default="all" basedir="../">
 
-	<propertyfile file="../build.properties"/>
-	<propertyfile file="./build.properties"/>
+	<property file="build.properties"/>
+	<property file="${path.build}/build.properties"/>
 
-	<target name="all" depends="deb, tar, zip">
+	<target name="all" depends="clean, deb, tar, zip">
 	</target>
 
-	<target name="deb" depends="docs">
+	<target name="clean">
+		<delete dir="${path.tmp.release.archive}" includeemptydirs="true" verbose="true" failonerror="true" />
+		<delete verbose="true" failonerror="true">
+			<fileset dir="${path.build.release.bin}">
+				<include name="**/**"/>
+			</fileset>
+		</delete>
+		<phing phingfile="${path.doc}/build.xml" target="clean"/>
 	</target>
 
-	<target name="tar" depends="docs">
+	<target name="deb" depends="preflight">
 	</target>
 
-	<target name="zip" depends="docs">
+	<target name="tar" depends="preflight">
+		<tar destfile="${build.bin.tar}">
+			<fileset dir="${path.tmp.release.archive}">
+				<include name="**/**"/>
+			</fileset>
+		</tar>
 	</target>
 
-	<target name="docs">
-		<phing phingfile="../doc/api/build.xml" target="all"/>
+	<target name="zip" depends="preflight">
+		<zip destfile="${build.bin.zip}">
+			<fileset dir="${path.tmp.release.archive}">
+				<include name="**/**"/>
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="preflight">
+
+		<!-- Build Docs Fresh -->
+		<phing phingfile="${path.doc}/build.xml" target="all"/>
+
+		<!-- Build /tmp target for archives -->
+		<mkdir dir="${path.tmp.release.archive}"/>
+		<mkdir dir="${path.tmp.release.archive}/doc/api"/>
+		<copy todir="${path.tmp.release.archive}">
+			<fileset dir="${path.src}">
+				<include name="**/**"/>
+			</fileset>
+		</copy>
+		<copy todir="${path.tmp.release.archive}/doc/api">
+			<fileset dir="${build.api.release}">
+				<include name="**/**"/>
+			</fileset>
+		</copy>
+		<copy file="${project.license}" tofile="${path.tmp.release.archive}/LICENSE.txt"/>
 	</target>
 
 
