@@ -1,9 +1,7 @@
-#summary Discussion of needed tools for Isaac
+#summary Discussion of rc1 milestone objectives
 #labels Discussion
 
-= Your Needed Tools =
-
-Hey Isaac.  Danny and I want to know what the most important tools you may need for developing sites so we can prioritize accordingly.
+= Needed Tools =
 
 Some tools to think about would be: 
  * Navigation controller
@@ -11,35 +9,4 @@ Some tools to think about would be:
  * Form controller
  * Basic MySQL authentication
 
-{{{
-
-<?php
-require_once 'MDB2.php';
-$dsn = 'mysql://user:pass@host/db';
-
-$mdb2 =& MDB2::factory($dsn);
-
-if (PEAR::isError($mdb2)) {
-    echo ($mdb2->getMessage().' - '.$mdb2->getUserinfo());
-}
-
-$query ='SELECT * FROM test';
-
-// run the query and get a result handler
-$result = $mdb2->query($query);
-
-// check if the query was executed properly
-if (PEAR::isError($result)) {
-    echo ($result->getMessage().' - '.$result->getUserinfo());
-    exit();
-}
-
-// lets just get row:0 and free the result
-$array = $result->fetchRow();
-$result->free();
-var_dump($array);
-?>
-
-}}}
-
-If you can think of anything else let us know.  Thanks!
+Anything else?
