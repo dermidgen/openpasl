@@ -11,4 +11,9 @@ Some tools to think about would be:
  * Form controller
  * Basic MySQL authentication
 
+{{{
+$mysql> SELECT * FROM `users` WHERE `clue` > 0;
+no results found
+}}}
+
 If you can think of anything else let us know.  Thanks!
