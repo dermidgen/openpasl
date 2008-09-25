@@ -83,3 +83,10 @@ $accountInfo = $dbInstance->queryAll("SELECT * FROM `account_data` WHERE `accoun
 ?>
 
 }}}
+
+In the preceeding example, the use of the MDB2 driver allows abstraction from Oracle and Oracle's SQL syntax.  It also provides
+drop-in placement of the Oracle driver.  However, this comes at the significant performance penalty of using PEAR/MDB2.  Regardless,
+this feature allows developers to quickly refactor and make significant migratory efforts without having to spend time working on a
+native driver upfront.  This is also useful in applications where perhaps it is necessary to make the occasional query to a foreign
+database and where the performance drawbacks of MDB2 don't present a threat to overall application performance.  Sometimes it is
+necessary to make small compromises ;)
