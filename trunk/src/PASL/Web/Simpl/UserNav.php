@@ -52,7 +52,7 @@ class PASL_Web_Simpl_UserNav extends PASL_Web_Simpl_NavMenu
 
 	public function __construct()
 	{
-		$this->addMenuItem(new NavItem("Logout", "Logout", "?actn=logout", null));
+		$this->addMenuItem(new PASL_Web_Simpl_NavItem("Logout", "Logout", "?actn=logout", null));
 	}
 
 	/**
