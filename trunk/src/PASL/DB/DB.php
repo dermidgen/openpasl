@@ -70,21 +70,18 @@ class PASL_DB
 	 */
 	private static $drivers = Array();
 
-	//TODO: Refactor to support mdb2 style dsn for raw driver connections
-	//TODO: Refactor to implement factories for raw drivers and mdb2 connections
-
 	/**
 	 * Function for parsing DSN strings.
 	 *
 	 * @param String DSN string supporting:
-	 *  phptype://username:password@protocol+hostspec:110//usr/db_file.db?mode=0644
-	 *  phptype://username:password@hostspec/database_name
-	 *  phptype://username:password@hostspec
-	 *  phptype://username@hostspec
-	 *  phptype://hostspec/database
-	 *  phptype://hostspec
-	 *  phptype(dbsyntax)
-	 *  phptype
+	 *  + phptype://username:password@protocol+hostspec:110//usr/db_file.db?mode=0644
+	 *  + phptype://username:password@hostspec/database_name
+	 *  + phptype://username:password@hostspec
+	 *  + phptype://username@hostspec
+	 *  + phptype://hostspec/database
+	 *  + phptype://hostspec
+	 *  + phptype(dbsyntax)
+	 *  + phptype
 	 *
 	 * @return Array An associative array with the keys:
 	 *  + phptype:  Database backend used in PHP (mysql, odbc etc.)
@@ -150,7 +147,7 @@ class PASL_DB
 		$dbPassword = $dsn['password'];
 		$dbHostSpec = $dsn['hostspec'];
 		$dbDatabase = $dsn['database'];
-		
+
 		$className = "PASL_DB_Driver_" . $driver;
 
 		if(!class_exists($className, false))
@@ -161,10 +158,9 @@ class PASL_DB
 			require_once($dPath);
 		}
 
-		if(!$singleton) return new $className($dbHostSpec, $dbUsername, $dbPassword, $dbDatabase); 
-		else 
+		if(!$singleton) return new $className($dbHostSpec, $dbUsername, $dbPassword, $dbDatabase);
+		else
 		{
-			// TODO: Clean up on how singletons are called
 			$ReflectedClass = new ReflectionClass($className);
 
 			$Host = $ReflectedClass->getProperty("host");
@@ -185,7 +181,7 @@ class PASL_DB
 		return $db;
 	}
 
-	/** 
+	/**
 	 * Get a fresh instance of DB Connection Driver
 	 *
 	 * @param String|Array $dsn

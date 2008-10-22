@@ -47,7 +47,7 @@
 	<target name="api">
 		<!-- TODO: Check for phpdoc, and extjs output extension -->
 
-        <phpdoc title="OpenPASL API Documentation" target="${build.api.release}" output="HTML:frames/Extjs:default" quiet="true">
+        <phpdoc title="OpenPASL API Documentation" target="${build.api.release}" parseprivate="true" output="HTML:frames/Extjs:default" quiet="true">
             <fileset dir="${path.src}/PASL/">
                 <include name="*.php" />
                 <include name="**/*.php" />
