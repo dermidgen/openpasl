@@ -1,4 +1,8 @@
 #labels Phase-Implementation,Examples
+Usage examples for openpasl packages
+
+<wiki:toc/>
+
 = PASL_DB =
 
 Very basic example of DB usage
@@ -90,3 +94,5 @@ this feature allows developers to quickly refactor and make significant migrator
 native driver upfront.  This is also useful in applications where perhaps it is necessary to make the occasional query to a foreign
 database and where the performance drawbacks of MDB2 don't present a threat to overall application performance.  Sometimes it is
 necessary to make small compromises ;)
+
+= PASL_WEB_SIMPL =
