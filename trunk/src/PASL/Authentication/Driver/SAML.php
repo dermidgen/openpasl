@@ -43,6 +43,29 @@
 
 class PASL_Authentication_Driver_SAML implements PASL_Authentication_iDriver
 {
+	public function __construct()
+	{
 
+	}
+
+	public function setOption($key, $value)
+	{
+
+	}
+
+	public function getOption($key)
+	{
+
+	}
+
+	public function getError()
+	{
+
+	}
+
+	public function authenticate($credentials)
+	{
+
+	}
 }
 ?>

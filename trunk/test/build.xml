@@ -28,12 +28,18 @@
      Override a property in build.properties
 -->
 
-<project name="openpasl test harness" default="all" basedir="./">
+<project name="openpasl test harness" default="all" basedir="../">
 
-	<target name="all" depends="PASL">
-	</target>
+	<property file="build.properties"/>
+	<property file="${path.test}/build.properties"/>
 
-	<target name="PASL">
+	<target name="all">
+		<simpletest haltonfailure="true" haltonerror="true">
+			<formatter type="plain" usefile="false"/>
+			<fileset dir="${path.test}">
+				<include name="**/*.php"/>
+			</fileset>
+		</simpletest>
 	</target>
 
 

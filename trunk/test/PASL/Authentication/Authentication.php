@@ -32,73 +32,25 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-require_once('PASL/DB/DB.php');
-
-/**
- * Provides a driver for MySQL based authentication
- *
- * @package PASL_Authentication
- * @subpackage PASL_Authentication_Driver
- * @category Authentication
- * @author Danny Graham <good.midget@gmail.com>
- */
-class PASL_Authentication_Driver_MySQL implements PASL_Authentication_iDriver
+if(!defined('SRCPATH'))
 {
-	/**
-	 * Instance of mysql connection driver
-	 *
-	 * @var PASL_DB_Driver_mysql
-	 */
-	private $driver = null;
+	define('SRCPATH', realpath(dirname(__FILE__).'/../../../src/PASL'));
+	ini_set('include_path', get_include_path().PATH_SEPARATOR . SRCPATH);
+}
 
-	/**
-	 * The query string to be used for processing logins
-	 *
-	 * @var string
-	 */
-	private $query = null;
+require_once('simpletest/autorun.php');
+require_once('PASL/Authentication/Authentication.php');
 
-	private $errors = Array();
-
-	public function __construct()
+class PASL_AuthenticationTest extends UnitTestCase
+{
+	function PASL_AuthenticationTest()
 	{
-
+		$this->UnitTestCase("PASL Authetication Tests");
 	}
 
-	public function setOption($key, $value)
+	function TestTrue()
 	{
-		switch($key)
-		{
-			case "driver":
-				if (gettype($value) != 'PASL_DB_Driver_mysql') throw new Exception("Expected Object of type PASL_DB_Driver_mysql");
-				$this->driver = $value;
-				return true;
-			break;
-			default:
-				$this->{$key} = $value;
-				return true;
-		}
-	}
-
-	public function getOption($key)
-	{
-		if (isset($this->{$key})) return $this->{$key};
-		else
-		{
-			$this->errors[] = "Key '$key' not found.";
-			return null;
-		}
-	}
-
-	public function getError()
-	{
-		// Return the last error
-		return end($this->errors);
-	}
-
-	public function authenticate($credentials)
-	{
-
+		$this->assertTrue(true);
 	}
 }
 ?>
