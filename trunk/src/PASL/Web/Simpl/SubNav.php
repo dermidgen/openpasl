@@ -48,7 +48,7 @@ class PASL_Web_Simpl_SubNav extends PASL_Web_Simpl_NavMenu
 	/**
 	* @var PASL_Web_Simpl_SubNav
 	*/
-	private static $instance = null;
+	protected static $instance = null;
 
 	public function __construct()
 	{

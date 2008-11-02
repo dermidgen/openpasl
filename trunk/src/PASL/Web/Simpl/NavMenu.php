@@ -56,7 +56,7 @@ class PASL_Web_Simpl_NavMenu
 	 *
 	 * @param PASL_Web_Simpl_NavItem $item
 	 */
-	private function selectItem($item)
+	private function selectItem(PASL_Web_Simpl_NavItem $item)
 	{
 		$item->selected = true;
 	}
@@ -65,12 +65,21 @@ class PASL_Web_Simpl_NavMenu
 	 * Selects the item at the given index
 	 *
 	 * @param int $index
+	 * @return PASL_Web_Simpl_NavItem
 	 */
 	public function selectItemAt($index)
 	{
 		if (isset($this->menuItems[$index])) $this->selectItem($this->menuItems[$index]);
 	}
 
+	/**
+	 * Returns a menu item matching the given attribute value
+	 *
+	 * @param String $attribute
+	 * @param String $value
+	 *
+	 * @return PASL_Web_Simpl_NavItem
+	 */
 	public function selectItemByAttribute($attribute, $value)
 	{
 		foreach($this->menuItems as $item)
@@ -83,6 +92,8 @@ class PASL_Web_Simpl_NavMenu
 	 * Selects a menu item by the provided name
 	 *
 	 * @param String $name
+	 *
+	 * @return PASL_Web_Simpl_NavItem
 	 */
 	public function selectItemByName($name)
 	{
@@ -97,7 +108,7 @@ class PASL_Web_Simpl_NavMenu
 	 *
 	 * @param PASL_Web_Simpl_NavItem $menuItem
 	 */
-	public function addMenuItem($menuItem)
+	public function addMenuItem(PASL_Web_Simpl_NavItem $menuItem)
 	{
 		array_push($this->menuItems, $menuItem);
 	}
@@ -107,7 +118,7 @@ class PASL_Web_Simpl_NavMenu
 	 *
 	 * @param PASL_Web_Simpl_NavItem $header
 	 */
-	public function addMenuHeader($header)
+	public function addMenuHeader(PASL_Web_Simpl_NavItem $header)
 	{
 		array_push($this->menuItems, $header);
 	}

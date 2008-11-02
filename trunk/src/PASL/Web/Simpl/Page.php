@@ -169,7 +169,7 @@ class PASL_Web_Simpl_Page
 
 		foreach($this->JSScriptPackages as $package)
 		{
-			$this->JSScriptPayload = $package . "\n";
+			$this->JSScriptPayload .= $package . "\n";
 		}
 
 		$this->JSScriptPayload .= "</script>\n";
@@ -198,6 +198,16 @@ class PASL_Web_Simpl_Page
 		}
 
 		$this->CSSScriptPayload .= "</style>\n";
+	}
+
+	/**
+	 * Add a CSS package path for inclusion
+	 *
+	 * @param string The url to a CSS file
+	 */
+	public function addCSSPackage($url)
+	{
+
 	}
 
 	/**
