@@ -23,6 +23,8 @@ class PASL_DBTest extends UnitTestCase
 
 	public function __construct()
 	{
+		$this->UnitTestCase("PASL DB Tests");
+
 		/* !!! CANNOT RUN THIS TEST WITHOUT POINTING AT A LIVE DSN !!! */
 		$this->strMyDsn = "mysql://openpasl_test:openpasl_test@localhost/openpasl_test";
 
@@ -74,13 +76,14 @@ class PASL_DBTest extends UnitTestCase
 	{
 		// Test new instance factory for a native/custom driver
 		$dbDriver = PASL_DB::factory($this->strMyDsn, false, false);
-		$this->assertIsA($dbDriver, 'PASL_DB_Driver_Common');
-		$this->assertIsA($dbDriver, 'PASL_DB_Driver_MySQL');
+
+		$this->assertIsA($dbDriver, 'PASL_DB_Driver_common');
+		$this->assertIsA($dbDriver, 'PASL_DB_Driver_mysql');
 
 		// Test singleton factory for a native/custom driver
 		$dbDriver = PASL_DB::singleton($this->strMyDsn, false, false);
-		$this->assertIsA($dbDriver, 'PASL_DB_Driver_Common');
-		$this->assertIsA($dbDriver, 'PASL_DB_Driver_MySQL');
+		$this->assertIsA($dbDriver, 'PASL_DB_Driver_common');
+		$this->assertIsA($dbDriver, 'PASL_DB_Driver_mysql');
 
 		$sql = "SELECT * FROM pasl_query_tests";
 
@@ -111,6 +114,17 @@ class PASL_DBTest extends UnitTestCase
 		$DBDsn = PASL_DB::ParseDSN($this->strMyDsn);
 		$this->assertIsA($DBDsn, 'Array', 'PASL_DB::ParseDSN should return an array');
 		$this->assertIdentical($this->aMyDsn,$DBDsn,"PASL_DB::ParseDSN did not return the expected value - perhaps it's not working right");
+	}
+
+	public function testPASLDriverGetInstance()
+	{
+		$dbDriver = PASL_DB::singleton($this->strMyDsn, false, false);
+		$this->assertIsA($dbDriver, 'PASL_DB_Driver_common');
+		$this->assertIsA($dbDriver, 'PASL_DB_Driver_mysql');
+
+		$dbDriverCmp = PASL_DB::getInstance($this->aMyDsn['phptype'] . '_' . $this->aMyDsn['hostspec']);
+
+		$this->assertIdentical($dbDriver,$dbDriverCmp);
 	}
 
 	public function testMDB2Drivers()

@@ -2,7 +2,7 @@
 
 if(!defined('SRCPATH'))
 {
-	define('SRCPATH', realpath(dirname(__FILE__).'/../../../src/PASL'));
+	define('SRCPATH', realpath(dirname(__FILE__).'/../../../../src/PASL'));
 	ini_set('include_path', get_include_path().PATH_SEPARATOR . SRCPATH);
 }
 
@@ -19,6 +19,12 @@ class PASL_Web_Simpl_PageTest extends UnitTestCase
 	public function __construct()
 	{
 		$this->page = new PASL_Web_Simpl_Page();
+	}
+
+	public function PageTest()
+	{
+		// Stubbed test to keep from the testsuite from breaking
+		$this->assertTrue(true);
 	}
 }
 

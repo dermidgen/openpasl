@@ -50,6 +50,7 @@ class PASL_AuthenticationTest extends UnitTestCase
 
 	function TestTrue()
 	{
+		// Stubbed test to keep the testsuite from breaking
 		$this->assertTrue(true);
 	}
 }

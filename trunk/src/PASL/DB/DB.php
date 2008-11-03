@@ -68,7 +68,17 @@ class PASL_DB
 	 * @static
 	 * @var array
 	 */
-	private static $drivers = Array();
+	private static $nativeDrivers = Array();
+
+	/**
+	 * An array of instantiated MDB2 drivers
+	 *
+	 * @access private
+	 * @static
+	 * @var array
+	 */
+	private static $MDB2Drivers = Array();
+
 
 	/**
 	 * Function for parsing DSN strings.
@@ -194,8 +204,6 @@ class PASL_DB
 		// Ensure that the DSN is in Array format
 		if (!is_array($dsn)) $dsn = PASL_DB::ParseDSN($dsn);
 
-		$driverIndex = $dsn['phptype'] . '_' . $dsn['hostspec'];
-
 		if ($portable) // Kick out MDB2 Driver
 		{
 			require_once("MDB2.php");
@@ -206,7 +214,6 @@ class PASL_DB
 			$db = PASL_DB::PASL_Factory($dsn, false);
 		}
 
-		PASL_DB::$drivers[$driverIndex] = $db;
 		return $db;
 	}
 
@@ -228,15 +235,45 @@ class PASL_DB
 		if ($portable) // Kick out MDB2 Driver
 		{
 			require_once("MDB2.php");
+
+			// Check the existing driver stack and return one if it already exists
+			if (isset(PASL_DB::$MDB2Drivers[$driverIndex])) return PASL_DB::$MDB2Drivers[$driverIndex];
+
 			$db = MDB2::singleton($dsn, $options);
+			PASL_DB::$MDB2Drivers[$driverIndex] = $db; // Stick the driver in our local stack
 		}
 		else // We'll go with a native/custom driver
 		{
+
+			// Check the existing driver stack and return one if it already exists
+			if (isset(PASL_DB::$nativeDrivers[$driverIndex])) return PASL_DB::$nativeDrivers[$driverIndex];
+
 			$db = PASL_DB::PASL_Factory($dsn, true);
+			PASL_DB::$nativeDrivers[$driverIndex] = $db; // Stick the driver in our local stack
 		}
 
-		PASL_DB::$drivers[$driverIndex] = $db;
 		return $db;
+	}
+
+	/**
+	 * Returns an existing driver connection
+	 *
+	 * @param String $instanceName should be formatted as phptype_host
+	 * @param bool $portable return a driver from the MDB2Driver stack
+	 * @return PASL_DB_Driver_Driver_Common
+	 */
+	public static function getInstance($instanceName, $portable=false)
+	{
+		if ($portable)
+		{
+			if (isset(PASL_DB::$MDB2Drivers[$instanceName])) return PASL_DB::$MDB2Drivers[$instanceName];
+		}
+		else
+		{
+			if (isset(PASL_DB::$nativeDrivers[$instanceName])) return PASL_DB::$nativeDrivers[$instanceName];
+		}
+
+		return null;
 	}
 }
 
