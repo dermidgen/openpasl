@@ -32,26 +32,76 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-if(!defined('SRCPATH'))
-{
-	define('SRCPATH', realpath(dirname(__FILE__).'/../../../src/PASL'));
-	ini_set('include_path', get_include_path().PATH_SEPARATOR . SRCPATH);
-}
+require_once('PASL/DB/DB.php');
+require_once('PASL/Authentication/iProvider.php');
+require_once('PASL/Authentication/Provider/common.php');
 
-require_once('simpletest/autorun.php');
-require_once('PASL/Authentication/Authentication.php');
-
-class PASL_AuthenticationTest extends UnitTestCase
+class PASL_Authentication_Provider_mysql extends PASL_Authentication_Provider_common implements PASL_Authentication_iProvider
 {
-	function PASL_AuthenticationTest()
+	private $encryptedPasswords = true;
+	private $encryptionMethod = 'md5';
+	private $authQuery = 'SELECT * FROM `users` WHERE `username`="%s" LIMIT 1';
+
+	/**
+	 * @var PASL_DB_Driver_mysql
+	 */
+	private $driver = null;
+
+	public function __construct()
 	{
-		$this->UnitTestCase("PASL Authetication Tests");
+
 	}
 
-	function TestTrue()
+	private function validatePassword($userPassword, $cmpPassword)
 	{
-		// Stubbed test to keep the testsuite from breaking
-		$this->assertTrue(true);
+		if ($this->encryptedPasswords)
+		{
+			switch($this->encryptionMethod)
+			{
+				case 'md5':
+					return (md5($userPassword) == $cmpPassword);
+				break;
+				default:
+					return (md5($userPassword) == $cmpPassword);
+			}
+		}
+
+		return ($userPassword == $cmpPassword);
+	}
+
+	public function setEncryption($encryptionType)
+	{
+		if ($encryptionType == 'none') $this->encryptedPasswords = false;
+		else
+		{
+			$this->encryptedPasswords = true;
+			$this->encryptionMethod = $encryptionType;
+		}
+	}
+
+	public function setDSN($dsn)
+	{
+		if (!$this->driver) $this->driver = PASL_DB::singleton($dsn);
+	}
+
+	public function setDriver(PASL_DB_Driver_mysql $oDriver)
+	{
+		$this->driver = $oDriver;
+	}
+
+	public function setQuery($strQuery)
+	{
+		$this->authQuery = $strQuery;
+	}
+
+	public function authenticate($credentials)
+	{
+		// TODO: Implement data validation/cleaning against supplied credentials
+
+		$query = sprintf($this->authQuery, $credentials['username']);
+		$res = $this->driver->queryRow($query);
+
+		return $this->validatePassword($credentials['password'], $res['password']);
 	}
 }
 ?>

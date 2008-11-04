@@ -33,55 +33,16 @@
  */
 
 /**
- * Provides an interface for authentication drivers.
+ * Provides an interface for authentication providers.
  *
  * @package PASL
  * @subpackage PASL_Authentication
  * @category Authentication
  * @author Danny Graham <good.midget@gmail.com>
  */
-interface PASL_Authentication_iDriver
+interface PASL_Authentication_iProvider
 {
-	/**
-	 * Authenticate the user
-	 *
-	 * @param mixed User Credentials
-	 * @return bool
-	 */
 	public function authenticate($credentials);
-
-	/**
-	 * Returns the last error response as an error Code/String array
-	 *
-	 * @return array An associate array with the following keys:
-	 *  + errorCode: The int value code of the error
-	 *  + errorString: The string value of the error
-	 */
-	public function getError();
-
-	/**
-	 * Sets a driver specific option.
-	 * Some drivers may just have internal
-	 * properties that are set, however some drivers may be adapters to
-	 * other authentication objects and settings may need to be passed
-	 * through. (In the case of a cURL or LDAP driver additional parameters
-	 * would need to be passed through to the cURL or LDAP connector
-	 * underneath.  Since we don't know where how these options are stored
-	 * we'll let the driver implement this.
-	 *
-	 * @param string $key The option name or property value
-	 * @param mixed $value The value that the option takes
-	 * @return bool
-	 */
-	public function setOption($key, $value);
-
-	/**
-	 * Gets a driver specific option.
-	 * Again, like setOption, we'll let the driver implement this.
-	 *
-	 * @param string $key The option name or property value to be returned
-	 * @return mixed
-	 */
-	public function getOption($key);
 }
+
 ?>

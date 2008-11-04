@@ -46,170 +46,73 @@
 class PASL_Authentication
 {
 	/**
-	 * @var PASL_Authentication_iDriver
+	 * @var PASL_Authentication_iProvider
 	 */
-	private $driver = null;
+	private $provider = null;
 
-	public function __construct($dsn)
+	public function __construct($strProvider)
 	{
-		if (!is_null($dsn)) $this->setDSN($dsn);
+		$this->setProvider($strProvider);
 	}
 
-	private function validateDSN($aDsn)
+	private function parseCredentials($credentials)
 	{
-
-	}
-
-	/**
-	 * Function for parsing DSN strings.
-	 *
-	 * @param String DSN string supporting:
-	 *  + phptype://username:password@protocol+hostspec:110//usr/db_file.db?mode=0644
-	 *  + phptype://username:password@hostspec/database_name
-	 *  + phptype://username:password@hostspec
-	 *  + phptype://username@hostspec
-	 *  + phptype://hostspec/database
-	 *  + phptype://hostspec
-	 *  + phptype(dbsyntax)
-	 *  + phptype
-	 *
-	 * @return Array An associative array with the keys:
-	 *  + phptype:  Database backend used in PHP (mysql, odbc etc.)
-	 *  + dbsyntax: Database used with regards to SQL syntax etc.
-	 *  + protocol: Communication protocol to use (tcp, unix etc.)
-	 *  + hostspec: Host specification (hostname[:port])
-	 *  + database: Database to use on the DBMS server
-	 *  + username: User name for login
-	 *  + password: Password for login
-	 *
-	 * @author Danny Graham <good.midget@gmail.com>
-	 */
-	private function parseDSN($dsn)
-	{
-		$Matches = Array();
-
-		if(!preg_match("/(^[a-zA-Z]*)\:[\/|\\\]{2}(.*)\:?(.*)\@?(.*)\/(.*)/i", $DSN, $Matches)) return false;
-
-		// If username and password or a username exists.
-		if(preg_match("/:|@/i", $Matches[2]))
-		{
-			$Username = '';
-			$Password = '';
-			$Host = '';
-
-			$SplitUserPass = preg_split("/:|@/", $Matches[2]);
-
-			$Username = $SplitUserPass[0];
-
-			if(count($SplitUserPass) == 2) $Host = $SplitUserPass[1];
-			elseif(count($SplitUserPass) == 3)
-			{
-				$Password = $SplitUserPass[1];
-				$Host = $SplitUserPass[2];
-			}
-		}
-
-		$Array = Array();
-		$Array["phptype"] = $Matches[1];
-		$Array["hostspec"] = ($Host) ? $Host : $Matches[2];
-		$Array["database"] = $Matches[5];
-		$Array["dsn"] = $Matches[0];
-		$Array["username"] = $Username;
-		$Array["password"] = $Password;
-		$Array["dbsyntax"] = '';
-		$Array["protocol"] = 'tcp';
-
-		return $Array;
+		return $credentials;
 	}
 
 	/**
-	 * Factory for instantiating the specified driver
+	 * Factory for instantiating the specified auth provider
 	 *
-	 * @param string Name of the driver to instantiate
-	 * @return PASL_Authentication_iDriver
+	 * @param string Name of the provider to instantiate
+	 * @return PASL_Authentication_iProvider
 	 */
-	private function driverFactory($strDriver)
+	private function providerFactory($strProvider)
 	{
-		switch($strDriver)
+		switch($strProvider)
 		{
 			case "saml":
-				$driver = null;
+				$provider = null;
+			break;
+			case "mysql":
+				require_once('PASL/Authentication/Provider/mysql.php');
+				$provider = new PASL_Authentication_Provider_mysql();
 			break;
 			default:
-				$driver = null;
+				$provider = null;
 			break;
 		}
 
-		return $driver;
+		return $provider;
 	}
 
 	/**
-	 * Sets an option in the driver
+	 * Sets the authentication provider to be used
 	 *
-	 * @see PASL_Authentication_iDriver::setOption()
-	 *
-	 * @param string $key The option value to be set
-	 * @param string $value The value to pass
-	 * @return bool
+	 * @param string Name of the provider to use
+	 * @return void
 	 */
-	public function setOption($key, $value)
+	public function setProvider($strProvider)
 	{
-		return $this->driver->setOption($key, $value);
+		$this->provider = $this->providerFactory($strProvider);
 	}
 
 	/**
-	 * Gets an option from the driver
+	 * Returns the current instantiated auth provider.
+	 * + This can be useful for setting provider specific options.
+	 * + For type hinting use phpdoc to declare the actual provider type.
 	 *
-	 * @see PASL_Authentication_iDriver::getOption()
-	 *
-	 * @param string $key The option value to be returned
-	 * @return mixed
+	 * @return PASL_Authentication_iProvider
 	 */
-	public function getOption($key)
+	public function getProvider()
 	{
-		return $this->driver->getOption($key);
+		return $this->provider;
 	}
 
-	/**
-	 * Sets the data source name for the authentication routines.
-	 * This allows the specification of a driver, key indexes for
-	 * validating user credentials against, a credential parser,
-	 * or a database dsn.
-	 *
-	 * @see parseDSN()
-	 *
-	 * @param String|Array $dsn The dsn for authentication
-	 * @return bool
-	 */
-	public function setDSN($dsn)
-	{
-		$aDsn = (get_type($dsn) == "string") ? $this->parseDSN($dsn) : $dsn; // Array
-		if (!$this->validateDSN($aDsn)) return false;
-
-		$this->driver = $this->driverFactory($aDsn['driver']);
-		return true;
-	}
-
-	/**
-	 * Returns the current authentication driver
-	 *
-	 * @return PASL_Authentication_iDriver
-	 */
-	public function getDriver()
-	{
-		return $this->driver;
-	}
-
-	/**
-	 * Authenticate a user
-	 *
-	 * @param mixed $credentials
-	 *
-	 * @return bool
-	 */
 	public function authenticate($credentials)
 	{
-		return $this->driver->authenticate($credentials);
+		$payload = $this->parseCredentials($credentials);
+
+		return $this->provider->authenticate($payload);
 	}
 }
 ?>

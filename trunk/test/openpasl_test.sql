@@ -1,7 +1,7 @@
 -- MySQL Administrator dump 1.4
 --
 -- ------------------------------------------------------
--- Server version	5.0.51a-3ubuntu5.3
+-- Server version	5.0.51a-3ubuntu5.1
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -20,6 +20,30 @@
 
 CREATE DATABASE IF NOT EXISTS openpasl_test;
 USE openpasl_test;
+
+--
+-- Definition of table `openpasl_test`.`pasl_authentication_tests`
+--
+
+DROP TABLE IF EXISTS `openpasl_test`.`pasl_authentication_tests`;
+CREATE TABLE  `openpasl_test`.`pasl_authentication_tests` (
+  `id` int(11) NOT NULL auto_increment,
+  `username` varchar(65) NOT NULL,
+  `password` varchar(50) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `openpasl_test`.`pasl_authentication_tests`
+--
+
+/*!40000 ALTER TABLE `pasl_authentication_tests` DISABLE KEYS */;
+LOCK TABLES `pasl_authentication_tests` WRITE;
+INSERT INTO `openpasl_test`.`pasl_authentication_tests` VALUES  (1,'openpasl_test','openpasl_test'),
+ (2,'openpasl_test_md5','4431da8aa64cec89250b3e62ae5e11c5');
+UNLOCK TABLES;
+/*!40000 ALTER TABLE `pasl_authentication_tests` ENABLE KEYS */;
+
 
 --
 -- Definition of table `openpasl_test`.`pasl_query_tests`

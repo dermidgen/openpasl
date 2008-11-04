@@ -32,16 +32,8 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-/**
- * Provides base common functions in an abstract
- *
- * @package PASL_Authentication
- * @subpackage PASL_Authentication_Driver
- * @category Authentication
- * @author Danny Graham <good.midget@gmail.com>
- */
-
-abstract class PASL_Authentication_Driver_Common
+abstract class PASL_Authentication_Provider_common
 {
+
 }
 ?>
