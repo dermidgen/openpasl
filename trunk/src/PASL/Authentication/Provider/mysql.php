@@ -36,6 +36,17 @@ require_once('PASL/DB/DB.php');
 require_once('PASL/Authentication/iProvider.php');
 require_once('PASL/Authentication/Provider/common.php');
 
+/**
+ * Provides a mysql based authentication provider. This provider is designed to
+ * allow complete control over authentication logic by simply changing the base
+ * query used to gather user information.  Also supports several types of
+ * encrypted password storage (currently on MD5).
+ *
+ * @package PASL_Authentication
+ * @subpackage PASL_Authentication_Provider
+ * @category Authentication
+ * @author Danny Graham <good.midget@gmail.com>
+ */
 class PASL_Authentication_Provider_mysql extends PASL_Authentication_Provider_common implements PASL_Authentication_iProvider
 {
 	private $encryptedPasswords = true;
@@ -59,14 +70,20 @@ class PASL_Authentication_Provider_mysql extends PASL_Authentication_Provider_co
 			switch($this->encryptionMethod)
 			{
 				case 'md5':
-					return (md5($userPassword) == $cmpPassword);
+					$bMatch = (md5($userPassword) == $cmpPassword);
 				break;
-				default:
-					return (md5($userPassword) == $cmpPassword);
+				default: // Default is md5 encryption
+					$bMatch = (md5($userPassword) == $cmpPassword);
 			}
 		}
+		else $bMatch = ($userPassword == $cmpPassword);
 
-		return ($userPassword == $cmpPassword);
+		if ($bMatch) return true;
+		else
+		{
+			$this->errors[] = PASL_AUTH_BAD_PASSWORD;
+			return false;
+		}
 	}
 
 	public function setEncryption($encryptionType)
@@ -100,6 +117,12 @@ class PASL_Authentication_Provider_mysql extends PASL_Authentication_Provider_co
 
 		$query = sprintf($this->authQuery, $credentials['username']);
 		$res = $this->driver->queryRow($query);
+
+		if (!$res)
+		{
+			$this->errors[] = PASL_AUTH_BAD_USER;
+			return false;
+		}
 
 		return $this->validatePassword($credentials['password'], $res['password']);
 	}

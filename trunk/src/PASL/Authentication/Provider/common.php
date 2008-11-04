@@ -32,8 +32,28 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
+define('PASL_AUTH_INVALID_USERNAME', 000);
+define('PASL_AUTH_INVALID_PASSWORD', 001);
+define('PASL_AUTH_BAD_USER', 002);
+define('PASL_AUTH_BAD_PASSWORD', 003);
+
+/**
+ * Provides base level common methods for auth providers.  Also implements
+ * some of iProvider for you.  It is _strongly_ recommended to inherit this
+ * for your auth provider.
+ *
+ * @package PASL_Authentication
+ * @subpackage PASL_Authentication_Provider
+ * @category Authentication
+ * @author Danny Graham <good.midget@gmail.com>
+ */
 abstract class PASL_Authentication_Provider_common
 {
+	protected $errors = Array();
 
+	public function getError()
+	{
+		return end($this->errors);
+	}
 }
 ?>

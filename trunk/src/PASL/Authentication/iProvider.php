@@ -42,6 +42,7 @@
  */
 interface PASL_Authentication_iProvider
 {
+	public function getError(); // Satisfied in PASL_Authentication_Provider_common
 	public function authenticate($credentials);
 }
 

@@ -108,11 +108,17 @@ class PASL_Authentication
 		return $this->provider;
 	}
 
+	public function getError()
+	{
+		return $this->provider->getError();
+	}
+
 	public function authenticate($credentials)
 	{
 		$payload = $this->parseCredentials($credentials);
 
-		return $this->provider->authenticate($payload);
+		$authed = (bool) $this->provider->authenticate($payload);
+		return $authed;
 	}
 }
 ?>

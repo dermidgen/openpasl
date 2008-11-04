@@ -39,6 +39,12 @@ class PASL_AuthenticationTest extends UnitTestCase
 
 		$this->aPostCredentialsMD5['username'] = 'openpasl_test_md5';
 		$this->aPostCredentialsMD5['password'] = 'openpasl_test';
+
+		$this->aBadUser['username'] = 'x_openpasl_test';
+		$this->aBadUser['password'] = 'openpasl_test';
+
+		$this->aBadPassword['username'] = 'openpasl_test';
+		$this->aBadPassword['password'] = 'x_openpasl_test';
 	}
 
 	function TestProvider_mysql()
@@ -85,6 +91,51 @@ class PASL_AuthenticationTest extends UnitTestCase
 		$authProvider->setQuery('SELECT * FROM `pasl_authentication_tests` WHERE `username`="%s" LIMIT 1');
 
 		$this->assertTrue($oAuth->authenticate($this->aPostCredentialsMD5));
+	}
+
+	function TestAuth_mysql_saml()
+	{
+
+	}
+
+	function TestAuth_mysql_bad_user()
+	{
+		$db = PASL_DB::singleton($this->strMyDsn);
+
+		$oAuth = new PASL_Authentication('mysql');
+
+		/**
+		 * @var PASL_Authentication_Provider_mysql
+		 */
+		$authProvider = $oAuth->getProvider();
+		$authProvider->setDriver($db);
+		$authProvider->setEncryption('none');
+		$authProvider->setQuery('SELECT * FROM `pasl_authentication_tests` WHERE `username`="%s" LIMIT 1');
+
+		$this->assertFalse($oAuth->authenticate($this->aBadUser));
+
+		$oErr = $oAuth->getError();
+		$this->assertEqual($oErr, PASL_AUTH_BAD_USER);
+	}
+
+	function TestAuth_mysql_bad_password()
+	{
+		$db = PASL_DB::singleton($this->strMyDsn);
+
+		$oAuth = new PASL_Authentication('mysql');
+
+		/**
+		 * @var PASL_Authentication_Provider_mysql
+		 */
+		$authProvider = $oAuth->getProvider();
+		$authProvider->setDriver($db);
+		$authProvider->setEncryption('none');
+		$authProvider->setQuery('SELECT * FROM `pasl_authentication_tests` WHERE `username`="%s" LIMIT 1');
+
+		$this->assertFalse($oAuth->authenticate($this->aBadPassword));
+
+		$oErr = $oAuth->getError();
+		$this->assertEqual($oErr, PASL_AUTH_BAD_PASSWORD);
 	}
 }
 ?>

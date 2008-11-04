@@ -32,5 +32,25 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
+require_once('PASL/Authentication/iProvider.php');
+require_once('PASL/Authentication/Provider/common.php');
 
+/**
+ * Provides a SAML based authentication provider. This provider is designed to
+ * allow authentication against local and remote SAML gateways.  This has nothing
+ * to do with allowing users to authenticate with SAML credentials, this only
+ * provides authentication with providers that require/support SAML
+ *
+ * @package PASL_Authentication
+ * @subpackage PASL_Authentication_Provider
+ * @category Authentication
+ * @author Danny Graham <good.midget@gmail.com>
+ */
+class PASL_Authentication_Provider_saml extends PASL_Authentication_Provider_common implements PASL_Authentication_iProvider
+{
+	public function authenticate($credentials)
+	{
+
+	}
+}
 ?>
