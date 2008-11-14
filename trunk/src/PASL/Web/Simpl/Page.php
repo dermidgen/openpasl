@@ -141,12 +141,12 @@ class PASL_Web_Simpl_Page
 	/**
 	 * Updates the JSPlayload with all included scripts
 	 */
-	private function updateJSPayload()
+	private function updateJSPayload($url)
 	{
-		$JSPayload = "";
-		foreach($JSPackages as $package)
+		$this->JSPayload = '';
+		foreach($this->JSPackages as $package)
 		{
-			$JSPayload .= '<script type="text/javascript" src="'.$url.'"></script>' . "\n";
+			$this->JSPayload .= '<script type="text/javascript" src="'.$url.'"></script>' . "\n";
 		}
 	}
 
@@ -157,7 +157,7 @@ class PASL_Web_Simpl_Page
 	public function addJSPackage($url)
 	{
 		array_push($this->JSPackages, $url);
-		$this->updateJSPayload();
+		$this->updateJSPayload($url);
 	}
 
 	/**
@@ -186,6 +186,29 @@ class PASL_Web_Simpl_Page
 	}
 
 	/**
+	 * Updates the CSSPlayload with all included scripts
+	 */
+	private function updateCSSPayload($url)
+	{
+		$this->CSSPayload = '';
+		foreach($this->CSSPackages as $package)
+		{
+			$this->CSSPayload .= '<link href="'.$url.'" type="text/css" rel="stylesheet">' . "\n";
+		}
+	}
+
+	/**
+	 * Add a CSS package path for inclusion
+	 *
+	 * @param string The url to a CSS file
+	 */
+	public function addCSSPackage($url)
+	{
+		array_push($this->CSSPackages, $script);
+		$this->updateCSSPayload($url);
+	}
+
+	/**
 	 * Updates the CSS Script Payload containing CSS markup
 	 */
 	public function updateCSSScriptPayload()
@@ -198,16 +221,6 @@ class PASL_Web_Simpl_Page
 		}
 
 		$this->CSSScriptPayload .= "</style>\n";
-	}
-
-	/**
-	 * Add a CSS package path for inclusion
-	 *
-	 * @param string The url to a CSS file
-	 */
-	public function addCSSPackage($url)
-	{
-
 	}
 
 	/**
