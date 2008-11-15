@@ -32,38 +32,40 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
+require_once('PASL/Web/Service/iServiceProvider.php');
+require_once('PASL/Web/Service/Request.php');
+
 /**
- * Provides the interface for all service responders
+ * Provider for REST based services.
  *
- * @package PASL_Web
- * @subpackage PASL_Web_Service
+ * @package PASL_Web_Service
+ * @subpackage PASL_Web_Service_Provider
  * @category Web
  * @author Danny Graham <good.midget@gmail.com>
  */
-
-interface PASL_Web_Service_iServiceResponder
+class PASL_Web_Service_Provider_Rest implements PASL_Web_Service_iServiceProvider
 {
-	/**
-	 * Clears any data in the current response buffer
-	 *
-	 * @return void
-	 */
-	public function clearResponseBuffer();
+	public function parseRequest()
+	{
+		$oRequest = new PASL_Web_Service_Request();
+		$oRequestHash = Array();
 
-	/**
-	 * Get's the response payload ready for transport to the service client
-	 *
-	 * @return string Fully formatted response payload (XML, JSON, AMF)
-	 */
-	public function getResponse();
+		switch($_SERVER['REQUEST_METHOD'])
+		{
+			case 'GET':
+				$oRequestHash = $_GET;
+			break;
+			case 'POST':
+				$oRequestHash = $_POST;
+			break;
+			case 'PUT':
+				parse_str(file_get_contents("php://input"), $oRequestHash);
+			break;
+		}
 
-	/**
-	 * Adds data to the response buffer
-	 *
-	 * @param mixed Data to add to the output buffer
-	 * @return void
-	 */
-	public function addPayload($payload);
+		$oRequest->method = $oRequestHash['method'];
+
+		return $oRequest;
+	}
 }
-
 ?>

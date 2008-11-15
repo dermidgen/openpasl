@@ -32,8 +32,54 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
+/**
+ * Request object that acts as a standard object to encapsulate
+ * service request information.
+ *
+ * @package PASL_Web
+ * @subpackage PASL_Web_Service
+ * @category Web
+ * @author Danny Graham <good.midget@gmail.com>
+ */
 class PASL_Web_Service_Request
 {
+	/**
+	 * The full signature of the request URI
+	 *
+	 * @var string
+	 */
+	public $requestURI = null;
 
+	/**
+	 * The class or object that contains the method to be called
+	 *
+	 * @var string
+	 */
+	public $operationClass = null;
+
+	/**
+	 * The method name to be called
+	 *
+	 * @var string
+	 */
+	public $method = null;
+
+	/**
+	 * A collection of arguments to be passed when the method is called
+	 *
+	 * @var unknown_type
+	 */
+	public $methodArgs = Array();
+
+	/**
+	 * Adds the passed data to the methodArgs collection
+	 *
+	 * @param mixed Argument data to be added to the method call
+	 * @return void
+	 */
+	public function addMethodArg($arg)
+	{
+		$this->methodArgs[] = $arg;
+	}
 }
 ?>

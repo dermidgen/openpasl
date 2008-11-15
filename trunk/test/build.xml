@@ -37,7 +37,7 @@
 		<simpletest haltonfailure="true" haltonerror="true">
 			<formatter type="plain" usefile="false"/>
 			<fileset dir="${path.test}">
-				<include name="**/*.php"/>
+				<include name="**/*Test*.php"/>
 			</fileset>
 		</simpletest>
 	</target>

@@ -32,38 +32,54 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-/**
- * Provides the interface for all service responders
- *
- * @package PASL_Web
- * @subpackage PASL_Web_Service
- * @category Web
- * @author Danny Graham <good.midget@gmail.com>
- */
+if(!defined('SRCPATH'))
+{
+	define('SRCPATH', realpath(dirname(__FILE__).'/../../../../src/PASL'));
+	ini_set('include_path', get_include_path().PATH_SEPARATOR . SRCPATH);
+}
 
-interface PASL_Web_Service_iServiceResponder
+require_once('simpletest/autorun.php');
+require_once('PASL/Web/Service/Service.php');
+require_once('SampleService.php');
+
+class PASL_Web_ServiceTest extends UnitTestCase
 {
 	/**
-	 * Clears any data in the current response buffer
-	 *
-	 * @return void
+	 * @var PASL_Web_Service
 	 */
-	public function clearResponseBuffer();
+	private $service;
 
-	/**
-	 * Get's the response payload ready for transport to the service client
-	 *
-	 * @return string Fully formatted response payload (XML, JSON, AMF)
-	 */
-	public function getResponse();
+	public function PASL_Web_ServiceTest()
+	{
+		$this->UnitTestCase("PASL Web Service Tests");
+	}
 
-	/**
-	 * Adds data to the response buffer
-	 *
-	 * @param mixed Data to add to the output buffer
-	 * @return void
-	 */
-	public function addPayload($payload);
+	public function TestServiceInstantiation()
+	{
+		// Stubbed test to keep from the testsuite from breaking
+		$this->service = new PASL_Web_Service_SampleService();
+		$this->assertIsA($this->service, 'PASL_Web_Service');
+
+		$this->service->setServiceMode('REST');
+	}
+
+	public function TestLocalScopeMethods()
+	{
+		// Since we're not coming from a web server we need to set the mode
+		$_SERVER['REQUEST_METHOD'] = 'GET';
+
+		$_GET['method'] = 'ServiceMethod';
+		$this->service->handle();
+		$response = $this->service->getResponder()->getResponse();
+		$this->assertEqual($response, 'ServiceMethod');
+
+		$this->service->getResponder()->clearResponseBuffer();
+
+		$_GET['method'] = 'ServiceMethod2';
+		$this->service->handle();
+		$response = $this->service->getResponder()->getResponse();
+		$this->assertEqual($response, 'ServiceMethod2');
+	}
 }
 
 ?>

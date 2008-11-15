@@ -32,38 +32,33 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
+require_once('PASL/Web/Service/iServiceResponder.php');
+
 /**
- * Provides the interface for all service responders
+ * Responder for REST based services.
  *
- * @package PASL_Web
- * @subpackage PASL_Web_Service
+ * @package PASL_Web_Service
+ * @subpackage PASL_Web_Service_Responder
  * @category Web
  * @author Danny Graham <good.midget@gmail.com>
  */
-
-interface PASL_Web_Service_iServiceResponder
+class PASL_Web_Service_Responder_REST implements PASL_Web_Service_iServiceResponder
 {
-	/**
-	 * Clears any data in the current response buffer
-	 *
-	 * @return void
-	 */
-	public function clearResponseBuffer();
+	private $response = null;
 
-	/**
-	 * Get's the response payload ready for transport to the service client
-	 *
-	 * @return string Fully formatted response payload (XML, JSON, AMF)
-	 */
-	public function getResponse();
+	public function getResponse()
+	{
+		return $this->response;
+	}
 
-	/**
-	 * Adds data to the response buffer
-	 *
-	 * @param mixed Data to add to the output buffer
-	 * @return void
-	 */
-	public function addPayload($payload);
+	public function clearResponseBuffer()
+	{
+		$this->response = null;
+	}
+
+	public function addPayload($payload)
+	{
+		$this->response .= $payload;
+	}
 }
-
 ?>

@@ -44,6 +44,12 @@
 
 class PASL_Web_Service
 {
+	/**
+	 * String name of the type of service we've said we want to run.
+	 * (SOAP, REST, AMF, etc.)
+	 *
+	 * @var string
+	 */
 	public $serviceType = null;
 
 	/**
@@ -97,7 +103,7 @@ class PASL_Web_Service
 
 		$provider = new $className();
 
-		if (!($responder instanceof PASL_Web_Service_iServiceProvider))
+		if (!($provider instanceof PASL_Web_Service_iServiceProvider))
 			throw new Exception("Provider does not implement iServiceProvider");
 
 		return $provider;
@@ -147,8 +153,34 @@ class PASL_Web_Service
 		return $response;
 	}
 
+	/**
+	 * Returns the instance of the current provider
+	 *
+	 * @return PASL_Web_Service_iServiceProvider
+	 */
+	public function getProvider()
+	{
+		return $this->provider;
+	}
+
+	/**
+	 * Returns the instance of the current responder
+	 *
+	 * @return PASL_Web_Service_iServiceResponder
+	 */
+	public function getResponder()
+	{
+		return $this->responder;
+	}
+
+	/**
+	 * Set the scope object for running the handler method
+	 *
+	 * @param object The object containing the handler method
+	 */
 	public function setHandler($oHandler=null)
 	{
+		// TODO: Implement factory for instantiating handler objects
 		$this->oHandlerContext = $oHandler;
 	}
 
@@ -173,6 +205,8 @@ class PASL_Web_Service
 	public function handle()
 	{
 		$oRequest = $this->provider->parseRequest();
+
+		// TODO: Inspect the request object for handler context
 
 		if ($this->oHandlerContext == null) // We'll try local scope
 			$this->responder->addPayload($this->callHandler($this,$oRequest));

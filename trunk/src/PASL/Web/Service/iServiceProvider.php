@@ -34,6 +34,11 @@
 
 /**
  * Provides the interface for all service providers
+ *
+ * @package PASL_Web
+ * @subpackage PASL_Web_Service
+ * @category Web
+ * @author Danny Graham <good.midget@gmail.com>
  */
 interface PASL_Web_Service_iServiceProvider
 {
