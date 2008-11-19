@@ -45,9 +45,10 @@ require_once('PASL/Web/Service/Request.php');
  */
 class PASL_Web_Service_Provider_Rest implements PASL_Web_Service_iServiceProvider
 {
-	public function parseRequest()
+	public function parseRequest($oRequest=null)
 	{
-		$oRequest = new PASL_Web_Service_Request();
+		if (is_null($oRequest))	$oRequest = new PASL_Web_Service_Request();
+
 		$oRequestHash = Array();
 
 		switch($_SERVER['REQUEST_METHOD'])

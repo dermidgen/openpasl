@@ -33,10 +33,52 @@
  */
 
 require_once('PASL/Web/Service/iServiceProvider.php');
+require_once('PASL/Web/Service/amfphp/globals.php');
+require_once('PASL/Web/Service/amfphp/core/amf/app/Gateway.php');
 
 class PASL_Web_Service_Provider_AMF implements PASL_Web_Service_iServiceProvider
 {
-	public function parseRequest()
+	private $productionServer = false;
+
+	public $gateway = null;
+
+	public function __construct()
+	{
+		$this->gateway = new Gateway();
+		$this->gateway->setCharsetHandler("utf8_decode", "ISO-8859-1", "ISO-8859-1");
+
+		//Error types that will be rooted to the NetConnection debugger
+		$this->gateway->setErrorHandling(E_ALL ^ E_NOTICE);
+		$this->gateway->enableGzipCompression(25*1024);
+	}
+
+	/**
+	 * Set's AMFPHP in either debug or production mode.
+	 * When used with no parameter a boolean value will be returned
+	 * indicating the whether production mode is on or off
+	 *
+	 * @param bool $bVal
+	 * @return bool
+	 */
+	public function isProductionMode($bVal=null)
+	{
+		if (!is_null($bVal) && is_bool($bVal))
+		{
+			$this->productionServer = $bVal;
+
+			if ($this->productionServer)
+			{
+				// Disable debugging, remote tracing, and service browser
+				$this->gateway->disableDebug();
+				// Keep the Flash/Flex IDE player from connecting to the gateway. Used for security to stop remote connections.
+				$this->gateway->disableStandalonePlayer();
+			}
+		}
+
+		return $this->productionServer;
+	}
+
+	public function parseRequest($oRequest=null)
 	{
 
 	}

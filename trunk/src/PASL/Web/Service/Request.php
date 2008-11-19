@@ -51,11 +51,27 @@ class PASL_Web_Service_Request
 	public $requestURI = null;
 
 	/**
+	 * The type of service call this request uses
+	 *
+	 * @var string
+	 */
+	public $serviceType = 'REST';
+
+	/**
 	 * The class or object that contains the method to be called
 	 *
 	 * @var string
 	 */
 	public $operationClass = null;
+
+	/**
+	 * The path that the operation object resides. This is required
+	 * for services to be published as an AMF service due to the
+	 * way AMFPHP works.
+	 *
+	 * @var string
+	 */
+	public $operationClassPath = null;
 
 	/**
 	 * The method name to be called

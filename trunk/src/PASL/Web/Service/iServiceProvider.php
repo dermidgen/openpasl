@@ -46,9 +46,10 @@ interface PASL_Web_Service_iServiceProvider
 	 * Parses the incoming request and translates the request
 	 * payload into PASL_Web_Service_Request object.
 	 *
+	 * @param PASL_Web_Service_Request An existing request object to inspect, modify, and return
 	 * @return PASL_Web_Service_Request
 	 */
-	public function parseRequest();
+	public function parseRequest($oRequest=null);
 }
 
 ?>

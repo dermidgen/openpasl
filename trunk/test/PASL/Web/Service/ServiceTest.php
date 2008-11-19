@@ -60,15 +60,19 @@ class PASL_Web_ServiceTest extends UnitTestCase
 		$this->service = new PASL_Web_Service_SampleService();
 		$this->assertIsA($this->service, 'PASL_Web_Service');
 
-		$this->service->setServiceMode('REST');
+//		$this->service->setServiceMode('REST');
 	}
 
 	public function TestLocalScopeMethods()
 	{
 		// Since we're not coming from a web server we need to set the mode
 		$_SERVER['REQUEST_METHOD'] = 'GET';
+		$_SERVER['REQUEST_URI'] = '/rest/SampleService/ServiceMethod';
 
 		$_GET['method'] = 'ServiceMethod';
+
+		$this->service->setHandler($this->service);
+
 		$this->service->handle();
 		$response = $this->service->getResponder()->getResponse();
 		$this->assertEqual($response, 'ServiceMethod');

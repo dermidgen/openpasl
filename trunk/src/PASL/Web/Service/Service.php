@@ -32,6 +32,9 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
+require_once('PASL/Web/Service/Request.php');
+
+
 /**
  * Provides a base class for publishing web services. Can be used through
  * direct instantiation or by extension.
@@ -82,6 +85,8 @@ class PASL_Web_Service
 	 * @var object
 	 */
 	protected $oHandlerContext = null;
+
+	protected $sClassPath = null;
 
 	/**
 	 * Factory for instantiating service providers
@@ -154,6 +159,49 @@ class PASL_Web_Service
 	}
 
 	/**
+	 * Parses the incoming request data to determine which type of service
+	 * the request is addressing, and generate a request object based
+	 * on how the underlying provider parses the request data.
+	 *
+	 * @return PASL_Web_Service_Request
+	 */
+	protected function parseRequest()
+	{
+		$requestMethod = $_SERVER['REQUEST_METHOD'];
+		$requestURI = $_SERVER['REQUEST_URI'];
+
+		$oRequest = new PASL_Web_Service_Request();
+
+		/**
+		 * A broken out array of the request
+		 *
+		 * Requests should be path based with some variation between service types
+		 * + REST:
+		 * +   [domainroot]/{service identifier}/{classname}/{method}/{params}
+		 * +   http://service.company.com/rest/mymodule/mymethod/myparam1/myparam2/myparam3
+		 * + SOAP:
+		 * +   [domainroot]/{service identifier}
+		 * +   http://service.company.com/soap
+		 * + AMF:
+		 * +   [domainroot]/{service identifier}/{classpath}
+		 * +   http://service.company.com/amf/modulepath
+		 */
+		$oRequestParts = explode('/',$requestURI);
+		if ($oRequestParts[0] == '') array_shift($oRequestParts);
+
+		$oRequest->serviceType = $oRequestParts[0];
+
+		// Set the object scope to handle the service request
+		$oRequest->operationClass = ($oRequest->serviceType == 'REST' || $oRequest->serviceType == 'AMF') ? $oRequestParts[1] : null;
+
+		// Set the class path for AMF publishing
+		$oRequest->operationClassPath = $this->sClassPath;
+
+		$this->setServiceMode($oRequest->serviceType);
+		return $this->provider->parseRequest($oRequest);
+	}
+
+	/**
 	 * Returns the instance of the current provider
 	 *
 	 * @return PASL_Web_Service_iServiceProvider
@@ -177,11 +225,16 @@ class PASL_Web_Service
 	 * Set the scope object for running the handler method
 	 *
 	 * @param object The object containing the handler method
+	 * @return void
 	 */
 	public function setHandler($oHandler=null)
 	{
-		// TODO: Implement factory for instantiating handler objects
 		$this->oHandlerContext = $oHandler;
+
+		// We need to get some filesystem information on the object for setting up AMF service handlers
+		$className = get_class(($oHandler == null) ? $this : $oHandler);
+		$reflected = new ReflectionClass($className);
+		$this->sClassPath = dirname($reflected->getFileName());
 	}
 
 	/**
@@ -197,6 +250,8 @@ class PASL_Web_Service
 	 */
 	public function setServiceMode($strModeType)
 	{
+		$strModeType = strtoupper($strModeType);
+
 		$this->serviceType = $strModeType;
 		$this->provider = $this->providerFactory($strModeType);
 		$this->responder = $this->responderFactory($strModeType);
@@ -204,10 +259,9 @@ class PASL_Web_Service
 
 	public function handle()
 	{
-		$oRequest = $this->provider->parseRequest();
+		$oRequest = $this->parseRequest();
 
-		// TODO: Inspect the request object for handler context
-
+		// Inspect the request object for handler context
 		if ($this->oHandlerContext == null) // We'll try local scope
 			$this->responder->addPayload($this->callHandler($this,$oRequest));
 		else // We'll use the handler object
