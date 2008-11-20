@@ -32,38 +32,8 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-/**
- * Provides a sample service
- *
- */
-class SampleService
-{
+require_once('PASL/Web/Service/Gateway.php');
 
-	public function __construct()
-	{
+PASL_Web_Service_Gateway::Main(dirname(__FILE__));
 
-	}
-
-	/**
-	 * This is a sample service method - 1 of 2 in this class
-	 *
-	 * @param string
-	 * @return string
-	 */
-	public function ServiceMethod($args)
-	{
-		return "You called ServiceMethod() with the following args:\n\t" . $args;
-	}
-
-	/**
-	 * This is a sample service method - 2 of 2 in this class
-	 *
-	 * @param string
-	 * @return string
-	 */
-	public function ServiceMethod2($args)
-	{
-		return "You called ServiceMethod2() with the following args:\n\t" . $args;
-	}
-}
 ?>

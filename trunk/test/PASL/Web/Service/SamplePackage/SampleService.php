@@ -33,7 +33,7 @@
  */
 
 /**
- * Provides a sample service
+ * Provides a sample service under the package SamplePackage
  *
  */
 class SampleService
@@ -52,7 +52,7 @@ class SampleService
 	 */
 	public function ServiceMethod($args)
 	{
-		return "You called ServiceMethod() with the following args:\n\t" . $args;
+		return "You called SamplePackage.ServiceMethod() with the following args:\n\t" . $args;
 	}
 
 	/**
@@ -63,7 +63,7 @@ class SampleService
 	 */
 	public function ServiceMethod2($args)
 	{
-		return "You called ServiceMethod2() with the following args:\n\t" . $args;
+		return "You called SamplePackage.ServiceMethod2() with the following args:\n\t" . $args;
 	}
 }
 ?>
