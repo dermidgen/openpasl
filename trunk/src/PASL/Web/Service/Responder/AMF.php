@@ -34,6 +34,16 @@
 
 require_once('PASL/Web/Service/iServiceResponder.php');
 
+/**
+ * This is a shell class to meet the requirements of a provider and a responder for each
+ * service type.  In the case of AMF services we hand off to AMFPHP to handle the
+ * reponse packaging - so we never get to this class.
+ *
+ * @package PASL_Web_Service
+ * @subpackage PASL_Web_Service_Responder
+ * @category Web
+ * @author Danny Graham <good.midget@gmail.com>
+ */
 class PASL_Web_Service_Responder_AMF implements PASL_Web_Service_iServiceResponder
 {
 	private $response = null;
@@ -45,7 +55,6 @@ class PASL_Web_Service_Responder_AMF implements PASL_Web_Service_iServiceRespond
 	 */
 	public function clearResponseBuffer()
 	{
-		$this->response = null;
 	}
 
 	/**
@@ -55,7 +64,6 @@ class PASL_Web_Service_Responder_AMF implements PASL_Web_Service_iServiceRespond
 	 */
 	public function getResponse()
 	{
-		return $this->response;
 	}
 
 	/**
@@ -66,7 +74,6 @@ class PASL_Web_Service_Responder_AMF implements PASL_Web_Service_iServiceRespond
 	 */
 	public function addPayload($payload)
 	{
-		$this->response .= $payload;
 	}
 }
 ?>

@@ -36,6 +36,16 @@ require_once('PASL/Web/Service/iServiceProvider.php');
 require_once('PASL/Web/Service/amfphp/globals.php');
 require_once('PASL/Web/Service/amfphp/core/amf/app/Gateway.php');
 
+/**
+ * Provides AMF based service support through AMFPHP. We do a little
+ * cleanup here to ensure that the classpath is correctly set for AMFPHP
+ * to find, instantiate and call the handler.
+ *
+ * @package PASL_Web_Service
+ * @subpackage PASL_Web_Service_Provider
+ * @category Web
+ * @author Danny Graham <good.midget@gmail.com>
+ */
 class PASL_Web_Service_Provider_AMF implements PASL_Web_Service_iServiceProvider
 {
 	private $productionServer = false;

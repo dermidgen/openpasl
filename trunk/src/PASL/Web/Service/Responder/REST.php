@@ -48,7 +48,7 @@ class PASL_Web_Service_Responder_REST implements PASL_Web_Service_iServiceRespon
 
 	public function getResponse()
 	{
-		return $this->response;
+		return json_encode($this->response);
 	}
 
 	public function clearResponseBuffer()
