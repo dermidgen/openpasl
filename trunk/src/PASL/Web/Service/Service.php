@@ -84,9 +84,10 @@ class PASL_Web_Service
 	 *
 	 * @var object
 	 */
-	protected $oHandlerContext = null;
+	protected $oHandler = null;
 
-	protected $sClassPath = null;
+	public $sBaseClassBath = null;
+	public $sClassPath = null;
 
 	/**
 	 * Factory for instantiating service providers
@@ -141,6 +142,29 @@ class PASL_Web_Service
 	}
 
 	/**
+	 * Factory for instantiating a handler class
+	 *
+	 * @param string The name of the class to handle the service request
+	 * @return object
+	 */
+	private function handlerFactory($strClassName)
+	{
+		// Compatability for calling packaged classes with dot notation
+		// e.g. SamplePackage.SampleSubPackage.SampleService
+		$pathParts = explode('.', $strClassName);
+
+		$strClassName = array_pop($pathParts);
+		$classPath = join('/',$pathParts);
+		$classPath = ($classPath != '') ? $this->sBaseClassPath . '/' . $classPath . '/' : $this->sBaseClassPath . '/';
+		$classPath = $classPath . $strClassName . '.php';
+		if (!file_exists($classPath)) throw new Exception('Class ' . $strClassName . ' not found at: ' . $classPath);
+
+		require_once($classPath);
+
+		return new $strClassName();
+	}
+
+	/**
 	 * Calls the appropriate method within the scope of the handler
 	 * and returns the result.
 	 *
@@ -153,7 +177,7 @@ class PASL_Web_Service
 	{
 		if (!method_exists($oHandler, $oRequest->method)) throw new Exception('Method not implemented');
 
-		$response = $oHandler->{$oRequest->method}($oRequest);
+		$response = call_user_func_array(array($oHandler, $oRequest->method), $oRequest->methodArgs);
 
 		return $response;
 	}
@@ -191,11 +215,19 @@ class PASL_Web_Service
 
 		$oRequest->serviceType = $oRequestParts[0];
 
-		// Set the object scope to handle the service request
-		$oRequest->operationClass = ($oRequest->serviceType == 'REST' || $oRequest->serviceType == 'AMF') ? $oRequestParts[1] : null;
+		$oRequest->requestURI = $requestURI;
+		$oRequest->oRequestHash = $oRequestParts;
+
+		// For AMF based services AMFPHP will handle all this from the request payload
+		if ($oRequest->serviceType != 'AMF')
+		{
+			// Set the object scope to handle the service request
+			$oRequest->operationClass = ($oRequest->serviceType == 'REST' || $oRequest->serviceType == 'AMF') ? $oRequestParts[1] : null;
+			if (is_null($this->oHandler)) $this->setHandler($this->handlerFactory($oRequest->operationClass));
+		}
 
 		// Set the class path for AMF publishing
-		$oRequest->operationClassPath = $this->sClassPath;
+		$oRequest->operationClassPath = $this->sBaseClassPath;
 
 		$this->setServiceMode($oRequest->serviceType);
 		return $this->provider->parseRequest($oRequest);
@@ -227,12 +259,14 @@ class PASL_Web_Service
 	 * @param object The object containing the handler method
 	 * @return void
 	 */
-	public function setHandler($oHandler=null)
+	public function setHandler($oHandler)
 	{
-		$this->oHandlerContext = $oHandler;
+		$this->oHandler = $oHandler;
 
 		// We need to get some filesystem information on the object for setting up AMF service handlers
+		// AMFPHP requires us to provide a classpath to provision services.
 		$className = get_class(($oHandler == null) ? $this : $oHandler);
+
 		$reflected = new ReflectionClass($className);
 		$this->sClassPath = dirname($reflected->getFileName());
 	}
@@ -261,16 +295,21 @@ class PASL_Web_Service
 	{
 		$oRequest = $this->parseRequest();
 
+		// If it's an AMF service request we'll just let AMFPHP handle the whole thing
+		if ($this->serviceType == 'AMF') return $this->provider->handle();
+
 		// Inspect the request object for handler context
-		if ($this->oHandlerContext == null) // We'll try local scope
+		if ($this->oHandler == null) // We'll try local scope
 			$this->responder->addPayload($this->callHandler($this,$oRequest));
 		else // We'll use the handler object
-			$this->responder->addPayload($this->callHandler($this->oHandlerContext, $oRequest));
+			$this->responder->addPayload($this->callHandler($this->oHandler, $oRequest));
+
+		$this->send();
 	}
 
 	public function send()
 	{
-		$strResponse = $this->responder->sendResponse();
+		print $this->responder->getResponse();
 	}
 }
 

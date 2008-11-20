@@ -32,24 +32,41 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-/**
- * Provides the interface for all service providers
- *
- * @package PASL_Web
- * @subpackage PASL_Web_Service
- * @category Web
- * @author Danny Graham <good.midget@gmail.com>
- */
-interface PASL_Web_Service_iServiceProvider
+require_once('PASL/Web/Service/Service.php');
+
+class PASL_Web_Service_Gateway
 {
+	private static $instance = null;
+
 	/**
-	 * Parses the incoming request and translates the request
-	 * payload into PASL_Web_Service_Request object.
+	 * Instance of the main service provisioner
 	 *
-	 * @param PASL_Web_Service_Request An existing request object to inspect, modify, and return
-	 * @return PASL_Web_Service_Request
+	 * @var PASL_Web_Service
 	 */
-	public function parseRequest($oRequest);
+	public $service = null;
+
+	public function __construct()
+	{
+		$this->service = new PASL_Web_Service();
+	}
+
+	public static function Main($strBasePath)
+	{
+		$gateway = PASL_Web_Service_Gateway::GetInstance();
+		$gateway->service->sBaseClassPath = $strBasePath;
+		$gateway->service->handle();
+	}
+
+	/**
+	 * Singleton
+	 *
+	 * @return PASL_Web_Service_Gateway
+	 */
+	public static function GetInstance()
+	{
+		if (PASL_Web_Service_Gateway::$instance == null) PASL_Web_Service_Gateway::$instance = new PASL_Web_Service_Gateway();
+		return PASL_Web_Service_Gateway::$instance;
+	}
 }
 
 ?>

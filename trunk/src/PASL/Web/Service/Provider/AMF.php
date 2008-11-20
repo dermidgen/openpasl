@@ -40,6 +40,11 @@ class PASL_Web_Service_Provider_AMF implements PASL_Web_Service_iServiceProvider
 {
 	private $productionServer = false;
 
+	/**
+	 * The AMFPHP Gateway for handling AMF service requests
+	 *
+	 * @var Gateway
+	 */
 	public $gateway = null;
 
 	public function __construct()
@@ -78,9 +83,20 @@ class PASL_Web_Service_Provider_AMF implements PASL_Web_Service_iServiceProvider
 		return $this->productionServer;
 	}
 
-	public function parseRequest($oRequest=null)
+	/**
+	 * Parse the request / request object
+	 *
+	 * @param PASL_Web_Service_Request The intial request object
+	 */
+	public function parseRequest($oRequest)
 	{
+		$this->gateway->setClassPath($oRequest->operationClassPath);
+		return $oRequest;
+	}
 
+	public function handle()
+	{
+		$this->gateway->service();
 	}
 }
 

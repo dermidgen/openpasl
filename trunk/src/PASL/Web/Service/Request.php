@@ -51,6 +51,13 @@ class PASL_Web_Service_Request
 	public $requestURI = null;
 
 	/**
+	 * The request uri broken out into a hash
+	 *
+	 * @var array
+	 */
+	public $oRequestHash = Array();
+
+	/**
 	 * The type of service call this request uses
 	 *
 	 * @var string
@@ -86,6 +93,13 @@ class PASL_Web_Service_Request
 	 * @var unknown_type
 	 */
 	public $methodArgs = Array();
+
+	/**
+	 * The contents of $_GET, $_POST, or the phpinput stream
+	 *
+	 * @var array
+	 */
+	public $requestPayload = Array();
 
 	/**
 	 * Adds the passed data to the methodArgs collection
