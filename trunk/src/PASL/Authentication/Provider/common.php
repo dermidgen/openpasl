@@ -32,10 +32,10 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-define('PASL_AUTH_INVALID_USERNAME', 000);
-define('PASL_AUTH_INVALID_PASSWORD', 001);
-define('PASL_AUTH_BAD_USER', 002);
-define('PASL_AUTH_BAD_PASSWORD', 003);
+define('PASL_AUTH_INVALID_USERNAME', 001);
+define('PASL_AUTH_INVALID_PASSWORD', 002);
+define('PASL_AUTH_BAD_USER', 003);
+define('PASL_AUTH_BAD_PASSWORD', 004);
 
 /**
  * Provides base level common methods for auth providers.  Also implements
@@ -53,7 +53,8 @@ abstract class PASL_Authentication_Provider_common
 
 	public function getError()
 	{
-		return end($this->errors);
+		if (count($this->errors)) return end($this->errors);
+		else return false;
 	}
 }
 ?>

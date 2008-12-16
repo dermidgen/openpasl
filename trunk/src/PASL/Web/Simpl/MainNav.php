@@ -52,10 +52,6 @@ class PASL_Web_Simpl_MainNav extends PASL_Web_Simpl_NavMenu
 	 */
 	protected static $instance = null;
 
-	public function __construct()
-	{
-	}
-
 	/**
 	 * Returns singleton instance of PASL_Web_Simpl_MainNav
 	 *
@@ -63,8 +59,8 @@ class PASL_Web_Simpl_MainNav extends PASL_Web_Simpl_NavMenu
 	 */
 	public static function GetInstance()
 	{
-		if(PASL_Web_Simpl_MainNav::$instance == null) PASL_Web_Simpl_MainNav::$instance = new PASL_Web_Simpl_MainNav();
-		return PASL_Web_Simpl_MainNav::$instance;
+		if(self::$instance == null) self::$instance = new self;
+		return self::$instance;
 	}
 }
 

@@ -48,12 +48,7 @@ class PASL_Web_Simpl_UserNav extends PASL_Web_Simpl_NavMenu
 	/**
 	* @var PASL_Web_Simpl_UserNav
 	*/
-	private static $instance = null;
-
-	public function __construct()
-	{
-		$this->addMenuItem(new PASL_Web_Simpl_NavItem("Logout", "Logout", "?actn=logout", null));
-	}
+	protected static $instance = null;
 
 	/**
 	 * Returns a singleton instance of PASL_Web_Simpl_UserNav
@@ -62,8 +57,8 @@ class PASL_Web_Simpl_UserNav extends PASL_Web_Simpl_NavMenu
 	 */
 	public static function GetInstance()
 	{
-		if (PASL_Web_Simpl_UserNav::$instance == null) PASL_Web_Simpl_UserNav::$instance = new PASL_Web_Simpl_UserNav();
-		return PASL_Web_Simpl_UserNav::$instance;
+		if (self::$instance == null) self::$instance = new self();
+		return self::$instance;
 	}
 }
 

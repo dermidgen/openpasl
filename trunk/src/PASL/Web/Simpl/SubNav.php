@@ -72,8 +72,8 @@ class PASL_Web_Simpl_SubNav extends PASL_Web_Simpl_NavMenu
 	 */
 	public static function GetInstance()
 	{
-		if (PASL_Web_Simpl_SubNav::$instance == null) PASL_Web_Simpl_SubNav::$instance = new PASL_Web_Simpl_SubNav();
-		return PASL_Web_Simpl_SubNav::$instance;
+		if (self::$instance == null) self::$instance = new self;
+		return self::$instance;
 	}
 }
 
