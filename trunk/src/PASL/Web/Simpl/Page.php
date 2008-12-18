@@ -266,11 +266,13 @@ class PASL_Web_Simpl_Page
 		ereg("http://",$url) ? $local = FALSE : $local = TRUE;
 
 		$body = "";
+		
+		if($template) $templateURI = (file_exists($this->TemplateBasePath.$url)) ? $this->TemplateBasePath.$url : "themes/default/templates/{$url}";
 
 		if ($local)
 		{
 			$file = array();
-			$file = file(($template) ? $this->TemplateBasePath.$url : $url);
+			$file = file(($template) ? $templateURI : $url);
 			foreach ($file as $line)
 			{
 				$body .= $line;
