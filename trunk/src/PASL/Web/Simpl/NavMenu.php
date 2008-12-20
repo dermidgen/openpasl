@@ -70,6 +70,8 @@ class PASL_Web_Simpl_NavMenu
 	public function selectItemAt($index)
 	{
 		if (isset($this->menuItems[$index])) $this->selectItem($this->menuItems[$index]);
+		
+		return $this->getSelectedItem();
 	}
 
 	/**
@@ -86,6 +88,8 @@ class PASL_Web_Simpl_NavMenu
 		{
 			if (isset($item->$attribute) && $item->$attribute == $value) $this->selectItem($item);
 		}
+		
+		return $this->getSelectedItem();
 	}
 
 	/**
@@ -101,6 +105,22 @@ class PASL_Web_Simpl_NavMenu
 		{
 			if ($item->title == $name) $this->selectItem($item);
 		}
+		
+		return $this->getSelectedItem();
+	}
+	
+	/**
+	 * Returns the selected item
+	 * 
+	 * @return PASL_Web_Simpl_NavItem
+	 */
+	public function getSelectedItem()
+	{
+		foreach ($this->menuItems as $item) {
+			if ($item->selected) return $item;
+		}
+		
+		return null;
 	}
 
 	/**
