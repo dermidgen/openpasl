@@ -188,10 +188,10 @@ class PASL_Web_Simpl_Page
 	/**
 	 * Updates the CSSPlayload with all included scripts
 	 */
-	private function updateCSSPayload($url)
+	private function updateCSSPayload()
 	{
 		$this->CSSPayload = '';
-		foreach($this->CSSPackages as $package)
+		foreach($this->CSSPackages as $url)
 		{
 			$this->CSSPayload .= '<link href="'.$url.'" type="text/css" rel="stylesheet">' . "\n";
 		}
@@ -204,8 +204,8 @@ class PASL_Web_Simpl_Page
 	 */
 	public function addCSSPackage($url)
 	{
-		array_push($this->CSSPackages, $script);
-		$this->updateCSSPayload($url);
+		array_push($this->CSSPackages, $url);
+		$this->updateCSSPayload();
 	}
 
 	/**
