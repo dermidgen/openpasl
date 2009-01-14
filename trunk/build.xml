@@ -30,6 +30,8 @@
 
 <project name="openpasl" default="all" basedir="./">
 
+	<property file="build.properties"/>
+	
 	<target name="all" depends="docs">
 	</target>
 
