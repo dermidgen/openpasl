@@ -30,7 +30,11 @@
 
 <project name="openpasl" default="all" basedir="./">
 
-	<target name="all">
+	<target name="all" depends="docs">
 	</target>
 
+	<target name="docs">
+		<phing phingfile="${path.doc}/build.xml" haltonfailure="true"/>
+	</target>
+	
 </project>
