@@ -44,21 +44,41 @@
 class PASL_Web_Simpl_NavMenu
 {
 	public $style;
+	public $selectedItem = null;
 	public $menuItems = Array();
 
 	public function __construct()
 	{
 
 	}
-
+	
 	/**
 	 * Sets the selected property of a nav item to true
 	 *
 	 * @param PASL_Web_Simpl_NavItem $item
 	 */
-	private function selectItem(PASL_Web_Simpl_NavItem $item)
+	protected function selectItem(PASL_Web_Simpl_NavItem $item)
 	{
+		$this->selectedItem = $item;
 		$item->selected = true;
+	}
+	
+	public function getItemAt($index)
+	{
+		if (isset($this->menuItems[$index])) return $this->menuItems[$index];
+	}
+	
+	public function getItemByAttribute($attribute, $value)
+	{
+		foreach($this->menuItems as $item)
+		{
+			if (isset($item->$attribute) && $item->$attribute == $value) return $item;
+		}
+	}
+	
+	public function getItemByName($name)
+	{
+		return $this->getItemByAttribute('title', $name);
 	}
 
 	/**
@@ -69,9 +89,9 @@ class PASL_Web_Simpl_NavMenu
 	 */
 	public function selectItemAt($index)
 	{
-		if (isset($this->menuItems[$index])) $this->selectItem($this->menuItems[$index]);
+		$this->selectItem($this->getItemAt($index));
 		
-		return $this->getSelectedItem();
+		return $this->selectedItem;
 	}
 
 	/**
@@ -84,12 +104,9 @@ class PASL_Web_Simpl_NavMenu
 	 */
 	public function selectItemByAttribute($attribute, $value)
 	{
-		foreach($this->menuItems as $item)
-		{
-			if (isset($item->$attribute) && $item->$attribute == $value) $this->selectItem($item);
-		}
+		$this->selectItem($this->getItemByAttribute($attribute, $value));
 		
-		return $this->getSelectedItem();
+		return $this->selectedItem;
 	}
 
 	/**
@@ -101,10 +118,7 @@ class PASL_Web_Simpl_NavMenu
 	 */
 	public function selectItemByName($name)
 	{
-		foreach($this->menuItems as $item)
-		{
-			if ($item->title == $name) $this->selectItem($item);
-		}
+		$this->selectItem($this->getItemByName($name));
 		
 		return $this->getSelectedItem();
 	}
@@ -116,11 +130,7 @@ class PASL_Web_Simpl_NavMenu
 	 */
 	public function getSelectedItem()
 	{
-		foreach ($this->menuItems as $item) {
-			if ($item->selected) return $item;
-		}
-		
-		return null;
+		return $this->selectedItem;
 	}
 
 	/**

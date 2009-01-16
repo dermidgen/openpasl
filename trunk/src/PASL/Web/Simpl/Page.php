@@ -121,27 +121,27 @@ class PASL_Web_Simpl_Page
 	/**
 	 * @var Array
 	 */
-	private $JSPackages = Array();
+	protected $JSPackages = Array();
 
 	/**
 	 * @var Array
 	 */
-	private $JSScriptPackages = Array();
+	protected $JSScriptPackages = Array();
 
 	/**
 	 * @var Array
 	 */
-	private $CSSPackages = Array();
+	protected $CSSPackages = Array();
 
 	/**
 	 * @var Array
 	 */
-	private $CSSScriptPackages = Array();
+	protected $CSSScriptPackages = Array();
 
 	/**
 	 * Updates the JSPlayload with all included scripts
 	 */
-	private function updateJSPayload($url)
+	protected function updateJSPayload($url)
 	{
 		$this->JSPayload = '';
 		foreach($this->JSPackages as $package)
@@ -188,7 +188,7 @@ class PASL_Web_Simpl_Page
 	/**
 	 * Updates the CSSPlayload with all included scripts
 	 */
-	private function updateCSSPayload()
+	protected function updateCSSPayload()
 	{
 		$this->CSSPayload = '';
 		foreach($this->CSSPackages as $url)
@@ -239,7 +239,7 @@ class PASL_Web_Simpl_Page
 	 * @param String $data
 	 * @return String
 	 */
-	private function parseData($data)
+	protected function parseData($data)
 	{
 		$body = $data;
 

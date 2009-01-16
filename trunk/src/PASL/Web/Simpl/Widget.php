@@ -43,7 +43,9 @@ class PASL_Web_Simpl_Widget
 	
 	public function __toString()
 	{
+		if (file_exists(sprintf($this->templatePath, $this->Theme, $this->Name))) $this->Theme = 'default';
 		$templatePath = sprintf($this->templatePath, $this->Theme, $this->Name);
+
 		$body = file_get_contents($templatePath);
 
 		preg_match_all( "/\%(\S+?)\%/", $body, $matches );
