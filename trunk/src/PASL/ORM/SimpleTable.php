@@ -39,7 +39,7 @@ class PASL_ORM_SimpleTable
 	/**
 	 * @var PASL_DB_Driver_mysql
 	 */
-	protected $db;
+	public $db;
 	
 	/**
 	 * @var array

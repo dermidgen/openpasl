@@ -32,55 +32,38 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-class PASL_ORM_SimpleObject
-{
-	protected $table;
-	
-	public function __construct(PASL_ORM_SimpleTable $table)
-	{
-		$this->table = $table;
-	}
-	
-	public function __set($name, $value)
-	{
-		$this->table->$name = $value;
-	}
-	
-	public function __get($name)
-	{
-		return $this->table->$name;
-	}
-	
-	public function __call($name, $args)
-	{
-		if (method_exists($this->table, $name)) return call_user_func_array(array($this->table,$name),$args);
-		return false;
-	}
+require_once('PASL/ORM/ORM.php');
 
-	public function save()
+require_once('PASL/RBAC/Action.php');
+
+class PASL_RBAC
+{
+	private static $instance;
+	
+	public function __construct()
 	{
-		$where = $set = $bindwhere = $bindval = Array();
-		foreach($this->schema['pkeys'] as $key)
-		{
-			$set[] = $where[] = "`$key` = ?";
-			$bindval[$key] = (isset($this->newValues[$key])) ? $this->newValues[$key] : $this->rowValues[$key] ;
-			$bindwhere[] = $this->rowValues[$key];
-		}
-		$bind = array_merge($bindval,$bindwhere);
 		
-		//TODO: Map Exception for non AutoInc
-		
-		$query = "update `{$this->schema['table']}` set ". join(',',$set) ." where ". join(',',$where);
-		$this->db->query($query, $bind);
 	}
 	
-	public function delete()
+	public function init($dsn)
 	{
-		$pkey = $this->schema['pkeys'][0];
-		$query = "delete from {$this->schema['table']} where `$pkey` = '{$this->$pkey}'";
+		PASL_ORM::registerDB('pasl_rbac', PASL_DB::factory($dsn));
+	}
+	
+	public function getDB()
+	{
+		return PASL_ORM::getDB('pasl_rbac');
+	}
+	
+	public function getPermissions($object_uid, $user_uid)
+	{
 		
-		$this->db->query($query);
+	}
+	
+	public static function GetInstance()
+	{
+		if (!self::$instance) self::$instance = new self;
+		return self::$instance;
 	}
 }
-
 ?>
