@@ -55,7 +55,7 @@ abstract class PASL_DB_Driver_Common
 	 * @param String $query
 	 * @return mixed
 	 */
-	abstract public function query($query);
+	abstract public function query($query, array $bind=null);
 
 	abstract public function free($result);
 	abstract public function fetchOne($result,$colnum);

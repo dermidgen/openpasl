@@ -58,7 +58,9 @@ class PASL_DB_Driver_mysql extends PASL_DB_Driver_Common
 	*/
 	private static $instance = null;
 
-	private $Link = null;
+	public $db = null;
+	
+	private $lastbind;
 
 	/**
 	 * Connects to a MySQL database
@@ -70,9 +72,45 @@ class PASL_DB_Driver_mysql extends PASL_DB_Driver_Common
 	 */
 	public function __construct($Host, $Username, $Password, $Database)
 	{
-
-		$this->Link = mysql_connect($Host, $Username, $Password);
-		mysql_select_db($Database, $this->Link);
+		$this->db = mysqli_connect($Host, $Username, $Password, $Database);
+	}
+	
+	private function statementFetchRow($statement)
+	{
+		if (!$statement->num_rows()) return null;
+		
+		$statement->fetch();
+		$row = Array();
+		foreach($statement->bind as $key=>$val) $row[$key] = $val;
+		return $row;
+	}
+	
+	private function getDataTypes(array $data)
+	{
+		$types = Array();
+		foreach($data as $val)
+		{
+			switch(gettype($val))
+			{
+				case 'string':
+					$type = 's';
+				break;
+				case 'integer':
+					$type = 'i';
+				break;
+				case 'double':
+					$type = 'd';
+				break;
+				case 'blob':
+					$type = 'b';
+				break;
+				default:
+					$type = 's';
+			}
+			
+			$types[] = $type;
+		}
+		return join('',$types);
 	}
 
 	/**
@@ -81,9 +119,39 @@ class PASL_DB_Driver_mysql extends PASL_DB_Driver_Common
 	 * @param string Query
 	 * @return MySQLResult
 	 */
-	public function query($query)
+	public function query($query, array $bind=null)
 	{
-		return mysql_query($query, $this->Link);
+		if ($bind) // We'll use a prepared statement
+		{
+			//TODO: Add token replacement for associative keys in query string
+			// query string should support 'select * from table where `c_key` = :c_key'
+			// should be replaced as 'select * from table where `c_key` = ?'
+			$statement = $this->db->prepare($query);
+			array_unshift($bind, $this->getDataTypes($bind));
+			
+			call_user_func_array(array($statement,'bind_param'), $bind);
+			
+			@$statement->execute();
+			$statement->store_result();
+			
+			$bind = Array();
+			
+			if ($statement->num_rows())
+			{
+				$fields = $statement->result_metadata()->fetch_fields();
+				foreach($fields as $field)
+				{
+					$bind[] = &$row[$field->name];
+				}
+				
+				@$statement->bind = $row;
+				call_user_func_array(array($statement,'bind_result'),$bind);
+			}
+				
+			return $statement;
+		}
+		
+		return $this->db->query($query);
 	}
 
 	/**
@@ -93,7 +161,7 @@ class PASL_DB_Driver_mysql extends PASL_DB_Driver_Common
 	 */
 	public function free($result)
 	{
-		mysql_free_result($result);
+		$result->close();
 	}
 
 
@@ -108,7 +176,7 @@ class PASL_DB_Driver_mysql extends PASL_DB_Driver_Common
 	{
 		// TODO: Type checking on colnum
 		$fetchMode = (!is_int($column)) ? MYSQL_ASSOC : MYSQL_NUM;
-		$One = mysql_fetch_array($result, $fetchMode);
+		$One = mysqli_fetch_array($result, $fetchMode);
 		$One = $One[$column];
 		return $One;
 	}
@@ -121,7 +189,8 @@ class PASL_DB_Driver_mysql extends PASL_DB_Driver_Common
 	 */
 	public function fetchRow($result)
 	{
-		return mysql_fetch_assoc($result);
+		if (get_class($result) == 'mysqli_stmt') return $this->statementFetchRow($result);
+		return mysqli_fetch_assoc($result);
 	}
 
 	/**
@@ -137,7 +206,7 @@ class PASL_DB_Driver_mysql extends PASL_DB_Driver_Common
 		$AssocNew = Array();
 
 		$fetchMode = (!is_int($column)) ? MYSQL_ASSOC : MYSQL_NUM;
-		while($AssocArray = mysql_fetch_array($result, $fetchMode))
+		while($AssocArray = mysqli_fetch_array($result, $fetchMode))
 		{
 			$AssocNew[] = $AssocArray[$column];
 		}
@@ -154,7 +223,7 @@ class PASL_DB_Driver_mysql extends PASL_DB_Driver_Common
 	public function fetchAll($result)
 	{
 		$AssocNew = Array();
-		while($AssocArray = mysql_fetch_array($result, MYSQL_ASSOC))
+		while($AssocArray = (get_class($result) == 'mysqli_stmt') ? $this->statementFetchRow($result) : mysqli_fetch_array($result, MYSQL_ASSOC))
 		{
 			$AssocNew[] = $AssocArray;
 		}
