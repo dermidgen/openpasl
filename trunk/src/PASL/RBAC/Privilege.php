@@ -34,16 +34,16 @@
 
 require_once('PASL/ORM/SimpleTable.php');
 
-class PASL_RBAC_User extends PASL_ORM_SimpleTable
+class PASL_RBAC_Privilege extends PASL_ORM_SimpleTable
 {
 	public $schema = Array(
-		'table'		=> 't_user',
+		'table'		=> 't_privilege',
 		'fields'	=> Array(
-			'c_uid', 'c_owner', 'c_group', 'c_unixperms',
-			'c_status', 'c_username', 'c_password', 'c_group_memberships'	
+			'c_role', 'c_who', 'c_action', 'c_type',
+			'c_related_table', 'c_related_uid'
 		),
-		'pkeys'		=> Array('c_uid','c_owner','c_group','c_unixperms','c_username','c_group_memberships'),
-		'akey'		=> 'c_uid'
+		'pkeys'		=> Array('c_role','c_who','c_action','c_type','c_related_table','c_related_uid'),
+		'akey'		=> null
 	);
 	
 	public function __construct($id=null, $username=null)
@@ -58,10 +58,6 @@ class PASL_RBAC_User extends PASL_ORM_SimpleTable
 			));
 		}
 	}
-	
-	public function can($action, $resource)
-	{
-		
-	}
 }
+
 ?>

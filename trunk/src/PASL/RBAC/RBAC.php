@@ -55,7 +55,7 @@ class PASL_RBAC
 		return PASL_ORM::getDB('pasl_rbac');
 	}
 	
-	public function getPermissions($object_uid, $user_uid)
+	public function getPermissions($user_uid, $resource_uid)
 	{
 		
 	}
