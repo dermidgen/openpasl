@@ -105,11 +105,13 @@ class PASL_ORM_SimpleTable
 	{
 	}
 	
-	protected function __stmtprep(array $params)
+	protected function __stmtprep(array $params, $strict=false)
 	{
 		$where = $bind = Array();
 		foreach($this->schema['pkeys'] as $key) 
 		{
+			if (!$strict && !isset($params[$key])) continue;
+			
 			$where[] = "`$key` = ?";
 			$bind[$key] = $params[$key];
 		}
