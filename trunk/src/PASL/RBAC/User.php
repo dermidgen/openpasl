@@ -50,7 +50,7 @@ class PASL_RBAC_User extends PASL_ORM_SimpleTable
 	{
 		$this->db = PASL_ORM::getDB('pasl_rbac');
 		
-		if (!is_null($title))
+		if (!is_null($id))
 		{
 			$this->__loadObject( Array(
 				'c_uid' => $id,

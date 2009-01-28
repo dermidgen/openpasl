@@ -77,7 +77,7 @@ class PASL_ORM_SimpleTable
 			if (isset($this->rowDecorator)) $this->newValues[$name] = $value;
 			else $this->rowValues[$name] = $value;
 		}
-		else $this->$name = $value;
+		else $this->rowValues[$name] = $value;
 	}
 	
 	public function __get($name)
