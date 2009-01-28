@@ -58,6 +58,7 @@ class PASL_RBAC
 	public function getObjectACLs($type, $uid)
 	{
 		$db = $this->getDB();
+		
 		$query = "select
 			    pr.c_role,
 			    pr.c_who,
@@ -87,13 +88,17 @@ class PASL_RBAC
 			    and pr.c_related_table = '%s';";
 		
 		$query = sprintf($query, $type, $uid, $type, $uid, $type);
+		$res = $db->queryAll($query);
 
-//		$bind = Array('v_table_name'=>$table,'v_object_id'=>$uid);
+		//TODO: Once these queries get locked in we'll want them to be stored procedures
+		// We'll also want to make sure that in any case where unqualified user input may be passed
+		// we're using prepared statements to ensure data is clean.
+
+//		$query = 'call allACLEntries(?,?)';
+//		$bind = Array('v_table_name'=>$type,'v_object_id'=>$uid);
 //		$res = $db->fetchAll($db->query($query,$bind));
 		
-		$res = $db->queryAll($query);
-		
-		return var_export($res, true);
+		return '<pre>' . var_export($res, true) . '</pre>';
 	}
 	
 	public function getPermissions($user_uid, $resource_uid)
