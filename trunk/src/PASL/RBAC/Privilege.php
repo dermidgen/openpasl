@@ -46,15 +46,14 @@ class PASL_RBAC_Privilege extends PASL_ORM_SimpleTable
 		'akey'		=> null
 	);
 	
-	public function __construct($id=null, $username=null)
+	public function __construct($role=null)
 	{
 		$this->db = PASL_ORM::getDB('pasl_rbac');
 		
-		if (!is_null($title))
+		if (!is_null($role))
 		{
 			$this->__loadObject( Array(
-				'c_uid' => $id,
-				'c_username' => $username
+				'c_role' => $role
 			));
 		}
 	}
