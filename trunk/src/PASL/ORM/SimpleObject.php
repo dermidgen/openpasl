@@ -35,22 +35,22 @@
 class PASL_ORM_SimpleObject
 {
 	protected $table;
-	
+
 	public function __construct(PASL_ORM_SimpleTable $table)
 	{
 		$this->table = $table;
 	}
-	
+
 	public function __set($name, $value)
 	{
 		$this->table->$name = $value;
 	}
-	
+
 	public function __get($name)
 	{
 		return $this->table->$name;
 	}
-	
+
 	public function __call($name, $args)
 	{
 		if (method_exists($this->table, $name)) return call_user_func_array(array($this->table,$name),$args);
@@ -60,25 +60,44 @@ class PASL_ORM_SimpleObject
 	public function save()
 	{
 		$where = $set = $bindwhere = $bindval = Array();
-		foreach($this->schema['pkeys'] as $key)
+		foreach($this->schema['fields'] as $key)
 		{
-			$set[] = $where[] = "`$key` = ?";
-			$bindval[$key] = (isset($this->newValues[$key])) ? $this->newValues[$key] : $this->rowValues[$key] ;
-			$bindwhere[] = $this->rowValues[$key];
+			if (!isset($this->newValues[$key]) && !isset($this->rowValues[$key])) continue;
+
+			if(isset($this->newValues[$key]))
+			{
+				$set[] = "`$key` = ?";
+				$bindval[$key] = (isset($this->newValues[$key])) ? $this->newValues[$key] : $this->rowValues[$key] ;
+			}
+
+			if(!$this->schema['akey'] && in_array($key, $this->schema['pkeys']))
+			{
+				$where[] = "`$key` = ?";
+				$bindwhere[$key] = $this->rowValues[$key];
+			}
+			else if ($this->schema['akey'] == $key)
+			{
+				$where[] = "`$key` = ?";
+				$bindwhere[$key] = $this->rowValues[$key];
+			}
+
 		}
+
 		$bind = array_merge($bindval,$bindwhere);
-		
+
 		//TODO: Map Exception for non AutoInc
-		
+//		var_dump($this);
+//		var_dump($bind);
+
 		$query = "update `{$this->schema['table']}` set ". join(',',$set) ." where ". join(',',$where);
 		$this->db->query($query, $bind);
 	}
-	
+
 	public function delete()
 	{
 		$pkey = $this->schema['pkeys'][0];
 		$query = "delete from {$this->schema['table']} where `$pkey` = '{$this->$pkey}'";
-		
+
 		$this->db->query($query);
 	}
 }

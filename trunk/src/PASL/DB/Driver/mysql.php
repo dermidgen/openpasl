@@ -59,7 +59,7 @@ class PASL_DB_Driver_mysql extends PASL_DB_Driver_Common
 	private static $instance = null;
 
 	public $db = null;
-	
+
 	private $lastbind;
 
 	/**
@@ -74,17 +74,17 @@ class PASL_DB_Driver_mysql extends PASL_DB_Driver_Common
 	{
 		$this->db = mysqli_connect($Host, $Username, $Password, $Database);
 	}
-	
+
 	private function statementFetchRow($statement)
 	{
 		if (!$statement->num_rows()) return null;
-		
+
 		$statement->fetch();
 		$row = Array();
 		foreach($statement->bind as $key=>$val) $row[$key] = $val;
 		return $row;
 	}
-	
+
 	private function getDataTypes(array $data)
 	{
 		$types = Array();
@@ -107,7 +107,7 @@ class PASL_DB_Driver_mysql extends PASL_DB_Driver_Common
 				default:
 					$type = 's';
 			}
-			
+
 			$types[] = $type;
 		}
 		return join('',$types);
@@ -128,14 +128,16 @@ class PASL_DB_Driver_mysql extends PASL_DB_Driver_Common
 			// should be replaced as 'select * from table where `c_key` = ?'
 			$statement = $this->db->prepare($query);
 			array_unshift($bind, $this->getDataTypes($bind));
-			
+
+			if (!$statement) return $statement;
+
 			call_user_func_array(array($statement,'bind_param'), $bind);
-			
+
 			@$statement->execute();
 			$statement->store_result();
-			
+
 			$bind = Array();
-			
+
 			if ($statement->num_rows())
 			{
 				$fields = $statement->result_metadata()->fetch_fields();
@@ -143,14 +145,14 @@ class PASL_DB_Driver_mysql extends PASL_DB_Driver_Common
 				{
 					$bind[] = &$row[$field->name];
 				}
-				
+
 				@$statement->bind = $row;
 				call_user_func_array(array($statement,'bind_result'),$bind);
 			}
-				
+
 			return $statement;
 		}
-		
+
 		return $this->db->query($query);
 	}
 

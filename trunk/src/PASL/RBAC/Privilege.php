@@ -45,15 +45,18 @@ class PASL_RBAC_Privilege extends PASL_ORM_SimpleTable
 		'pkeys'		=> Array('c_role','c_who','c_action','c_type','c_related_table','c_related_uid'),
 		'akey'		=> null
 	);
-	
-	public function __construct($role=null)
+
+	public function __construct($role=null,$who=null,$action=null,$type=null)
 	{
 		$this->db = PASL_ORM::getDB('pasl_rbac');
-		
+
 		if (!is_null($role))
 		{
 			$this->__loadObject( Array(
-				'c_role' => $role
+				'c_role' => $role,
+				'c_who' => $who,
+				'c_action' => $action,
+				'c_type' => $type
 			));
 		}
 	}
