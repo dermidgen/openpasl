@@ -32,23 +32,23 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-require_once('PASL/ORM/SimpleTable.php');
+require_once('PASL/RBAC/common.php');
 
-class PASL_RBAC_Action extends PASL_ORM_SimpleTable
+class PASL_RBAC_Action extends PASL_RBAC_common
 {
 	public $schema = Array(
 		'table'		=> 't_action',
 		'fields'	=> Array(
-			'c_title', 'c_apply_object'	
+			'c_title', 'c_apply_object'
 		),
 		'pkeys'		=> Array('c_title'),
 		'akey'		=> null
 	);
-	
+
 	public function __construct($title=null)
 	{
 		$this->db = PASL_ORM::getDB('pasl_rbac');
-		
+
 		if (!is_null($title))
 		{
 			$this->__loadObject( Array(

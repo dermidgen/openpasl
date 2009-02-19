@@ -32,9 +32,9 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-require_once('PASL/ORM/SimpleTable.php');
+require_once('PASL/RBAC/common.php');
 
-class PASL_RBAC_Privilege extends PASL_ORM_SimpleTable
+class PASL_RBAC_Privilege extends PASL_RBAC_common
 {
 	public $schema = Array(
 		'table'		=> 't_privilege',

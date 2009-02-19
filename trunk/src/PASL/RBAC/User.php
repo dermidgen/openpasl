@@ -32,24 +32,28 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-require_once('PASL/ORM/SimpleTable.php');
+require_once('PASL/ORM/ORM.php');
+require_once('PASL/RBAC/common.php');
 
-class PASL_RBAC_User extends PASL_ORM_SimpleTable
+class PASL_RBAC_User extends PASL_RBAC_common
 {
 	public $schema = Array(
 		'table'		=> 't_user',
 		'fields'	=> Array(
 			'c_uid', 'c_owner', 'c_group', 'c_unixperms',
-			'c_status', 'c_username', 'c_password', 'c_group_memberships'	
+			'c_status', 'c_username', 'c_password', 'c_group_memberships'
 		),
 		'pkeys'		=> Array('c_uid','c_owner','c_group','c_unixperms','c_username','c_group_memberships'),
 		'akey'		=> 'c_uid'
 	);
-	
+
 	public function __construct($id=null, $username=null)
 	{
+		$DB = PASL_DB::factory('mysql://seemlux:seemlux@localhost/rbac');
+		PASL_ORM::registerDB('pasl_rbac', $DB);
+
 		$this->db = PASL_ORM::getDB('pasl_rbac');
-		
+
 		if (!is_null($id))
 		{
 			$this->__loadObject( Array(
@@ -58,10 +62,11 @@ class PASL_RBAC_User extends PASL_ORM_SimpleTable
 			));
 		}
 	}
-	
-	public function can($action, $resource)
+
+	public function can($action, $resource, $ObjectId=null)
 	{
-		
+		if($resource->AuthorizeUser($action, $this->c_uid, $ObjectId)) return true;
+		else return false;
 	}
 }
 ?>
