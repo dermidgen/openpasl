@@ -108,6 +108,7 @@ class PASL_RBAC_common extends PASL_ORM_SimpleTable
 		$i=0;
 		foreach($this->groupStack AS $group) // Build the membership pool...
 		{
+			$this->groupStack[$i]['_ugroups'] = 0;
 			foreach($db_ugroups AS $db_ugroup)
 			{
 				if(isset($this->groupStack[$i][$db_ugroup['c_name']])) $this->groupStack[$i]['_ugroups'] += $this->groupStack[$i][$db_ugroup['c_name']];
