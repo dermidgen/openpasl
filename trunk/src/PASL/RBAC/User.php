@@ -49,9 +49,6 @@ class PASL_RBAC_User extends PASL_RBAC_common
 
 	public function __construct($id=null, $username=null)
 	{
-		$DB = PASL_DB::factory('mysql://seemlux:seemlux@localhost/rbac');
-		PASL_ORM::registerDB('pasl_rbac', $DB);
-
 		$this->db = PASL_ORM::getDB('pasl_rbac');
 
 		if (!is_null($id))
