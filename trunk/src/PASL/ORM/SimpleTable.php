@@ -139,7 +139,6 @@ class PASL_ORM_SimpleTable
 
 	public function decorate(array $data)
 	{
-		var_dump($data);
 		if (!count($data)) return;
 		foreach($data as $key=>$value) $this->$key = $value;
 	}
