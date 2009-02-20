@@ -60,8 +60,19 @@ class PASL_RBAC_User extends PASL_RBAC_common
 		}
 	}
 
-	public function can($action, $resource, $ObjectId=null)
+	/**
+	 * Checks to see if a user can perform an action on a resource
+	 *
+	 * @param string $action
+	 * @param object $resource
+	 * @param int $ObjectId
+	 * @return boolean
+	 */
+	public function can($action, $resource)
 	{
+		$pkey = $resource->schema['pkeys'][0];
+		$ObjectId = $resource->$pkey;
+
 		if($resource->AuthorizeUser($action, $this->c_uid, $ObjectId)) return true;
 		else return false;
 	}
