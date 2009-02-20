@@ -36,6 +36,11 @@ require_once('PASL/DB/DB.php');
 require_once('PASL/ORM/SimpleTable.php');
 require_once('PASL/ORM/ORM.php');
 
+/**
+ * This class contains common methods to be extended by RBAC-enabled tables or objects.
+ *
+ * @author Scott Thundercloud
+ */
 class PASL_RBAC_common extends PASL_ORM_SimpleTable
 {
 	protected $groupStack = Array();
@@ -138,6 +143,12 @@ class PASL_RBAC_common extends PASL_ORM_SimpleTable
 		return ($value) ? true : false;
 	}
 
+	/**
+	 * Checks an array set for a specific group
+	 *
+	 * @param array $UserGroups
+	 * @return boolean
+	 */
 	public function CheckGroups($UserGroups)
 	{
 		foreach($UserGroups AS $group)
@@ -148,10 +159,17 @@ class PASL_RBAC_common extends PASL_ORM_SimpleTable
 		return false;
 	}
 
+	/**
+	 * Authorizes a user on a specific action
+	 *
+	 * @param string $action
+	 * @param int $UserId
+	 * @param int $ObjectId
+	 * @return boolean
+	 */
 	public function AuthorizeUser($action, $UserId, $ObjectId=null)
 	{
 		$DB = $this->db;
-
 		$this->bitwiseCreateGroupMembership($action, $UserId, $ObjectId);
 
 		$IsInGroup = $this->CheckGroups($this->__DBGroups);
@@ -160,6 +178,7 @@ class PASL_RBAC_common extends PASL_ORM_SimpleTable
 		{
 			if($action == "write" || "delete" || "read")
 			{
+
 				$permissions = array(
 				   "owner_read"   => 256,
 				   "owner_write"  => 128,
@@ -173,6 +192,7 @@ class PASL_RBAC_common extends PASL_ORM_SimpleTable
 				);
 
 				$result = $DB->queryAll('SELECT `t_group`.`c_name`, `c_owner`, `c_group`, `c_unixperms` FROM `'.$this->schema['table'].'` INNER JOIN `t_group` ON (`t_group`.c_uid = `'.$this->schema['table'].'`.c_group) WHERE `'.$this->schema['table'].'`.`c_uid` = "'.$ObjectId.'"');
+
 				$result[0]['c_unixperms'] =  octdec("0".$result[0]['c_unixperms']);
 				$unixpermissions =  (int) decoct($result[0]['c_unixperms']);
 				$owner = $result[0]['c_owner'];
@@ -207,7 +227,6 @@ class PASL_RBAC_common extends PASL_ORM_SimpleTable
 					break;
 
 					case "write":
-						var_dump($can_write);
 						if($can_write) return true;
 						else return false;
 					break;
