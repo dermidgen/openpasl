@@ -221,12 +221,12 @@ class PASL_RBAC_common extends PASL_ORM_SimpleTable
 			}
 			else
 			{
-				$result = $DB->queryAll('SELECT COUNT(`c_role`) AS count FROM `t_privilege` WHERE `c_role` = "user" AND `c_action` = "write" AND `c_who` = "'.$UserId.'" AND `c_related_table` = "'.$this->schema['table'].'" AND `c_related_uid` = "'.$ObjectId.'"');
+				$result = $DB->queryAll('SELECT COUNT(`c_role`) AS count FROM `t_privilege` WHERE `c_role` = "user" AND `c_action` = "'.$action.'" AND `c_who` = "'.$UserId.'" AND `c_related_table` = "'.$this->schema['table'].'" AND `c_related_uid` = "'.$ObjectId.'"');
 			}
 		}
 		else
 		{
-			$result = $DB->queryAll('SELECT COUNT(`c_role`) AS count FROM `t_privilege` WHERE `c_role` = "user" AND `c_action` = "write" AND `c_who` = "'.$UserId.'" AND `c_related_table` = "'.$this->schema['table'].'"');
+			$result = $DB->queryAll('SELECT COUNT(`c_role`) AS count FROM `t_privilege` WHERE `c_role` = "user" AND `c_action` = "'.$action.'" AND `c_who` = "'.$UserId.'" AND `c_related_table` = "'.$this->schema['table'].'"');
 		}
 
 		$result = ($result[0]['count'] > 0) ? true : false;
