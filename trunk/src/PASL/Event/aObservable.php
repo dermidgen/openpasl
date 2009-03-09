@@ -32,18 +32,145 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
+require_once('PASL/Event/Event.php');
+
+/**
+ * PHP implementation of an event dispatcher
+ *
+ * @package Event
+ */
 abstract class PASL_Event_aObservable
 {
+	/**
+	 * Holds the event types
+	 *
+	 * @var array
+	 */
 	protected $events = Array();
 
+	/**
+	 * Method to add an event type
+	 *
+	 * @param string $strType
+	 * @return void
+	 */
 	private function addEventType($strType)
 	{
-		if (!isset($this->events[$strType])) $this->events[$strType] = $strType;
+		if (!isset($this->events[$strType])) $this->events[$strType] = new PASL_Event($strType);
 	}
 
-	public function addObserver($strEvent, PASL_Event_iObserver $observer)
+	/**
+	 * Internal method to dispatch events on a specific event type.
+	 *
+	 * @param object $Object
+	 * @return void
+	 */
+	private function dispatchQueue($Object)
 	{
+		$eName = $Object->type;
+		$Event = $this->events[$eName];
 
+		if(empty($Event)) return;
+
+		for($i=0; $i < count($Event->observers); $i++)
+		{
+			$callbackFunction = ($Event->observers[$i]->{$eName}) ? $Event->observers[$i]->{$eName} : $Event->observers[$i];
+
+			if(is_array($callbackFunction))
+			{
+				$Obj = $callbackFunction[0];
+				$MethodName = $callbackFunction[1];
+
+				call_user_method($MethodName, $Obj, $Object);
+			}
+			else call_user_func($callbackFunction, $Object);
+		}
+	}
+
+	/**
+	 * Checks to see if an observer exists
+	 *
+	 * @param string $strEvent
+	 * @param object $observer
+	 * @return boolean
+	 */
+	private function checkObserver($strEvent, $observer)
+	{
+		$observers = $this->events[$strEvent]->observers;
+
+		for($i=0; $i < count($observers); $i++)
+		{
+			if($observers[$i] == $observer) return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Dispatch an event type
+	 *
+	 *
+	 * @param object $Object
+	 * @return void
+	 * @example
+	 *{{
+	 * $eventObject = new stdClass;
+	 * $eventObject->type = 'event_name';
+	 * $eventObject->example = 'data'
+	 *
+	 * $object->dispatch($eventObject);
+	 *}}
+	 */
+	public function dispatch($Object)
+	{
+		$this->dispatchQueue($Object);
+	}
+
+	/**
+	 * Add an observer to an event type
+	 *
+	 * @param string $strEvent
+	 * @param object $observer
+	 * @return void
+	 *
+	 * @example
+	 * {{
+	 * $observer = new stdClass;
+	 * $observer->click = Array($object, 'method name'); Wishing to set the callback to a method in a object
+	 * $observer->mouseup = 'function_name'; Wishing to set the callback to a function
+	 *
+	 * $object->addObserver('click', $eventObject);
+	 * $object->addObserver('mouseup', $eventObject);
+	 * }}
+	 */
+	public function addObserver($strEvent, $observer)
+	{
+		$this->addEventType($strEvent);
+
+		if(!$this->checkObserver($strEvent, $observer)) $this->events[$strEvent]->observers[] = $observer;
+	}
+
+	/**
+	 * Remove an observer from a event type
+	 *
+	 * @param string $strEvent
+	 * @param object $observer
+	 * @return void
+	 */
+	public function removeObserver($strEvent, $observer)
+	{
+		$Event = $this->events[$strEvent];
+
+		if($Event)
+		{
+			for($i=0; $i < count($Event->observers); $i++)
+			{
+				if($Event->observers[$i] == $observer)
+				{
+					unset($Event->observers[$i]);
+				}
+			}
+		}
 	}
 }
 ?>
