@@ -96,3 +96,78 @@ database and where the performance drawbacks of MDB2 don't present a threat to o
 necessary to make small compromises ;)
 
 = PASL_WEB_SIMPL =
+
+= PASL_RBAC =
+A short example on how to use the PASL_RBAC classes and information about the schema.
+
+
+== A PASL_RBAC object ==
+
+Below you'll see how to check to see if user 'thundercloud' can write to the user table
+{{{
+<?
+// Include dependencies
+require_once('PASL/DB/DB.php');
+require_once('PASL/RBAC/User.php');
+require_once('PASL/RBAC/RBAC.php');
+require_once('PASL/ORM/ORM.php');
+
+// Register A DB with the ORM
+$DB = PASL_DB::factory("mysql://user:pass@localhost/rbac");
+
+// Register the DB
+PASL_ORM::registerDB('pasl_rbac', $DB);
+
+// Grab a user
+$User = new PASL_RBAC_User(9, 'thundercloud');
+
+// Grab the user table
+$UserTable = new PASL_RBAC_User;
+
+// Check to see if the user can 'write' to the user table
+$can = $User->can('write', $UserTable);
+
+if($can) echo 'User can write to the user table';
+else echo 'User can't write to the user table';
+
+
+?>
+}}}
+Below you'll see how to check to see if user 'thundercloud' can alter the user's own account.  Pretty much the same as the example above except we add parameters to the RBAC object.
+
+{{{
+<?
+// Include dependencies
+require_once('PASL/DB/DB.php');
+require_once('PASL/RBAC/User.php');
+require_once('PASL/RBAC/RBAC.php');
+require_once('PASL/ORM/ORM.php');
+
+// Register A DB with the ORM
+$DB = PASL_DB::factory("mysql://user:pass@localhost/rbac");
+
+// Register the DB
+PASL_ORM::registerDB('pasl_rbac', $DB);
+
+// Grab a user
+$User = new PASL_RBAC_User(9, 'thundercloud');
+
+// Grab the user
+$UserEntry = new PASL_RBAC_User(8, 'someuser');
+
+// Check to see if the user can 'write' to the user table
+$can = $User->can('write', $UserEntry);
+
+if($can) echo 'User can modify the user's information';
+else echo 'User can't modify the user's information';
+
+
+?>
+}}}
+
+
+
+
+== The DB schema ==
+
+
