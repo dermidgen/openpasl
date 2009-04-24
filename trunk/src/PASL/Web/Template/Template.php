@@ -65,6 +65,7 @@
 		 */
 		protected $Variables = Array();
 
+		protected $TemplateBasePath = null;
 		/**
 		 * Set file to be interpreted
 		 *
@@ -82,7 +83,21 @@
 		 */
 		public function SetVariables(array $Variables)
 		{
-			$this->Variables = $Variables;
+			foreach($Variables AS $key=>$val)
+			{
+				$this->Variables[$key] = $val;
+			}
+		}
+
+		/**
+		 * Set a variable to be injected into the template.
+		 *
+		 * @param array Variable
+		 */
+		public function AddVariable(array $Variable)
+		{
+			list($key, $val) = each($Variable);
+			$this->Variables[$key] = $val;
 		}
 
 		/**

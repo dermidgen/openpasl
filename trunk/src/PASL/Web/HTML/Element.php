@@ -46,16 +46,19 @@
 
 		private $innerHTML = '';
 
+		private $Appended = null;
+
 		public function setAttribute($Name, $Value)
 		{
 			$Name = strtolower($Name);
-			$this->Attribute[$Name] = $Value;
+			$this->Attribute[''.$Name.''] = $Value;
 		}
 
 		public function getAttribute($Name)
 		{
 			$Name = strtolower(trim($Name));
-			return $this->Attribute[$Name];
+
+			return (!empty($this->Attribute[$Name])) ? $this->Attribute[$Name] : false;
 		}
 
 		public function setTagName($TagName)
@@ -103,9 +106,7 @@
 			}
 
 			if(!empty($this->innerHTML)) $html .= $this->innerHTML;
-
 			if(!empty($this->innerHTML) || count($this->Appended >= 1)) $html .= '</'.$this->TagName.'>';
-
 
 			return $html;
 		}

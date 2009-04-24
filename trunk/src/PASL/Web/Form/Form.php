@@ -32,6 +32,8 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
+require_once('PASL/Data/Session.php');
+
 class PASL_Web_Form
 {
 	/**
@@ -55,14 +57,22 @@ class PASL_Web_Form
 	private $RequestMethod = 'post';
 
 	/**
+	 * The form data.
+	 */
+	private $FormData = Array();
+
+	/**
+	 * Unique ID
+	 */
+	private $Id;
+
+	/**
 	 * Handles validation on each input
 	 *
 	 * @return boolean
 	 */
 	public function Validate()
 	{
-		if(!$_POST && !$_GET) return;
-
 		$Items = $this->Items;
 
 		foreach($Items AS $Item)
@@ -115,7 +125,7 @@ class PASL_Web_Form
 		$ObjInfo = new ReflectionObject($FormItemObj);
 		$ParentClass = $ObjInfo->getParentClass()->getName();
 
-		if($ParentClass != 'PASL_Web_Form_Item_Common') throw new Exception('Invalid item object.  The object must extend '.$ParentClass);
+//		if($ParentClass != 'PASL_Web_Form_Item_Common') throw new Exception('Invalid item object.  The object must extend '.$ParentClass);
 
 		$Item = new stdClass;
 		$Item->Name = $FormItemName;
@@ -145,17 +155,32 @@ class PASL_Web_Form
 	 */
 	private function triggerSubmitAction()
 	{
-		if(empty($_POST) && empty($_GET)) return;
+		$FormData = $this->FormData;
 
 		foreach($this->Items AS $Item)
 		{
 			$I = $Item->Item;
 
 			$ItemName = $I->getName();
-			$RequestData = (!empty($_GET)) ? $_GET[$ItemName] : $_POST[$ItemName];
+			$RequestData = $FormData[$ItemName];
 
 			$I->doSubmitAction($ItemName, $RequestData);
 		}
+	}
+
+	public function SetId($Id)
+	{
+		$this->Id = $Id;
+	}
+
+	public function GetId()
+	{
+		return $this->Id;
+	}
+
+	public function SetFormData($FormData)
+	{
+		$this->FormData = $FormData;
 	}
 
 	/**
@@ -165,8 +190,12 @@ class PASL_Web_Form
 	 */
 	public function __toString()
 	{
-		$this->triggerSubmitAction();
-		$this->Validate();
+		if(!empty($this->FormData[$this->GetId()]))
+		{
+			$this->triggerSubmitAction();
+			$this->Validate();
+		}
+
 
 		$Variables = Array();
 		foreach($this->Items AS $Item)
@@ -176,7 +205,7 @@ class PASL_Web_Form
 
 			$Variables[$Item->Name] = (string) $I;
 
-			if($this->Error[$Name]) $Variables[$Name.'_error'] = end($this->Error[$Name]);
+			if(!empty($this->Error[$Name])) $Variables[$Name.'_error'] = end($this->Error[$Name]);
 		}
 
 		$this->Template->setVariables($Variables);
@@ -188,11 +217,14 @@ class PASL_Web_Form
 		{
 			$string .= $Name.'="'.$Value.'"';
 			if(count($this->Attributes)-1 != $i) $string .= ' ';
+
 			$i++;
 		}
 
 		$FormHTML = '<form '.$string.'>' . "\n";
+		$FormHTML .= '<input type="hidden" value="1" name="'.$this->Id.'">';
 		$FormHTML .= (string) $this->Template . "\n";
+
 		$FormHTML .= '</form>' . "\n";
 
 		return $FormHTML;

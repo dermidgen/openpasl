@@ -71,7 +71,7 @@
 		/**
 		 * Sets the element's value as static
 		 */
-		public function setStatic(boolean $Static)
+		public function setStatic($Static)
 		{
 			$this->Static = $Static;
 		}
@@ -138,7 +138,7 @@
 
 		public function setClassName($ClassName)
 		{
-			$this->setAttribute('className', $ClassName);
+			$this->setAttribute('class', $ClassName);
 		}
 	}
 ?>

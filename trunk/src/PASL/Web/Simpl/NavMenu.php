@@ -40,34 +40,36 @@
  * @category Web
  * @author Danny Graham <good.midget@gmail.com>
  */
+// TODO: Implement interface for nav items. PASL_Web_Simpl_NavItem
 
 class PASL_Web_Simpl_NavMenu
 {
 	public $style;
 	public $selectedItem = null;
 	public $menuItems = Array();
+	public $name = null;
 
-	public function __construct()
+	public function __construct($name=null)
 	{
-
+		$this->name = $name;
 	}
-	
+
 	/**
 	 * Sets the selected property of a nav item to true
 	 *
 	 * @param PASL_Web_Simpl_NavItem $item
 	 */
-	protected function selectItem(PASL_Web_Simpl_NavItem $item)
+	protected function selectItem($item)
 	{
 		$this->selectedItem = $item;
 		$item->selected = true;
 	}
-	
+
 	public function getItemAt($index)
 	{
 		if (isset($this->menuItems[$index])) return $this->menuItems[$index];
 	}
-	
+
 	public function getItemByAttribute($attribute, $value)
 	{
 		foreach($this->menuItems as $item)
@@ -75,7 +77,7 @@ class PASL_Web_Simpl_NavMenu
 			if (isset($item->$attribute) && $item->$attribute == $value) return $item;
 		}
 	}
-	
+
 	public function getItemByName($name)
 	{
 		return $this->getItemByAttribute('title', $name);
@@ -90,7 +92,7 @@ class PASL_Web_Simpl_NavMenu
 	public function selectItemAt($index)
 	{
 		$this->selectItem($this->getItemAt($index));
-		
+
 		return $this->selectedItem;
 	}
 
@@ -105,7 +107,7 @@ class PASL_Web_Simpl_NavMenu
 	public function selectItemByAttribute($attribute, $value)
 	{
 		$this->selectItem($this->getItemByAttribute($attribute, $value));
-		
+
 		return $this->selectedItem;
 	}
 
@@ -119,13 +121,13 @@ class PASL_Web_Simpl_NavMenu
 	public function selectItemByName($name)
 	{
 		$this->selectItem($this->getItemByName($name));
-		
+
 		return $this->getSelectedItem();
 	}
-	
+
 	/**
 	 * Returns the selected item
-	 * 
+	 *
 	 * @return PASL_Web_Simpl_NavItem
 	 */
 	public function getSelectedItem()
@@ -159,6 +161,17 @@ class PASL_Web_Simpl_NavMenu
 		{
 			print $item;
 		}
+	}
+
+	public function __toString()
+	{
+		$html = '';
+		foreach($this->menuItems as $item)
+		{
+			$html .= (string) $item;
+		}
+
+		return $html;
 	}
 }
 
