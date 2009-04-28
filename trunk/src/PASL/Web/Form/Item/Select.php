@@ -55,7 +55,7 @@
 			$this->autoSelect = $Boolean;
 		}
 
-		public function addOption($Value, $Selected=false, $DisplayValue='')
+		public function addOption($Value, $DisplayValue='', $Selected=false)
 		{
 			if(empty($DisplayValue)) $DisplayValue = $Value;
 

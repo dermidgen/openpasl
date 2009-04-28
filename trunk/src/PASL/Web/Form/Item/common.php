@@ -47,6 +47,17 @@
 
 		private $Static = false;
 
+		/**
+		 * Sets the validator for the form object.
+		 * Accepts an array to reference an object or a string to reference function name.
+		 *
+		 * @example
+		 * $FormObj->setValidator(array($object=>'method'));
+		 * $FormObj->setValidator('function_name');
+		 *
+		 * @param array|string $Validator
+		 * @return void
+		 */
 		public function setValidator($Validator)
 		{
 			$this->Validator = $Validator;
@@ -85,8 +96,17 @@
 		{
 			if(!$this->Validator) return true;
 
-			$Function = new ReflectionFunction($this->Validator);
-			$Data = $Function->invoke($this->internalData);
+			if(!is_array($this->Validator))
+			{
+				$Function = new ReflectionFunction($this->Validator);
+				$Data = $Function->invoke($this->getName(), $this->getValue());
+			}
+			else
+			{
+				list($ObjRef, $MethodName) = $this->Validator;
+				$Data = $ObjRef->{$MethodName}($this->getName(), $this->getValue());
+			}
+
 
 			if(is_bool($Data)) return true;
 			else
@@ -136,9 +156,19 @@
 			return $this->internalData;
 		}
 
+		public function getValidator()
+		{
+			return $this->Validator;
+		}
+
 		public function setClassName($ClassName)
 		{
 			$this->setAttribute('class', $ClassName);
+		}
+
+		public function getClassName()
+		{
+			return $this->getAttribute('class');
 		}
 	}
 ?>

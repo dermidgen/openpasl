@@ -67,6 +67,16 @@ class PASL_Web_Form
 	private $Id;
 
 	/**
+	 * Validator for each form item.  Setting this won't override a validator set on a form item
+	 */
+	private $Validator;
+
+	/**
+	 * Changes form items class name on error
+	 */
+	private $ErrorClassName = null;
+
+	/**
 	 * Handles validation on each input
 	 *
 	 * @return boolean
@@ -78,10 +88,19 @@ class PASL_Web_Form
 		foreach($Items AS $Item)
 		{
 			$I = $Item->Item;
+
+			if(!$I->getValidator() && !empty($this->Validator)) $I->setValidator($this->Validator);
+
 			if(!$I->Validate())
 			{
 				$Name = $I->getName();
 				$this->Error[$Name] = $I->getErrorMessage();
+
+				if($this->ErrorClassName)
+				{
+					$class = $I->getClassName();
+					$I->setClassName($this->ErrorClassName);
+				}
 			}
 		}
 	}
@@ -111,6 +130,11 @@ class PASL_Web_Form
 	{
 		if(count($this->Error) >= 1) return false;
 		return true;
+	}
+
+	public function setValidator($Validator)
+	{
+		$this->Validator = $Validator;
 	}
 
 	/**
@@ -168,19 +192,48 @@ class PASL_Web_Form
 		}
 	}
 
+	/**
+	 * Sets the form id
+	 *
+	 * @param $Id
+	 * @return void
+	 */
 	public function SetId($Id)
 	{
 		$this->Id = $Id;
 	}
 
+	/**
+	 * Get the form id
+	 *
+	 * @return void
+	 */
 	public function GetId()
 	{
 		return $this->Id;
 	}
 
+	/**
+	 * Set the form data
+	 *
+	 * @param array $FormData
+	 * @return void
+	 */
 	public function SetFormData($FormData)
 	{
 		$this->FormData = $FormData;
+	}
+
+	/**
+	 * Sets the error class name.  If an error occurres on an item, the item's class name is changed
+	 * to the specified class name.
+	 *
+	 * @param $ErrorClassName
+	 * @return void
+	 */
+	public function SetErrorClassName($ErrorClassName)
+	{
+		$this->ErrorClassName = $ErrorClassName;
 	}
 
 	/**
@@ -196,7 +249,6 @@ class PASL_Web_Form
 			$this->Validate();
 		}
 
-
 		$Variables = Array();
 		foreach($this->Items AS $Item)
 		{
@@ -205,11 +257,19 @@ class PASL_Web_Form
 
 			$Variables[$Item->Name] = (string) $I;
 
-			if(!empty($this->Error[$Name])) $Variables[$Name.'_error'] = end($this->Error[$Name]);
+			if(!empty($this->Error[$Name]))
+			{
+				$Variables[$Name.'_error'] = end($this->Error[$Name]);
+			}
+		}
+
+		if(!empty($this->Error))
+		{
+			$error = current($this->Error);
+			$Variables['first_error'] = current($error);
 		}
 
 		$this->Template->setVariables($Variables);
-
 
 		$string = '';
 		$i=0;
