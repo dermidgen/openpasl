@@ -76,9 +76,9 @@ class DArray extends Validation implements iValidator
 			$Callback = (!empty($this->Callback[$key])) ? $this->Callback[$key] : ($this->GlobalCallback !== null) ? $this->GlobalCallback : false;
 			if($Callback === false)
 			{
-				PASL::Log(__CLASS__.': Callback not set for "{$key}"');
+				Log::Add(__CLASS__.': Callback not set for "{$key}"');
 				continue;
-			}
+ 
 			
 			if(is_array($Callback))
 			{
