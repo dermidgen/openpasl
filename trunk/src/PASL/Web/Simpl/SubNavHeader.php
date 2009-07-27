@@ -36,7 +36,7 @@ namespace PASL\Web\Simpl\SubNavHeader;
 
 require_once("NavItem.php");
 
-use NavItem;
+use PASL\Web\Simpl\NavItem;
 
 /**
  * SubNavHeader provides a header menu item for SubNav

@@ -161,7 +161,7 @@ class DB
 		$dbHostSpec = $dsn['hostspec'];
 		$dbDatabase = $dsn['database'];
 
-		$className = $driver;
+		$className = 'PASL\DB\Driver\\'.$driver;
 
 		if(!class_exists($className, false))
 		{
@@ -174,7 +174,7 @@ class DB
 		if(!$singleton) return new $className($dbHostSpec, $dbUsername, $dbPassword, $dbDatabase);
 		else
 		{
-			$ReflectedClass = new ReflectionClass($className);
+			$ReflectedClass = new \ReflectionClass($className);
 
 			$Host = $ReflectedClass->getProperty("host");
 			$Username = $ReflectedClass->getProperty("username");
@@ -210,7 +210,7 @@ class DB
 		if ($portable) // Kick out MDB2 Driver
 		{
 			require_once("MDB2.php");
-			$db = MDB2::factory($dsn, $options);
+			$db = \MDB2::factory($dsn, $options);
 		}
 		else // We'll go with a native/custom driver
 		{
@@ -242,7 +242,7 @@ class DB
 			// Check the existing driver stack and return one if it already exists
 			if (isset(DB::$MDB2Drivers[$driverIndex])) return DB::$MDB2Drivers[$driverIndex];
 
-			$db = MDB2::singleton($dsn, $options);
+			$db = \MDB2::singleton($dsn, $options);
 			DB::$MDB2Drivers[$driverIndex] = $db; // Stick the driver in our local stack
 		}
 		else // We'll go with a native/custom driver

@@ -37,8 +37,8 @@ namespace PASL\Web\Service\Provider;
 require_once('PASL/Web/Service/iServiceProvider.php');
 require_once('PASL/Web/Service/Request.php');
 
-use \PASL\Web\Service\iServiceProvider;
-use \PASL\Web\Service\Request;
+use PASL\Web\Service\iServiceProvider;
+use PASL\Web\Service\Request;
 
 /**
  * Provider for REST based services.
@@ -48,7 +48,7 @@ use \PASL\Web\Service\Request;
  * @category Web
  * @author Danny Graham <good.midget@gmail.com>
  */
-class Rest implements \PASL\Web\Service\iServiceProvider
+class Rest implements iServiceProvider
 {
 	/**
 	 * Parse the incoming request in a RESTful way

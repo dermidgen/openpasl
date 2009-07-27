@@ -39,7 +39,7 @@ require_once('PASL/Web/Service/amfphp/globals.php');
 require_once('PASL/Web/Service/amfphp/core/amf/app/Gateway.php');
 
 
-use \PASL\Web\Service\iServiceProvider;
+use PASL\Web\Service\iServiceProvider;
 /**
  * Provides AMF based service support through AMFPHP. We do a little
  * cleanup here to ensure that the classpath is correctly set for AMFPHP
@@ -50,7 +50,7 @@ use \PASL\Web\Service\iServiceProvider;
  * @category Web
  * @author Danny Graham <good.midget@gmail.com>
  */
-class AMF implements \PASL\Web\Service\iServiceProvider
+class AMF implements iServiceProvider
 {
 	private $productionServer = false;
 

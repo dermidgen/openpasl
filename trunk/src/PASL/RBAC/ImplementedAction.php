@@ -36,7 +36,7 @@ namespace PASL\RBAC;
 require_once('PASL/RBAC/common.php');
 require_once('PASL/ORM/ORM.php');
 
-use common;
+use PASL\RBAC\common;
 use PASL\ORM;
 
 class ImplementedAction extends common

@@ -198,7 +198,7 @@ class Service
 		$requestMethod = $_SERVER['REQUEST_METHOD'];
 		$requestURI = $_SERVER['REQUEST_URI'];
 
-		$oRequest = new PASL_Web_Service_Request();
+		$oRequest = new Request();
 
 		/**
 		 * A broken out array of the request
@@ -271,7 +271,7 @@ class Service
 		// AMFPHP requires us to provide a classpath to provision services.
 		$className = get_class(($oHandler == null) ? $this : $oHandler);
 
-		$reflected = new ReflectionClass($className);
+		$reflected = new \ReflectionClass($className);
 		$this->sClassPath = dirname($reflected->getFileName());
 	}
 

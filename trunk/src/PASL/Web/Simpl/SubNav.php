@@ -36,7 +36,7 @@ namespace PASL\Web\Simpl;
 
 require_once("NavMenu.php");
 
-use NavMenu;
+use PASL\Web\Simpl\NavMenu;
 
 /**
  * SubNav provides a Menu of NavItems for display in a page template

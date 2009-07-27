@@ -102,7 +102,7 @@ abstract class Common extends Element
 
 		if(!is_array($this->Validator))
 		{
-			$Function = new ReflectionFunction($this->Validator);
+			$Function = new \ReflectionFunction($this->Validator);
 			$Data = $Function->invoke($this->getName(), $this->getValue());
 		}
 		else

@@ -35,7 +35,7 @@ namespace PASL\ORM;
 
 require_once('PASL/ORM/SimpleObject.php');
 
-use SimpleObject;
+use PASL\ORM\SimpleObject;
 
 class SimpleTable
 {

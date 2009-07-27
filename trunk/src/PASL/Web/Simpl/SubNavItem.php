@@ -36,7 +36,7 @@ namespace PASL\Web\Simpl;
 
 require_once("NavItem.php");
 
-use NavItem;
+use PASL\Web\Simpl\NavItem;
 
 /**
  * SubNavItem provides creates an item for the SubNav

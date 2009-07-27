@@ -36,7 +36,7 @@ namespace PASL\Web\Simpl;
 
 require_once("NavItem.php");
 
-use NavItem;
+use PASL\Web\Simpl\NavItem;
 
 /**
  * NavMenu provides a Menu of NavItems for display in a page template

@@ -34,9 +34,9 @@
 
 namespace PASL\Web\Form\Item;
 
-require_once('PASL/Web/Form/Item/common.php');
+require_once('PASL/Web/Form/Item/Common.php');
 
-use Common;
+use PASL\Web\Form\Item\Common;
 
 class Input extends Common
 {

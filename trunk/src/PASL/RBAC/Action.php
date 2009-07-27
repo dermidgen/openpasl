@@ -37,7 +37,7 @@ require_once('PASL/ORM/ORM.php');
 require_once('PASL/RBAC/common.php');
 
 use PASL\ORM;
-use common;
+use PASL\RBAC\common;
 
 class Action extends common
 {

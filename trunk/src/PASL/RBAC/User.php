@@ -37,7 +37,7 @@ namespace PASL\RBAC;
 require_once('PASL/ORM/ORM.php');
 require_once('PASL/RBAC/common.php');
 
-use common;
+use PASL\RBAC\common;
 use PASL\ORM;
 
 class User extends common

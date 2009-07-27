@@ -35,7 +35,7 @@ namespace PASL\DB\Driver;
 
 include_once("Common.php");
 
-use Common;
+use PASL\DB\Driver\Common;
 
 /**
  * Provides RAW driver implementation of MDB2 common API for MySQL.
@@ -75,7 +75,7 @@ class mysql extends Common
 	 */
 	public function __construct($Host, $Username, $Password, $Database)
 	{
-		$this->db = new mysqli($Host, $Username, $Password, $Database);
+		$this->db = new \mysqli($Host, $Username, $Password, $Database);
 	}
 
 	private function statementFetchRow($statement)

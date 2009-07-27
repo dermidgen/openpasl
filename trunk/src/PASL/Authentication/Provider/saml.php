@@ -39,8 +39,8 @@ require_once('PASL/Authentication/Provider/common.php');
 
 
 
-use iProvider;
-use common;
+use PASL\Authentication\Provider\iProvider;
+use PASL\Authentication\Provider\common;
 
 /**
  * Provides a SAML based authentication provider. This provider is designed to

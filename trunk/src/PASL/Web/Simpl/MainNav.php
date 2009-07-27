@@ -38,9 +38,9 @@ require_once("NavMenu.php");
 require_once("MainNavItem.php");
 require_once("MainNavHeader.php");
 
-use NavMenu;
-use MainNavItem;
-use MainNavHeader;
+use PASL\Web\Simpl\NavMenu;
+use PASL\Web\Simpl\MainNavItem;
+use PASL\Web\Simpl\MainNavHeader;
 
 /**
  * Main nav implements the main nav interface for the page

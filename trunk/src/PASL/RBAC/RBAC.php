@@ -227,7 +227,7 @@ class RBAC
 
 	public static function GetInstance()
 	{
-		if (!self::$instance) self::$instance = new $this;
+		if (!self::$instance) self::$instance = new self;
 		return self::$instance;
 	}
 }

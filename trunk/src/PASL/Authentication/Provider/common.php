@@ -32,7 +32,7 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
  
-namespace PASL/Authentication/Provider;
+namespace PASL\Authentication\Provider;
 
 define('PASL_AUTH_INVALID_USERNAME', 001);
 define('PASL_AUTH_INVALID_PASSWORD', 002);

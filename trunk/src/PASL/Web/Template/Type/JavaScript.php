@@ -65,6 +65,11 @@ class JavaScript extends Template
 {
 	private $JSInterpreter = null;
 
+	public function __construct()
+	{
+		$this->setJSInterpreter(new SpiderMonkey);
+	}
+	
 	protected function Interpret()
 	{
 		$JSInterpreter = $this->getJSInterpreter();

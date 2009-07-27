@@ -39,7 +39,7 @@ require_once('PASL/Authentication/Provider/common.php');
 
 use PASL\DB;
 use PASL\Autentication\iProvider;
-use common;
+use PASL\Authentication\Provider\common;
 
 /**
  * Provides a mysql based authentication provider. This provider is designed to

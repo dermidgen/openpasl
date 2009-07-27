@@ -128,7 +128,7 @@ class SpiderMonkey extends \JSContext implements iInterpreter
 	}
 
 	/**
-	 * Set a file to be interpreted.
+	 * Set a file to be interpreted
 	 * 
 	 * @return void 
 	 * @param string $File

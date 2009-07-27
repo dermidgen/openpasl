@@ -34,11 +34,11 @@
 
 namespace PASL\Web\Form\Item;
 
-require_once('PASL/Web/Form/Item/common.php');
+require_once('PASL/Web/Form/Item/Common.php');
 require_once('PASL/Web/Form/Item/Option.php');
 
-use Common;
-use Option;
+use PASL\Web\Form\Item\Common;
+use PASL\Web\Form\Item\Option;
 
 class Select extends Common
 {

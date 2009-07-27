@@ -36,7 +36,7 @@ namespace PASL\Web\Environment\JavaScript\Abstraction;
 
 require_once("PASL/Web/Environment/JavaScript/Abstraction/DOMNode.php");
 
-use DOMNode;
+use PASL\Web\Environment\JavaScript\Abstraction\DOMNode;
 
 class DOMDocument extends DOMNode
 {
