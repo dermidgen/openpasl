@@ -32,6 +32,8 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
+namespace PASL\Web\Service;
+
 /**
  * Request object that acts as a standard object to encapsulate
  * service request information.
@@ -41,7 +43,7 @@
  * @category Web
  * @author Danny Graham <good.midget@gmail.com>
  */
-class PASL_Web_Service_Request
+class Request
 {
 	/**
 	 * The full signature of the request URI

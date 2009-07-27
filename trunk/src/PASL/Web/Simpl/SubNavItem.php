@@ -32,7 +32,11 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
+namespace PASL\Web\Simpl;
+
 require_once("NavItem.php");
+
+use NavItem;
 
 /**
  * SubNavItem provides creates an item for the SubNav
@@ -43,7 +47,7 @@ require_once("NavItem.php");
  * @author Danny Graham <good.midget@gmail.com>
  */
 
-class PASL_Web_Simpl_SubNavItem extends PASL_Web_Simpl_NavItem
+class SubNavItem extends NavItem
 {
 	/**
 	 * Basic constructor

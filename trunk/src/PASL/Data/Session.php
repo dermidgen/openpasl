@@ -32,7 +32,9 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-class PASL_Data_Session
+namespace PASL\Data;
+
+class Session
 {
 	public static function GetValue($Key)
 	{

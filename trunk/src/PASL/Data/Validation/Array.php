@@ -31,11 +31,19 @@
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
+namespace PASL\Data\Validation;
 
 require_once('PASL/Data/Validation/Validation.php');
 require_once('PASL/Log.php');
 require_once('PASL/Data/Validation/iValidator.php');
 require_once('PASL/Data/Validation/Error.php');
+
+
+
+use PASL\Log;
+use PASL\Data\Validation;
+use PASL\Data\Validation\Error;
+use PASL\Data\Validation\iValidator;
 
 /**
  * Class to validate an data in an array.
@@ -44,7 +52,7 @@ require_once('PASL/Data/Validation/Error.php');
  * @category Data Validation
  * @author Scott Thundercloud <scott.tc@gmail.com>
  */
-class PASL_Data_Validation_Array extends PASL_Data_Validation implements PASL_Data_Validation_iValidator
+class DArray extends Validation implements iValidator
 {
 	private $Callback = Array();
 	private $GlobalCallback = null;
@@ -62,7 +70,7 @@ class PASL_Data_Validation_Array extends PASL_Data_Validation implements PASL_Da
 	public function Validate()
 	{
 		$Data = $this->getData();
-
+		
 		foreach($Data AS $key=>$val)
 		{
 			$Callback = (!empty($this->Callback[$key])) ? $this->Callback[$key] : ($this->GlobalCallback !== null) ? $this->GlobalCallback : false;
@@ -71,7 +79,7 @@ class PASL_Data_Validation_Array extends PASL_Data_Validation implements PASL_Da
 				PASL::Log(__CLASS__.': Callback not set for "{$key}"');
 				continue;
 			}
-
+			
 			if(is_array($Callback))
 			{
 				$obj = $Callback[0];
@@ -80,23 +88,24 @@ class PASL_Data_Validation_Array extends PASL_Data_Validation implements PASL_Da
 				// Method
 				if(!is_object($obj))
 				{
-					$Object = new ReflectionClass($obj);
+					$Object = new \ReflectionClass($obj);
 					$obj = $Object->newInstance();
-				} else $Object = new ReflectionObject($obj); // Object
+				} else $Object = new \ReflectionObject($obj); // Object
 
 				$Method = $Object->getMethod($method);
 				$Data = $Method->invoke($obj, $key, $val);
 			}
 			else
 			{
+				
 				// Run function
-				$Function = new ReflectionFunction($Callback);
+				$Function = new \ReflectionFunction($Callback);
 				$Data = $Function->invoke($key, $val);
 			}
 
 			if($Data !== true)
 			{
-				$Error = new PASL_Data_Validation_Error;
+				$Error = new Error;
 				$Error->Message = $Data;
 				$Error->Name = $key;
 				$Error->Value = $val;

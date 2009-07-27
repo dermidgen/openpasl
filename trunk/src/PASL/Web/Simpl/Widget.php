@@ -32,7 +32,9 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-class PASL_Web_Simpl_Widget
+namespace PASL\Web\Simpl;
+
+class Widget
 {
 	protected $templatePath = 'themes/%s/templates/widgets/%s.htm';
 	

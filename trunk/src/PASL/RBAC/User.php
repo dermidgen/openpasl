@@ -32,10 +32,15 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
+namespace PASL\RBAC;
+
 require_once('PASL/ORM/ORM.php');
 require_once('PASL/RBAC/common.php');
 
-class PASL_RBAC_User extends PASL_RBAC_common
+use common;
+use PASL\ORM;
+
+class User extends common
 {
 	public $schema = Array(
 		'table'		=> 't_user',
@@ -49,7 +54,7 @@ class PASL_RBAC_User extends PASL_RBAC_common
 
 	public function __construct($id=null, $username=null)
 	{
-		$this->db = PASL_ORM::getDB('pasl_rbac');
+		$this->db = ORM::getDB('pasl_rbac');
 
 		if (!is_null($id))
 		{

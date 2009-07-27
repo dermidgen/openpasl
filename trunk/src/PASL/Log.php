@@ -31,8 +31,9 @@
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
+namespace PASL;
 
-class PASL_Log
+class Log
 {
 	public static $logLevel = 0;
 	public static $logFile;
@@ -57,7 +58,7 @@ class PASL_Log
 		self::$logLevel = $intLogLevel;
 	}
 
-	public static function Log($strMessage, $bLineBreaks=true)
+	public static function Add($strMessage, $bLineBreaks=true)
 	{
 		if (self::$logLevel === 0) return false;
 		if (self::$logLevel >= 1) self::logToFile($strMessage, $bLineBreaks);

@@ -32,7 +32,11 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
+namespace PASL\Web\Simpl;
+
 require_once("NavItem.php");
+
+use NavItem;
 
 /**
  * MainNavHeader provides a Header menu item
@@ -43,7 +47,7 @@ require_once("NavItem.php");
  * @author Danny Graham <good.midget@gmail.com>
  */
 
-class PASL_Web_Simpl_MainNavHeader extends PASL_Web_Simpl_NavItem
+class MainNavHeader extends NavItem
 {
 	public function __construct($title)
 	{

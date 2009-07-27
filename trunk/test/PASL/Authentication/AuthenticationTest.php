@@ -49,18 +49,18 @@ class PASL_AuthenticationTest extends UnitTestCase
 
 	function TestProvider_mysql()
 	{
-		$db = PASL_DB::singleton($this->strMyDsn);
+		$db = \PASL\DB::singleton($this->strMyDsn);
 
-		$oAuth = new PASL_Authentication('mysql');
+		$oAuth = new \PASL\Authentication('mysql');
 		$authProvider = $oAuth->getProvider();
 
-		$this->assertIsA($authProvider, "PASL_Authentication_iProvider");
-		$this->assertIsA($authProvider, "PASL_Authentication_Provider_mysql");
+		$this->assertIsA($authProvider, "PASL\Authentication\iProvider");
+		$this->assertIsA($authProvider, "PASL\Authentication\Provider_mysql");
 	}
 
 	function TestAuth_mysql()
 	{
-		$db = PASL_DB::singleton($this->strMyDsn);
+		$db = \PASL\DB::singleton($this->strMyDsn);
 
 		$oAuth = new PASL_Authentication('mysql');
 
@@ -79,9 +79,9 @@ class PASL_AuthenticationTest extends UnitTestCase
 
 	function TestAuth_mysql_md5()
 	{
-		$db = PASL_DB::singleton($this->strMyDsn);
+		$db = \PASL\DB::singleton($this->strMyDsn);
 
-		$oAuth = new PASL_Authentication('mysql');
+		$oAuth = new \PASL\Authentication('mysql');
 
 		/**
 		 * @var PASL_Authentication_Provider_mysql
@@ -100,9 +100,9 @@ class PASL_AuthenticationTest extends UnitTestCase
 
 	function TestAuth_mysql_bad_user()
 	{
-		$db = PASL_DB::singleton($this->strMyDsn);
+		$db = \PASL\DB::singleton($this->strMyDsn);
 
-		$oAuth = new PASL_Authentication('mysql');
+		$oAuth = new \PASL\Authentication('mysql');
 
 		/**
 		 * @var PASL_Authentication_Provider_mysql
@@ -120,9 +120,9 @@ class PASL_AuthenticationTest extends UnitTestCase
 
 	function TestAuth_mysql_bad_password()
 	{
-		$db = PASL_DB::singleton($this->strMyDsn);
+		$db = \PASL\DB::singleton($this->strMyDsn);
 
-		$oAuth = new PASL_Authentication('mysql');
+		$oAuth = new \PASL\Authentication('mysql');
 
 		/**
 		 * @var PASL_Authentication_Provider_mysql

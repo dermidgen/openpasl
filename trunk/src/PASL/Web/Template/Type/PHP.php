@@ -31,51 +31,54 @@
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
+namespace PASL\Web\Template\Type;
 
-	/**
-	 * A hack to keep the loaded template's scope outside of the object.
-	 *
-	 * @param string $file
-	 * @param array $vars
-	 * @return string Template Contents
-	 */
-	function __load($file, $vars)
+/**
+ * A hack to keep the loaded template's scope outside of the object.
+ *
+ * @param string $file
+ * @param array $vars
+ * @return string Template Contents
+ */
+function __load($file, $vars)
+{
+	ob_start();
+
+	foreach($vars AS $key=>$val)
 	{
-		ob_start();
-
-		foreach($vars AS $key=>$val)
-		{
-			${$key} = $val;
-		}
-		$_PASL_VARIABLES = $vars;
-		include($file);
-
-		$contents = ob_get_contents();
-
-		ob_end_clean();
-
-		return $contents;
+		${$key} = $val;
 	}
+	$_PASL_VARIABLES = $vars;
+	include($file);
 
-	require_once('PASL/Web/Template/Template.php');
+	$contents = ob_get_contents();
 
+	ob_end_clean();
+
+	return $contents;
+}
+
+require_once('PASL/Web/Template/Template.php');
+
+use PASL\Web\Template;
+
+/**
+ * Class for loading templates using PHP
+ *
+ * @author Scott Thundercloud
+ */
+class PHP extends Template
+{
 	/**
-	 * Class for loading templates using PHP
+	 * Interprets the template using PHP.
 	 *
-	 * @author Scott Thundercloud
+	 * @package PASL_Web_Template_Type
+	 * @return string Template Data
 	 */
-	class PASL_Web_Template_Type_PHP extends PASL_Web_Template
+	protected function Interpret()
 	{
-		/**
-		 * Interprets the template using PHP.
-		 *
-		 * @package PASL_Web_Template_Type
-		 * @return string Template Data
-		 */
-		protected function Interpret()
-		{
-			$Contents = __load($this->File, $this->Variables);
-			return $Contents;
-		}
+		$Contents = __load($this->File, $this->Variables);
+		return $Contents;
 	}
+}
 ?>

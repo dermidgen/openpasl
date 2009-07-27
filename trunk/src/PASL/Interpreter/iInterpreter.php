@@ -31,6 +31,7 @@
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
+namespace PASL\Interpreter;
 
 /**
  * Provides an interface for interpreters
@@ -39,7 +40,7 @@
  * @category Interpreter
  * @author Scott Thundercloud <scott.tc@gmail.com>
  */
-interface PASL_Interpreter_iInterpreter
+interface iInterpreter
 {
 	public function Run();
 	public function assignVariable($Key, $Value);

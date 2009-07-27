@@ -31,15 +31,18 @@
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
+namespace PASL\Event;
 
 require_once('PASL/Event/Event.php');
+
+use PASL\Event;
 
 /**
  * PHP implementation of an event dispatcher
  *
  * @package Event
  */
-abstract class PASL_Event_aObservable
+abstract class aObservable
 {
 	/**
 	 * Holds the event types
@@ -56,7 +59,7 @@ abstract class PASL_Event_aObservable
 	 */
 	private function addEventType($strType)
 	{
-		if (!isset($this->events[$strType])) $this->events[$strType] = new PASL_Event($strType);
+		if (!isset($this->events[$strType])) $this->events[$strType] = new Event($strType);
 	}
 
 	/**

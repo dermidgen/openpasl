@@ -31,31 +31,34 @@
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
+namespace PASL\Web\Environment\JavaScript;
 
 require_once('PASL/Web/Environment/aEnvironment.php');
 require_once('PASL/Interpreter/JavaScript/SpiderMonkey.php');
 
+use PASL\Web\Environment\aEnvironment;
+use PASL\Interpreter\JavaScript\SpiderMonkey;
 
 
 
-class PASL_Web_Environment_JavaScript_Bootstrap extends PASL_Web_aEnvironment
+class Bootstrap extends aEnvironment
 {
 	protected $Options;
 	protected $Interpreter;
 	protected $IndexFile = 'index.js';
 	protected $BootstrapDirectory = '.';
 	protected $EnvironmentImports = Array();
-	
+
 	public function __construct()
 	{
-		$this->setInterpreter(new PASL_Interpreter_JavaScript_SpiderMonkey);
-		
+		$this->setInterpreter(new SpiderMonkey);
+
 		$Interpreter = $this->getInterpreter();
 	}
-	
+
 	public function registerClass($phpClassName, $jsObjectName)
 	{
-		$Obj = new stdClass;
+		$Obj = new \stdClass;
 		$Obj->phpName = $phpClassName;
 		$Obj->jsObjectName = $jsObjectName;
 		$Obj->Type = 'class';
@@ -67,7 +70,7 @@ class PASL_Web_Environment_JavaScript_Bootstrap extends PASL_Web_aEnvironment
 	
 	public function registerFunction($phpFunctionName, $jsObjectName)
 	{
-		$Obj = new stdClass;
+		$Obj = new \stdClass;
 		$Obj->phpName = $phpFunctionName;
 		$Obj->jsObjectName = $jsObjectName;
 		$Obj->Type = 'function';
@@ -79,7 +82,7 @@ class PASL_Web_Environment_JavaScript_Bootstrap extends PASL_Web_aEnvironment
 	
 	public function registerObject($name, $value)
 	{
-		$Obj = new stdClass;
+		$Obj = new \stdClass;
 		$Obj->phpName = $name;
 		$Obj->jsObjectName = $value;
 		$Obj->Type = 'object';
@@ -100,7 +103,9 @@ class PASL_Web_Environment_JavaScript_Bootstrap extends PASL_Web_aEnvironment
 		{
 			$php_class_name = $Import->phpName;
 			$js_object_name = $Import->jsObjectName;
-			
+
+			$js_php_class_name = str_replace("\\", '_', $Import->phpName);
+
 			$explodestr = (!is_string($js_object_name)) ? $php_class_name : $js_object_name;
 
 			// Register JS Object
@@ -110,7 +115,7 @@ class PASL_Web_Environment_JavaScript_Bootstrap extends PASL_Web_aEnvironment
 			$i=0;
 			foreach($explode AS $jsobj)
 			{
-				if($i == 0) $str .= $jsobj . "";
+				if($i == 0) $str .= $jsobj;
 				else $str .= '.' . $jsobj;
 
 				$i++;
@@ -122,16 +127,16 @@ class PASL_Web_Environment_JavaScript_Bootstrap extends PASL_Web_aEnvironment
 			switch($Import->Type)
 			{
 				case 'function':
-					$Interpreter->registerFunction($php_class_name, $php_class_name);
+					$Interpreter->registerFunction($php_class_name, $js_php_class_name);
 				break;
 
 				case 'class':
-					$Interpreter->registerClass($php_class_name, $php_class_name);
+					$Interpreter->registerClass($php_class_name, $js_php_class_name);
 				break;
 
 				case 'object':
-					$Interpreter->registerObject($php_class_name, $js_object_name);
-					$js_object_name = $php_class_name;
+					$Interpreter->registerObject($php_class_name, $js_php_class_name);
+					$js_object_name = $js_php_class_name;
 				break;
 
 				default:
@@ -139,8 +144,8 @@ class PASL_Web_Environment_JavaScript_Bootstrap extends PASL_Web_aEnvironment
 				break;
 			}
 
-			$jsobjstr .= $js_object_name .= ' = ' . $php_class_name . ";\n";
-			$jsobjstr .= $php_class_name . ' = null;' . "\n";
+			$jsobjstr .= $js_object_name .= ' = ' . $js_php_class_name . ";\n";
+			$jsobjstr .= $js_php_class_name . ' = null;' . "\n";
 		}
 
 		$bootstrap_str .= $jsobjstr;

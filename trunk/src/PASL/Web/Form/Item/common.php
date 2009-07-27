@@ -32,143 +32,147 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-	require_once("PASL/Web/HTML/Element.php");
+namespace PASL\Web\HTML\Element;
 
-	abstract class PASL_Web_Form_Item_Common extends PASL_Web_DOM_Element
+require_once("PASL/Web/HTML/Element.php");
+
+use PASL\Web\HTML\Element;
+
+abstract class Common extends Element
+{
+	# abstract function __toString(); // Satisfied by PASL_Web_DOM_Element
+	abstract function doSubmitAction($Name, $Value);
+
+	protected $internalData = '';
+
+	private $Validator = '';
+
+	private $Error = Array();
+
+	private $Static = false;
+
+	/**
+	 * Sets the validator for the form object.
+	 * Accepts an array to reference an object or a string to reference function name.
+	 *
+	 * @example
+	 * $FormObj->setValidator(array($object=>'method'));
+	 * $FormObj->setValidator('function_name');
+	 *
+	 * @param array|string $Validator
+	 * @return void
+	 */
+	public function setValidator($Validator)
 	{
-		# abstract function __toString(); // Satisfied by PASL_Web_DOM_Element
-		abstract function doSubmitAction($Name, $Value);
+		$this->Validator = $Validator;
+	}
 
-		protected $internalData = '';
+	public function getErrorMessage()
+	{
+		return $this->Error;
+	}
 
-		private $Validator = '';
+	/**
+	 * Checks if the value of the element is static or not
+	 *
+	 * @return bool
+	 */
+	public function isStatic()
+	{
+		if($this->Static === true) return true;
+		else return false;
+	}
 
-		private $Error = Array();
+	/**
+	 * Sets the element's value as static
+	 */
+	public function setStatic($Static)
+	{
+		$this->Static = $Static;
+	}
 
-		private $Static = false;
+	/**
+	 * Validates the element
+	 *
+	 * @return bool
+	 */
+	public function Validate()
+	{
+		if(!$this->Validator) return true;
 
-		/**
-		 * Sets the validator for the form object.
-		 * Accepts an array to reference an object or a string to reference function name.
-		 *
-		 * @example
-		 * $FormObj->setValidator(array($object=>'method'));
-		 * $FormObj->setValidator('function_name');
-		 *
-		 * @param array|string $Validator
-		 * @return void
-		 */
-		public function setValidator($Validator)
+		if(!is_array($this->Validator))
 		{
-			$this->Validator = $Validator;
+			$Function = new ReflectionFunction($this->Validator);
+			$Data = $Function->invoke($this->getName(), $this->getValue());
+		}
+		else
+		{
+			list($ObjRef, $MethodName) = $this->Validator;
+			$Data = $ObjRef->{$MethodName}($this->getName(), $this->getValue());
 		}
 
-		public function getErrorMessage()
-		{
-			return $this->Error;
-		}
 
-		/**
-		 * Checks if the value of the element is static or not
-		 *
-		 * @return bool
-		 */
-		public function isStatic()
+		if(is_bool($Data)) return true;
+		else
 		{
-			if($this->Static === true) return true;
-			else return false;
-		}
-
-		/**
-		 * Sets the element's value as static
-		 */
-		public function setStatic($Static)
-		{
-			$this->Static = $Static;
-		}
-
-		/**
-		 * Validates the element
-		 *
-		 * @return bool
-		 */
-		public function Validate()
-		{
-			if(!$this->Validator) return true;
-
-			if(!is_array($this->Validator))
+			foreach($Data AS $Error)
 			{
-				$Function = new ReflectionFunction($this->Validator);
-				$Data = $Function->invoke($this->getName(), $this->getValue());
+				$this->addErrorMessage($Error);
 			}
-			else
-			{
-				list($ObjRef, $MethodName) = $this->Validator;
-				$Data = $ObjRef->{$MethodName}($this->getName(), $this->getValue());
-			}
-
-
-			if(is_bool($Data)) return true;
-			else
-			{
-				foreach($Data AS $Error)
-				{
-					$this->addErrorMessage($Error);
-				}
-				return false;
-			}
-		}
-
-		/**
-		 * Adds an error message
-		 */
-		private function addErrorMessage($Error)
-		{
-			$this->Error[] = $Error;
-		}
-
-		/**
-		 * Sets the elements value and internal data
-		 */
-		public function setValue($Value)
-		{
-			$this->internalData = $Value;
-			$this->setAttribute('value', $Value);
-		}
-
-		public function setName($Name)
-		{
-			$this->setAttribute('name', $Name);
-		}
-
-		public function setID($ID)
-		{
-			$this->setAttribute('id', $Name);
-		}
-
-		public function getName()
-		{
-			return $this->getAttribute('name');
-		}
-
-		public function getValue()
-		{
-			return $this->internalData;
-		}
-
-		public function getValidator()
-		{
-			return $this->Validator;
-		}
-
-		public function setClassName($ClassName)
-		{
-			$this->setAttribute('class', $ClassName);
-		}
-
-		public function getClassName()
-		{
-			return $this->getAttribute('class');
+			return false;
 		}
 	}
+
+	/**
+	 * Adds an error message
+	 */
+	private function addErrorMessage($Error)
+	{
+		$this->Error[] = $Error;
+	}
+
+	/**
+	 * Sets the elements value and internal data
+	 */
+	public function setValue($Value)
+	{
+		$this->internalData = $Value;
+		$this->setAttribute('value', $Value);
+	}
+
+	public function setName($Name)
+	{
+		$this->setAttribute('name', $Name);
+	}
+
+	public function setID($ID)
+	{
+		$this->setAttribute('id', $Name);
+	}
+
+	public function getName()
+	{
+		return $this->getAttribute('name');
+	}
+
+	public function getValue()
+	{
+		return $this->internalData;
+	}
+
+	public function getValidator()
+	{
+		return $this->Validator;
+	}
+
+	public function setClassName($ClassName)
+	{
+		$this->setAttribute('class', $ClassName);
+	}
+
+	public function getClassName()
+	{
+		return $this->getAttribute('class');
+	}
+}
 ?>

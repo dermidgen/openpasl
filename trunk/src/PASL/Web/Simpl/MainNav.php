@@ -32,9 +32,15 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
+namespace PASL\Web\Simpl;
+
 require_once("NavMenu.php");
 require_once("MainNavItem.php");
 require_once("MainNavHeader.php");
+
+use NavMenu;
+use MainNavItem;
+use MainNavHeader;
 
 /**
  * Main nav implements the main nav interface for the page
@@ -45,7 +51,7 @@ require_once("MainNavHeader.php");
  * @author Danny Graham <good.midget@gmail.com>
  */
 
-class PASL_Web_Simpl_MainNav extends PASL_Web_Simpl_NavMenu
+class MainNav extends NavMenu
 {
 	/**
 	 * @var PASL_Web_Simpl_SubNav

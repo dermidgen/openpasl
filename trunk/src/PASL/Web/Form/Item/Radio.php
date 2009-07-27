@@ -32,19 +32,23 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-	require_once('PASL/Web/Form/Item/common.php');
+namespace PASL\Web\Form\Item;
 
-	class PASL_Web_Form_Item_Radio extends PASL_Web_Form_Item_Common
+require_once('PASL/Web/Form/Item/common.php');
+
+use \PASL\Web\Form\Item\Common;
+
+class Radio extends Common
+{
+	public function __construct()
 	{
-		public function __construct()
-		{
-			$this->setTagName('input');
-			$this->setAttribute('type', 'radio');
-		}
-
-		public function doSubmitAction($Name, $Value)
-		{
-			if($this->getValue() == $Value) $this->setInnerTagText('checked');
-		}
+		$this->setTagName('input');
+		$this->setAttribute('type', 'radio');
 	}
+
+	public function doSubmitAction($Name, $Value)
+	{
+		if($this->getValue() == $Value) $this->setInnerTagText('checked');
+	}
+}
 ?>

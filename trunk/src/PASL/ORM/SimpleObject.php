@@ -31,12 +31,14 @@
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
+namespace PASL\ORM;
 
-class PASL_ORM_SimpleObject
+
+class SimpleObject
 {
 	protected $table;
 
-	public function __construct(PASL_ORM_SimpleTable $table)
+	public function __construct(PASL\ORM\SimpleTable $table)
 	{
 		$this->table = $table;
 	}

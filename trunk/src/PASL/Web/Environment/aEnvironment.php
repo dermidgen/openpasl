@@ -31,40 +31,41 @@
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
+namespace PASL\Web\Environment;
 
-abstract class PASL_Web_aEnvironment
+abstract class aEnvironment
 {
 	protected $Interpreter;
 	protected $IndexFile = 'index.js';
 	protected $EnvironmentDirectory = null;
 	protected $ConfigFile = null;
-	
+
 
 	protected function setInterpreter($Interpreter)
 	{
 		$this->Interpreter = $Interpreter;
 	}
-	
+
 	protected function getInterpreter()
 	{
 		return $this->Interpreter;
 	}
-	
+
 	public function setIndexFile($IndexFile)
 	{
 		$this->IndexFile = $IndexFile;
 	}
-	
+
 	public function setEnvironmentDirectory($EnvironmentDirectory)
 	{
 		$this->EnvironmentDirectory = $EnvironmentDirectory;
 	}
-	
+
 	public function setConfigFile($configFile)
 	{
 		$this->configFile = $configFile;
 	}
-	
+
 	public function getConfigFile()
 	{
 		return $this->configFile;

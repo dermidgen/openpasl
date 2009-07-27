@@ -32,6 +32,8 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
+namespace PASL;
+
 /**
  * DB is more of a utility than an abstraction layer.  DB is designed to
  * allow the implementation of some basic concepts from PEAR::MDB2 using
@@ -51,7 +53,7 @@
  * @static
  * @author Danny Graham <good.midget@gmail.com>
  */
-class PASL_DB
+class DB
 {
 	/**
 	 * Database connector
@@ -131,6 +133,7 @@ class PASL_DB
 		}
 
 		$Array = Array();
+
 		$Array["phptype"] = $Matches[1];
 		$Array["hostspec"] = ($Host) ? $Host : $Matches[2];
 		$Array["database"] = $Matches[5];
@@ -158,7 +161,7 @@ class PASL_DB
 		$dbHostSpec = $dsn['hostspec'];
 		$dbDatabase = $dsn['database'];
 
-		$className = "PASL_DB_Driver_" . $driver;
+		$className = $driver;
 
 		if(!class_exists($className, false))
 		{
@@ -202,7 +205,7 @@ class PASL_DB
 	public static function factory($dsn,$options=false,$portable=false)
 	{
 		// Ensure that the DSN is in Array format
-		if (!is_array($dsn)) $dsn = PASL_DB::ParseDSN($dsn);
+		if (!is_array($dsn)) $dsn = DB::ParseDSN($dsn);
 
 		if ($portable) // Kick out MDB2 Driver
 		{
@@ -211,7 +214,7 @@ class PASL_DB
 		}
 		else // We'll go with a native/custom driver
 		{
-			$db = PASL_DB::PASL_Factory($dsn, false);
+			$db = DB::PASL_Factory($dsn, false);
 		}
 
 		return $db;
@@ -228,7 +231,7 @@ class PASL_DB
 	public static function singleton($dsn,$options=false,$portable=false)
 	{
 		// Ensure that the DSN is in Array format
-		if (!is_array($dsn)) $dsn = PASL_DB::ParseDSN($dsn);
+		if (!is_array($dsn)) $dsn = DB::ParseDSN($dsn);
 
 		$driverIndex = $dsn['phptype'] . '_' . $dsn['hostspec'];
 
@@ -237,19 +240,18 @@ class PASL_DB
 			require_once("MDB2.php");
 
 			// Check the existing driver stack and return one if it already exists
-			if (isset(PASL_DB::$MDB2Drivers[$driverIndex])) return PASL_DB::$MDB2Drivers[$driverIndex];
+			if (isset(DB::$MDB2Drivers[$driverIndex])) return DB::$MDB2Drivers[$driverIndex];
 
 			$db = MDB2::singleton($dsn, $options);
-			PASL_DB::$MDB2Drivers[$driverIndex] = $db; // Stick the driver in our local stack
+			DB::$MDB2Drivers[$driverIndex] = $db; // Stick the driver in our local stack
 		}
 		else // We'll go with a native/custom driver
 		{
-
 			// Check the existing driver stack and return one if it already exists
-			if (isset(PASL_DB::$nativeDrivers[$driverIndex])) return PASL_DB::$nativeDrivers[$driverIndex];
+			if (isset(DB::$nativeDrivers[$driverIndex])) return DB::$nativeDrivers[$driverIndex];
 
-			$db = PASL_DB::PASL_Factory($dsn, true);
-			PASL_DB::$nativeDrivers[$driverIndex] = $db; // Stick the driver in our local stack
+			$db = DB::PASL_Factory($dsn, true);
+			DB::$nativeDrivers[$driverIndex] = $db; // Stick the driver in our local stack
 		}
 
 		return $db;
@@ -266,11 +268,11 @@ class PASL_DB
 	{
 		if ($portable)
 		{
-			if (isset(PASL_DB::$MDB2Drivers[$instanceName])) return PASL_DB::$MDB2Drivers[$instanceName];
+			if (isset(DB::$MDB2Drivers[$instanceName])) return DB::$MDB2Drivers[$instanceName];
 		}
 		else
 		{
-			if (isset(PASL_DB::$nativeDrivers[$instanceName])) return PASL_DB::$nativeDrivers[$instanceName];
+			if (isset(DB::$nativeDrivers[$instanceName])) return DB::$nativeDrivers[$instanceName];
 		}
 
 		return null;

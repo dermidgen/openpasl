@@ -31,9 +31,16 @@
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
+ 
+namespace PASL\Authentication\Provider;
 
 require_once('PASL/Authentication/iProvider.php');
 require_once('PASL/Authentication/Provider/common.php');
+
+
+
+use iProvider;
+use common;
 
 /**
  * Provides a SAML based authentication provider. This provider is designed to
@@ -46,7 +53,7 @@ require_once('PASL/Authentication/Provider/common.php');
  * @category Authentication
  * @author Danny Graham <good.midget@gmail.com>
  */
-class PASL_Authentication_Provider_saml extends PASL_Authentication_Provider_common implements PASL_Authentication_iProvider
+class saml extends common implements iProvider
 {
 	public function authenticate($credentials)
 	{

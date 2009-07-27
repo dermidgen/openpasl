@@ -31,8 +31,11 @@
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
+namespace PASL\DB\Driver;
 
 include_once("Common.php");
+
+use Common;
 
 /**
  * Provides RAW driver implementation of MDB2 common API for MySQL.
@@ -47,7 +50,7 @@ include_once("Common.php");
 
 // TODO: Error checking
 
-class PASL_DB_Driver_mysql extends PASL_DB_Driver_Common
+class mysql extends Common
 {
 	//TODO: Implement abstract methods from DB_Driver_Common
 	//TODO: Implement raw driver support for queries
@@ -247,8 +250,8 @@ class PASL_DB_Driver_mysql extends PASL_DB_Driver_Common
 	 */
 	public static function GetInstance()
 	{
-		if (PASL_DB_Driver_mysql::$instance == null) PASL_DB_Driver_mysql::$instance = new PASL_DB_Driver_mysql(self::$host, self::$username, self::$password, self::$database);
-		return PASL_DB_Driver_mysql::$instance;
+		if (mysql::$instance == null) mysql::$instance = new mysql(self::$host, self::$username, self::$password, self::$database);
+		return mysql::$instance;
 	}
 }
 

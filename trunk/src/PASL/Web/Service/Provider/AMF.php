@@ -32,10 +32,14 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
+namespace PASL\Web\Service\Provider;
+
 require_once('PASL/Web/Service/iServiceProvider.php');
 require_once('PASL/Web/Service/amfphp/globals.php');
 require_once('PASL/Web/Service/amfphp/core/amf/app/Gateway.php');
 
+
+use \PASL\Web\Service\iServiceProvider;
 /**
  * Provides AMF based service support through AMFPHP. We do a little
  * cleanup here to ensure that the classpath is correctly set for AMFPHP
@@ -46,7 +50,7 @@ require_once('PASL/Web/Service/amfphp/core/amf/app/Gateway.php');
  * @category Web
  * @author Danny Graham <good.midget@gmail.com>
  */
-class PASL_Web_Service_Provider_AMF implements PASL_Web_Service_iServiceProvider
+class AMF implements \PASL\Web\Service\iServiceProvider
 {
 	private $productionServer = false;
 

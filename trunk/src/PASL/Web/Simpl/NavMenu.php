@@ -32,6 +32,8 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
+namespace PASL\Web\Simpl\NavMenu;
+
 /**
  * NavMenu provides a Menu of NavItems for display in a page template
 
@@ -42,7 +44,7 @@
  */
 // TODO: Implement interface for nav items. PASL_Web_Simpl_NavItem
 
-class PASL_Web_Simpl_NavMenu
+class NavMenu
 {
 	public $style;
 	public $selectedItem = null;
@@ -140,7 +142,7 @@ class PASL_Web_Simpl_NavMenu
 	 *
 	 * @param PASL_Web_Simpl_NavItem $menuItem
 	 */
-	public function addMenuItem(PASL_Web_Simpl_NavItem $menuItem)
+	public function addMenuItem(PASL\Web\Simpl\NavItem $menuItem)
 	{
 		array_push($this->menuItems, $menuItem);
 	}
@@ -150,7 +152,7 @@ class PASL_Web_Simpl_NavMenu
 	 *
 	 * @param PASL_Web_Simpl_NavItem $header
 	 */
-	public function addMenuHeader(PASL_Web_Simpl_NavItem $header)
+	public function addMenuHeader(PASL\Web\Simpl\NavItem $header)
 	{
 		array_push($this->menuItems, $header);
 	}

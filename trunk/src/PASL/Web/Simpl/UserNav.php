@@ -32,7 +32,11 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
+namespace PASL\Web\Simpl\UserNav;
+
 require_once("NavMenu.php");
+
+use NavMenu;
 
 /**
  * SubNavHeader provides a header menu item for SubNav
@@ -43,7 +47,7 @@ require_once("NavMenu.php");
  * @author Danny Graham <good.midget@gmail.com>
  */
 
-class PASL_Web_Simpl_UserNav extends PASL_Web_Simpl_NavMenu
+class UserNav extends NavMenu
 {
 	/**
 	* @var PASL_Web_Simpl_UserNav

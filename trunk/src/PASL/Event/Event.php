@@ -32,8 +32,10 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
+namespace PASL;
 
-class PASL_Event
+
+class Event
 {
 	/**
 	 * The event ID

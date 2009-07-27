@@ -32,11 +32,17 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
+namespace PASL;
+
 require_once('PASL/ORM/ORM.php');
-
 require_once('PASL/RBAC/Action.php');
+require_once('PASL/DB.php');
 
-class PASL_RBAC
+use PASL\ORM;
+use PASL\RBAC\Action;
+use PASL\DB;
+
+class RBAC
 {
 	private static $instance;
 
@@ -47,12 +53,12 @@ class PASL_RBAC
 
 	public function init($dsn)
 	{
-		PASL_ORM::registerDB('pasl_rbac', PASL_DB::factory($dsn));
+		ORM::registerDB('pasl_rbac', DB::factory($dsn));
 	}
 
 	public function getDB()
 	{
-		return PASL_ORM::getDB('pasl_rbac');
+		return ORM::getDB('pasl_rbac');
 	}
 
 	public function getObjectACLs($type, $uid)
@@ -221,7 +227,7 @@ class PASL_RBAC
 
 	public static function GetInstance()
 	{
-		if (!self::$instance) self::$instance = new self;
+		if (!self::$instance) self::$instance = new $this;
 		return self::$instance;
 	}
 }

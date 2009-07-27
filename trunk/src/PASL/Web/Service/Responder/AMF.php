@@ -32,7 +32,11 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
+namespace PASL\Web\Service\Responder;
+
 require_once('PASL/Web/Service/iServiceResponder.php');
+
+use PASL\Web\Service\iServiceProvider;
 
 /**
  * This is a shell class to meet the requirements of a provider and a responder for each
@@ -44,7 +48,7 @@ require_once('PASL/Web/Service/iServiceResponder.php');
  * @category Web
  * @author Danny Graham <good.midget@gmail.com>
  */
-class PASL_Web_Service_Responder_AMF implements PASL_Web_Service_iServiceResponder
+class AMF implements iServiceProvider
 {
 	private $response = null;
 

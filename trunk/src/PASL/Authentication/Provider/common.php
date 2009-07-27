@@ -31,11 +31,17 @@
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
+ 
+namespace PASL/Authentication/Provider;
 
 define('PASL_AUTH_INVALID_USERNAME', 001);
 define('PASL_AUTH_INVALID_PASSWORD', 002);
 define('PASL_AUTH_BAD_USER', 003);
 define('PASL_AUTH_BAD_PASSWORD', 004);
+
+
+
+
 
 /**
  * Provides base level common methods for auth providers.  Also implements
@@ -47,7 +53,7 @@ define('PASL_AUTH_BAD_PASSWORD', 004);
  * @category Authentication
  * @author Danny Graham <good.midget@gmail.com>
  */
-abstract class PASL_Authentication_Provider_common
+abstract class common
 {
 	protected $errors = Array();
 

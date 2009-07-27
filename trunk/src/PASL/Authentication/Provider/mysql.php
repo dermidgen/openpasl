@@ -31,10 +31,15 @@
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
+namespace PASL\Authentication\Provider;
 
 require_once('PASL/DB/DB.php');
 require_once('PASL/Authentication/iProvider.php');
 require_once('PASL/Authentication/Provider/common.php');
+
+use PASL\DB;
+use PASL\Autentication\iProvider;
+use common;
 
 /**
  * Provides a mysql based authentication provider. This provider is designed to
@@ -47,7 +52,7 @@ require_once('PASL/Authentication/Provider/common.php');
  * @category Authentication
  * @author Danny Graham <good.midget@gmail.com>
  */
-class PASL_Authentication_Provider_mysql extends PASL_Authentication_Provider_common implements PASL_Authentication_iProvider
+class mysql extends common implements iProvider
 {
 	private $encryptedPasswords = true;
 	private $encryptionMethod = 'md5';
@@ -98,10 +103,10 @@ class PASL_Authentication_Provider_mysql extends PASL_Authentication_Provider_co
 
 	public function setDSN($dsn)
 	{
-		if (!$this->driver) $this->driver = PASL_DB::singleton($dsn);
+		if (!$this->driver) $this->driver = DB::singleton($dsn);
 	}
 
-	public function setDriver(PASL_DB_Driver_mysql $oDriver)
+	public function setDriver(PASL\DB\Driver\mysql $oDriver)
 	{
 		$this->driver = $oDriver;
 	}

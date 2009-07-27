@@ -32,7 +32,9 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-class PASL_Web_Environment_JavaScript_Abstraction_DOMElement
+namespace PASL\Web\Environment\JavaScript\Abstraction;
+
+class DOMElement
 {
 
 }

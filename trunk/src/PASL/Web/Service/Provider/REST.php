@@ -32,8 +32,13 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
+namespace PASL\Web\Service\Provider;
+
 require_once('PASL/Web/Service/iServiceProvider.php');
 require_once('PASL/Web/Service/Request.php');
+
+use \PASL\Web\Service\iServiceProvider;
+use \PASL\Web\Service\Request;
 
 /**
  * Provider for REST based services.
@@ -43,12 +48,12 @@ require_once('PASL/Web/Service/Request.php');
  * @category Web
  * @author Danny Graham <good.midget@gmail.com>
  */
-class PASL_Web_Service_Provider_Rest implements PASL_Web_Service_iServiceProvider
+class Rest implements \PASL\Web\Service\iServiceProvider
 {
 	/**
 	 * Parse the incoming request in a RESTful way
 	 *
-	 * @param PASL_Web_Service_Request The request object
+	 * @param \PASL\Web\Service\Request The request object
 	 */
 	public function parseRequest($oRequest)
 	{

@@ -32,9 +32,13 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
+namespace PASL\Web\Environment\JavaScript\Abstraction;
+
 require_once("PASL/Web/Environment/JavaScript/Abstraction/DOMNode.php");
 
-class PASL_Web_Environment_JavaScript_Abstraction_DOMDocument extends PASL_Web_Environment_JavaScript_Abstraction_DOMNode
+use DOMNode;
+
+class DOMDocument extends DOMNode
 {
 	public function createElement($ElementName)
 	{

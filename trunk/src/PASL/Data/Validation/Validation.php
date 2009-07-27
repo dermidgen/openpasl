@@ -33,7 +33,9 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-abstract class PASL_Data_Validation
+namespace PASL\Data;
+
+abstract class Validation
 {
 	abstract function Validate();
 

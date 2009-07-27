@@ -32,7 +32,11 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
+namespace PASL\Web\Service\Responder;
+
 require_once('PASL/Web/Service/iServiceResponder.php');
+
+use PASL\Web\Service\iServiceResponder;
 
 /**
  * Responder for REST based services.
@@ -42,7 +46,7 @@ require_once('PASL/Web/Service/iServiceResponder.php');
  * @category Web
  * @author Danny Graham <good.midget@gmail.com>
  */
-class PASL_Web_Service_Responder_REST implements PASL_Web_Service_iServiceResponder
+class REST implements iServiceResponder
 {
 	private $response = null;
 

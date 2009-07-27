@@ -32,6 +32,8 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
+namespace PASL;
+
 /**
  * Authentication provides basic authentication mechanisms through various drivers.
  * Each driver parses a formatted DSN providing both username and password keys.
@@ -43,7 +45,7 @@
  * @category Authentication
  * @author Danny Graham <good.midget@gmail.com>
  */
-class PASL_Authentication
+class Authentication
 {
 	/**
 	 * @var PASL_Authentication_iProvider
@@ -75,7 +77,8 @@ class PASL_Authentication
 			break;
 			case "mysql":
 				require_once('PASL/Authentication/Provider/mysql.php');
-				$provider = new PASL_Authentication_Provider_mysql();
+				use PASL\Authentication\Provider\mysql;
+				$provider = new mysql();
 			break;
 			default:
 				$provider = null;
@@ -101,7 +104,7 @@ class PASL_Authentication
 	 * + This can be useful for setting provider specific options.
 	 * + For type hinting use phpdoc to declare the actual provider type.
 	 *
-	 * @return PASL_Authentication_iProvider
+	 * @return PASL/Authentication/iProvider
 	 */
 	public function getProvider()
 	{

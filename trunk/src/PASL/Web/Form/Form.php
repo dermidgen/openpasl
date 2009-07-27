@@ -32,9 +32,9 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-require_once('PASL/Data/Session.php');
+namespace PASL\Web;
 
-class PASL_Web_Form
+class Form
 {
 	/**
 	 * The form items (elements)
@@ -87,7 +87,7 @@ class PASL_Web_Form
 		$this->Attributes[$Name] = $Value;
 	}
 
-	public function setDataValidator(PASL_Data_Validation_iValidator $Validator)
+	public function setDataValidator(PASL\Data\Validation\iValidator $Validator)
 	{
 		$this->Validator = $Validator;
 	}
@@ -101,12 +101,8 @@ class PASL_Web_Form
 	 */
 	public function addItem($FormItemObj, $FormItemName)
 	{
-//		$ObjInfo = new ReflectionObject($FormItemObj);
-//		$ParentClass = $ObjInfo->getParentClass()->getName();
-
-//		if($ParentClass != 'PASL_Web_Form_Item_Common') throw new Exception('Invalid item object.  The object must extend '.$ParentClass);
-
-		$Item = new stdClass;
+		// TODO: Add type casting for $FormItemObj
+		$Item = new \stdClass;
 		$Item->Name = $FormItemName;
 		$Item->Item = $FormItemObj;
 
@@ -121,11 +117,7 @@ class PASL_Web_Form
 	 */
 	public function setTemplate($Template)
 	{
-		$ObjInfo = new ReflectionObject($Template);
-		$ParentClass = $ObjInfo->getParentClass()->getName();
-
-		if($ParentClass != 'PASL_Web_Template') throw new Exception('Invalid template object.  The object must extend '.$ParentClass);
-
+		// TODO: add type casting for $Template;
 		$this->Template = $Template;
 	}
 

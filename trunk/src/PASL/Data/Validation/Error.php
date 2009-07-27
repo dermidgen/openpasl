@@ -32,7 +32,10 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-class PASL_Data_Validation_Error
+namespace PASL\Data\Validation;
+
+
+class Error
 {
 	public $Message;
 	public $Name;

@@ -32,50 +32,54 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-	require_once('PASL/Web/Form/Item/common.php');
-	require_once('PASL/Web/Form/Item/Option.php');
+namespace PASL\Web\Form\Item;
 
+require_once('PASL/Web/Form/Item/common.php');
+require_once('PASL/Web/Form/Item/Option.php');
 
-	class PASL_Web_Form_Item_Select extends PASL_Web_Form_Item_Common
+use Common;
+use Option;
+
+class Select extends Common
+{
+	private $autoSelect = false;
+
+	public function __construct()
 	{
-		private $autoSelect = false;
+		$this->setTagName('select');
+	}
 
-		public function __construct()
+	public function setType($Type)
+	{
+		$this->setAttribute('type', $Type);
+	}
+
+	public function setAutoSelect($Boolean)
+	{
+		$this->autoSelect = $Boolean;
+	}
+
+	public function addOption($Value, $DisplayValue='', $Selected=false)
+	{
+		if(empty($DisplayValue)) $DisplayValue = $Value;
+
+		$Option = new Option;
+		$Option->setDisplayValue($DisplayValue);
+		$Option->setSelected($Selected);
+		$Option->setValue($Value);
+
+		$this->appendChild($Option);
+	}
+
+	public function doSubmitAction($Name, $Value)
+	{
+		foreach($this->AppendedElements AS $AppendedElement)
 		{
-			$this->setTagName('select');
-		}
-
-		public function setType($Type)
-		{
-			$this->setAttribute('type', $Type);
-		}
-
-		public function setAutoSelect($Boolean)
-		{
-			$this->autoSelect = $Boolean;
-		}
-
-		public function addOption($Value, $DisplayValue='', $Selected=false)
-		{
-			if(empty($DisplayValue)) $DisplayValue = $Value;
-
-			$Option = new PASL_Web_Form_Item_Option;
-			$Option->setDisplayValue($DisplayValue);
-			$Option->setSelected($Selected);
-			$Option->setValue($Value);
-
-			$this->appendChild($Option);
-		}
-
-		public function doSubmitAction($Name, $Value)
-		{
-			foreach($this->AppendedElements AS $AppendedElement)
+			if($AppendedElement->getValue() == $Value)
 			{
-				if($AppendedElement->getValue() == $Value)
-				{
-					$AppendedElement->setSelected(true);
-				}
+				$AppendedElement->setSelected(true);
 			}
 		}
 	}
+}
 ?>

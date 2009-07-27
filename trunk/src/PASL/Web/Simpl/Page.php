@@ -32,6 +32,8 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
+namespace PASL\Web\Simpl;
+
 /**
  * Page provides the base class for anything that's going out to the browser
  *
@@ -40,7 +42,7 @@
  * @category Web
  * @author Danny Graham <good.midget@gmail.com>
  */
-class PASL_Web_Simpl_Page
+class Page
 {
 	/**
 	 * @var Array

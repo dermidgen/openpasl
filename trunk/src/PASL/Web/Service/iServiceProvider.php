@@ -31,6 +31,7 @@
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
+namespace PASL\Web\Service;
 
 /**
  * Provides the interface for all service providers
@@ -40,7 +41,7 @@
  * @category Web
  * @author Danny Graham <good.midget@gmail.com>
  */
-interface PASL_Web_Service_iServiceProvider
+interface iServiceProvider
 {
 	/**
 	 * Parses the incoming request and translates the request

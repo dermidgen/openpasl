@@ -32,16 +32,18 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-require_once('PASL/DB/DB.php');
+namespace PASL\RBAC;
+
 require_once('PASL/ORM/SimpleTable.php');
-require_once('PASL/ORM/ORM.php');
+
+use PASL\ORM\SimpleTable;
 
 /**
  * This class contains common methods to be extended by RBAC-enabled tables or objects.
  *
  * @author Scott Thundercloud
  */
-class PASL_RBAC_common extends PASL_ORM_SimpleTable
+class common extends SimpleTable
 {
 	protected $groupStack = Array();
 	private $groupMembership = Array();

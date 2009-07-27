@@ -61,10 +61,10 @@ class PASL_Web_ServiceTest extends UnitTestCase
 	public function TestServiceInstantiation()
 	{
 		// Stubbed test to keep from the testsuite from breaking
-		$this->gateway = PASL_Web_Service_Gateway::GetInstance();
+		$this->gateway = \PASL\Web\Service\Gateway::GetInstance();
 		$this->service = $this->gateway->service;
 
-		$this->assertIsA($this->service, 'PASL_Web_Service');
+		$this->assertIsA($this->service, 'PASL\Web\Service');
 
 		// NOT REALLY SURE HOW TO WRITE A TEST HERE WHEN IT REQUIRES A REAL POST/GET/PUT/DELETE REQUEST
 	}

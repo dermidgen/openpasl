@@ -32,6 +32,8 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
+namespace PASL\Authentication;
+
 /**
  * Provides an interface for authentication providers.
  *
@@ -40,7 +42,7 @@
  * @category Authentication
  * @author Danny Graham <good.midget@gmail.com>
  */
-interface PASL_Authentication_iProvider
+interface iProvider
 {
 	public function getError(); // Satisfied in PASL_Authentication_Provider_common
 	public function authenticate($credentials);

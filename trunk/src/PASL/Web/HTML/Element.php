@@ -32,83 +32,85 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-	class PASL_Web_DOM_Element
+namespace PASL\Web\HTML;
+
+class Element
+{
+	protected $AppendedElements = Array();
+
+	protected $Attribute = Array();
+
+	protected $TagName = '';
+
+	protected $Readonly = false;
+
+	protected $innerTagText = '';
+
+	private $innerHTML = '';
+
+	private $Appended = null;
+
+	public function setAttribute($Name, $Value)
 	{
-		protected $AppendedElements = Array();
-
-		protected $Attribute = Array();
-
-		protected $TagName = '';
-
-		protected $Readonly = false;
-
-		protected $innerTagText = '';
-
-		private $innerHTML = '';
-
-		private $Appended = null;
-
-		public function setAttribute($Name, $Value)
-		{
-			$Name = strtolower($Name);
-			$this->Attribute[''.$Name.''] = $Value;
-		}
-
-		public function getAttribute($Name)
-		{
-			$Name = strtolower(trim($Name));
-
-			return (!empty($this->Attribute[$Name])) ? $this->Attribute[$Name] : false;
-		}
-
-		public function setTagName($TagName)
-		{
-			$this->TagName = $TagName;
-		}
-
-		public function setInnerHTML($InnerHTML)
-		{
-			$this->innerHTML = $InnerHTML;
-		}
-
-		public function appendChild($Element)
-		{
-			// Check to see if $Element is this class or extends this class
-			$this->AppendedElements[] = $Element;
-		}
-
-		public function setInnerTagText($innerTagText)
-		{
-			$this->innerTagText = $innerTagText;
-		}
-
-		public function __toString()
-		{
-			$html = '<'.$this->TagName.' ';
-
-			$i=0;
-			foreach($this->Attribute AS $Name=>$Value)
-			{
-				$html .= $Name . '="'.$Value.'"';
-				if($i <= count($this->Attribute)) $html .= ' ';
-
-				$i++;
-			}
-
-			$html .= ''.$this->innerTagText.'>';
-
-			if(count($this->AppendedElements) >= 1)
-			{
-				foreach($this->AppendedElements AS $AppendedElement)
-				{
-					$html .= (string) $AppendedElement;
-				}
-			}
-
-			if(!empty($this->innerHTML)) $html .= $this->innerHTML;
-			if(!empty($this->innerHTML) || count($this->Appended >= 1)) $html .= '</'.$this->TagName.'>';
-
-			return $html;
-		}
+		$Name = strtolower($Name);
+		$this->Attribute[''.$Name.''] = $Value;
 	}
+
+	public function getAttribute($Name)
+	{
+		$Name = strtolower(trim($Name));
+
+		return (!empty($this->Attribute[$Name])) ? $this->Attribute[$Name] : false;
+	}
+
+	public function setTagName($TagName)
+	{
+		$this->TagName = $TagName;
+	}
+
+	public function setInnerHTML($InnerHTML)
+	{
+		$this->innerHTML = $InnerHTML;
+	}
+
+	public function appendChild($Element)
+	{
+		// Check to see if $Element is this class or extends this class
+		$this->AppendedElements[] = $Element;
+	}
+
+	public function setInnerTagText($innerTagText)
+	{
+		$this->innerTagText = $innerTagText;
+	}
+
+	public function __toString()
+	{
+		$html = '<'.$this->TagName.' ';
+
+		$i=0;
+		foreach($this->Attribute AS $Name=>$Value)
+		{
+			$html .= $Name . '="'.$Value.'"';
+			if($i <= count($this->Attribute)) $html .= ' ';
+
+			$i++;
+		}
+
+		$html .= ''.$this->innerTagText.'>';
+
+		if(count($this->AppendedElements) >= 1)
+		{
+			foreach($this->AppendedElements AS $AppendedElement)
+			{
+				$html .= (string) $AppendedElement;
+			}
+		}
+
+		if(!empty($this->innerHTML)) $html .= $this->innerHTML;
+		if(!empty($this->innerHTML) || count($this->Appended >= 1)) $html .= '</'.$this->TagName.'>';
+
+		return $html;
+	}
+}
 ?>

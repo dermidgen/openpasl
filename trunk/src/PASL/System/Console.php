@@ -32,11 +32,13 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
+namespace PASL\System;
+
 if (!defined("STDIN")) define("STDIN", fopen('php://stdin','r'));
 if (!defined("STDOUT")) define("STDOUT", fopen('php://stdout','w'));
 if (!defined("STDERR")) define("STDERR", fopen('php://stderr','w'));
 
-class PASL_System_Console
+class Console
 {
 	/**
 	 * @var PASL_System_Console

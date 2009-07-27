@@ -75,15 +75,15 @@ class PASL_DBTest extends UnitTestCase
 	private function testPASLMySQL()
 	{
 		// Test new instance factory for a native/custom driver
-		$dbDriver = PASL_DB::factory($this->strMyDsn, false, false);
+		$dbDriver = \PASL\DB::factory($this->strMyDsn, false, false);
 
-		$this->assertIsA($dbDriver, 'PASL_DB_Driver_common');
-		$this->assertIsA($dbDriver, 'PASL_DB_Driver_mysql');
+		$this->assertIsA($dbDriver, 'PASL\DB\Driver\common');
+		$this->assertIsA($dbDriver, 'PASL\DB\Driver\mysql');
 
 		// Test singleton factory for a native/custom driver
 		$dbDriver = PASL_DB::singleton($this->strMyDsn, false, false);
-		$this->assertIsA($dbDriver, 'PASL_DB_Driver_common');
-		$this->assertIsA($dbDriver, 'PASL_DB_Driver_mysql');
+		$this->assertIsA($dbDriver, 'PASL\DB\Driver\common');
+		$this->assertIsA($dbDriver, 'PASL\DB\Driver\mysql');
 
 		$sql = "SELECT * FROM pasl_query_tests";
 
@@ -98,7 +98,7 @@ class PASL_DBTest extends UnitTestCase
 	private function testMDB2Instantiation()
 	{
 		// Test new instance factory for a portable MDB2 driver
-		$dbDriver = PASL_DB::factory($this->strMyDsn, false, true);
+		$dbDriver = \PASL\DB::factory($this->strMyDsn, false, true);
 		$this->assertIsA($dbDriver, 'MDB2_Driver_common');
 		$this->assertIsA($dbDriver, 'MDB2_Driver_mysql');
 
@@ -111,18 +111,18 @@ class PASL_DBTest extends UnitTestCase
 	public function testDSNParsing()
 	{
 		// Test DSN Parsing
-		$DBDsn = PASL_DB::ParseDSN($this->strMyDsn);
-		$this->assertIsA($DBDsn, 'Array', 'PASL_DB::ParseDSN should return an array');
-		$this->assertIdentical($this->aMyDsn,$DBDsn,"PASL_DB::ParseDSN did not return the expected value - perhaps it's not working right");
+		$DBDsn = \PASL\DB::ParseDSN($this->strMyDsn);
+		$this->assertIsA($DBDsn, 'Array', 'PASL\DB::ParseDSN should return an array');
+		$this->assertIdentical($this->aMyDsn,$DBDsn,"PASL\DB::ParseDSN did not return the expected value - perhaps it's not working right");
 	}
 
 	public function testPASLDriverGetInstance()
 	{
-		$dbDriver = PASL_DB::singleton($this->strMyDsn, false, false);
-		$this->assertIsA($dbDriver, 'PASL_DB_Driver_common');
-		$this->assertIsA($dbDriver, 'PASL_DB_Driver_mysql');
+		$dbDriver = \PASL\DB::singleton($this->strMyDsn, false, false);
+		$this->assertIsA($dbDriver, 'PASL\DB_Driver\common');
+		$this->assertIsA($dbDriver, 'PASL\DB_Driver\mysql');
 
-		$dbDriverCmp = PASL_DB::getInstance($this->aMyDsn['phptype'] . '_' . $this->aMyDsn['hostspec']);
+		$dbDriverCmp = \PASL\DB::getInstance($this->aMyDsn['phptype'] . '_' . $this->aMyDsn['hostspec']);
 
 		$this->assertIdentical($dbDriver,$dbDriverCmp);
 	}

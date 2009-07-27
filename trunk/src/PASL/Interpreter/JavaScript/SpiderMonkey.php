@@ -32,8 +32,12 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
+namespace PASL\Interpreter\JavaScript;
 
 require_once('PASL/Interpreter/iInterpreter.php');
+
+
+use PASL\Interpreter\iInterpreter;
 
 /**
  * Class for handling JavaScript interpretation
@@ -47,7 +51,7 @@ require_once('PASL/Interpreter/iInterpreter.php');
  * @category JavaScript Interpeter
  * @author Scott Thundercloud <scott.tc@gmail.com>
  */
-class PASL_Interpreter_JavaScript_SpiderMonkey extends JSContext implements PASL_Interpreter_iInterpreter
+class SpiderMonkey extends \JSContext implements iInterpreter
 {
 	/**
 	 * The template file to be interpreted

@@ -31,10 +31,16 @@
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
+
+namespace PASL\Web\Template\Type;
  
 require_once('PASL/Web/Template/Template.php');
 require_once('PASL/Interpreter/JavaScript/SpiderMonkey.php');
 require_once('PASL/Log.php');
+
+use PASL\Web\Template;
+use PASL\Interpreter\JavaScript\SpiderMonkey;
+use PASL\Log;
 
 /**
  * Class that provides an interface to create a web template using the JavaScript language
@@ -55,7 +61,7 @@ function __php_print($input)
 	print $input;
 }
 
-class PASL_Web_Template_Type_JavaScript extends PASL_Web_Template
+class JavaScript extends Template
 {
 	private $JSInterpreter = null;
 
@@ -80,7 +86,7 @@ class PASL_Web_Template_Type_JavaScript extends PASL_Web_Template
 		return $this->JSInterpreter;
 	}
 	
-	public function setJSInterpreter(PASL_Interpreter_iInterpreter $Interpreter)
+	public function setJSInterpreter(PASL\Interpreter\iInterpreter $Interpreter)
 	{
 		$this->JSInterpreter = $Interpreter;
 	}

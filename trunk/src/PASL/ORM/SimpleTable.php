@@ -31,10 +31,13 @@
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
+namespace PASL\ORM;
 
 require_once('PASL/ORM/SimpleObject.php');
 
-class PASL_ORM_SimpleTable
+use SimpleObject;
+
+class SimpleTable
 {
 	/**
 	 * @var PASL_DB_Driver_mysql
@@ -60,7 +63,7 @@ class PASL_ORM_SimpleTable
 
 	protected function _decorateAsRow()
 	{
-		$this->rowDecorator = new PASL_ORM_SimpleObject($this);
+		$this->rowDecorator = new SimpleObject($this);
 	}
 
 	public function __call($name, $args)

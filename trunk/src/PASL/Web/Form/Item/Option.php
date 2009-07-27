@@ -32,28 +32,32 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-	require_once('PASL/Web/Form/Item/common.php');
+namespace PASL\Web\Form\Item;
 
-	class PASL_Web_Form_Item_Option extends PASL_Web_Form_Item_Common
+require_once('PASL/Web/Form/Item/common.php');
+
+use \PASL\Web\Form\Item\Common;
+
+class Option extends Common
+{
+	public function __construct()
 	{
-		public function __construct()
-		{
-			$this->setTagName('option');
-		}
-
-		public function setDisplayValue($DisplayValue)
-		{
-			$this->setInnerHTML($DisplayValue);
-		}
-
-		public function setSelected($Selected)
-		{
-			if($Selected === true) $this->setAttribute('selected', '');
-		}
-
-		public function doSubmitAction($Name, $Value)
-		{
-
-		}
+		$this->setTagName('option');
 	}
+
+	public function setDisplayValue($DisplayValue)
+	{
+		$this->setInnerHTML($DisplayValue);
+	}
+
+	public function setSelected($Selected)
+	{
+		if($Selected === true) $this->setAttribute('selected', '');
+	}
+
+	public function doSubmitAction($Name, $Value)
+	{
+
+	}
+}
 ?>

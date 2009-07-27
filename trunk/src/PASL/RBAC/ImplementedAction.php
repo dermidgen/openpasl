@@ -31,10 +31,15 @@
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
+namespace PASL\RBAC;
 
 require_once('PASL/RBAC/common.php');
+require_once('PASL/ORM/ORM.php');
 
-class PASL_RBAC_ImplementedAction extends PASL_RBAC_common
+use common;
+use PASL\ORM;
+
+class ImplementedAction extends common
 {
 	public $schema = Array(
 		'table'		=> 't_implemented_action',
@@ -47,7 +52,7 @@ class PASL_RBAC_ImplementedAction extends PASL_RBAC_common
 
 	public function __construct($title=null, $action=null)
 	{
-		$this->db = PASL_ORM::getDB('pasl_rbac');
+		$this->db = ORM::getDB('pasl_rbac');
 
 		if (!is_null($title))
 		{

@@ -32,7 +32,9 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-class PASL_Web_Environment_JavaScript_Abstraction_DOMNode extends DOMNode
+namespace PASL\Web\Environment\JavaScript\Abstraction;
+
+class DOMNode
 {
 	public function __set($name, $value)
 	{

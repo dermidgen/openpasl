@@ -32,6 +32,8 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
+namespace PASL\DB\Driver;
+
 /**
  * Base abstract for raw driver implementation of MDB2 common API for MySQL
  *
@@ -41,7 +43,7 @@
  * @author Danny Graham <good.midget@gmail.com>
  */
 
-abstract class PASL_DB_Driver_Common
+abstract class Common
 {
 
 	/**

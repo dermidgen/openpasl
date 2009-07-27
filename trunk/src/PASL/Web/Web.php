@@ -31,7 +31,7 @@
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
-
+namespace PASL;
 /**
  * @package PASL
  * @subpackage PASL_Web
@@ -39,7 +39,7 @@
  * @author Danny Graham <good.midget@gmail.com>
  */
 
-class PASL_Web
+class Web
 {
 
 }

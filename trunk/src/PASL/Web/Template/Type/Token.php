@@ -32,75 +32,78 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
+namespace PASL\Web\Template\Type;
 
-	require_once('PASL/Web/Template/Template.php');
+require_once('PASL/Web/Template/Template.php');
 
-	class PASL_Web_Template_Type_Token extends PASL_Web_Template
+use PASL\Web\Template;
+
+class Token extends Template
+{
+	/**
+	 * Global Token Replacement For Specified Data
+	 *
+	 * @param String $data
+	 * @return String
+	 */
+	private function parseData($data)
 	{
-		/**
-		 * Global Token Replacement For Specified Data
-		 *
-		 * @param String $data
-		 * @return String
-		 */
-		private function parseData($data)
+		$body = $data;
+
+		preg_match_all( "/\%(\S+?)\%/", $body, $matches );
+		$tokens = array_values( array_unique( array_values( $matches[1] ) ) );
+
+		for ($i = 0; $i < count($tokens); $i++)
 		{
-			$body = $data;
-
-			preg_match_all( "/\%(\S+?)\%/", $body, $matches );
-			$tokens = array_values( array_unique( array_values( $matches[1] ) ) );
-
-			for ($i = 0; $i < count($tokens); $i++)
-			{
-				if (isset($this->Variables[$tokens[$i]])) $body = str_replace("%{$tokens[$i]}%", $this->Variables[$tokens[$i]], $body);
-				else $body = str_replace("%{$tokens[$i]}%", "", $body);
-			}
-			return $body;
+			if (isset($this->Variables[$tokens[$i]])) $body = str_replace("%{$tokens[$i]}%", $this->Variables[$tokens[$i]], $body);
+			else $body = str_replace("%{$tokens[$i]}%", "", $body);
 		}
-
-		/**
-		 * Return files parsed for Tokens.
-		 *
-		 * @param String $url Path to the doc fragment that needs to be parsed
-		 * @param Bool $template Is the path to a template that requires the TemplateBasePath.  Defaults to true
-		 * @return String
-		 */
-		public function loadAndParse($url, $template=true)
-		{
-			preg_match("http://", $url) ? $local = FALSE : $local = TRUE;
-
-			$body = "";
-
-			if ($local)
-			{
-				$file = array();
-
-				$file = file(($template) ? $this->TemplateBasePath.$url : $url);
-
-				foreach ($file as $line)
-				{
-					$body .= $line;
-				}
-			}
-			else
-			{
-				$fp = fopen($url,"r");
-				$body = fread($fp,1000000);
-				fclose($fp);
-			}
-
-			$body = $this->parseData($body);
-			return $body;
-		}
-
-		/**
-		 * Interpret the file.
-		 *
-		 * @return string Template Data
-		 */
-		protected function Interpret()
-		{
-			return $this->loadAndParse($this->File);
-		}
+		return $body;
 	}
+
+	/**
+	 * Return files parsed for Tokens.
+	 *
+	 * @param String $url Path to the doc fragment that needs to be parsed
+	 * @param Bool $template Is the path to a template that requires the TemplateBasePath.  Defaults to true
+	 * @return String
+	 */
+	public function loadAndParse($url, $template=true)
+	{
+		preg_match("http://", $url) ? $local = FALSE : $local = TRUE;
+
+		$body = "";
+
+		if ($local)
+		{
+			$file = array();
+
+			$file = file(($template) ? $this->TemplateBasePath.$url : $url);
+
+			foreach ($file as $line)
+			{
+				$body .= $line;
+			}
+		}
+		else
+		{
+			$fp = fopen($url,"r");
+			$body = fread($fp,1000000);
+			fclose($fp);
+		}
+
+		$body = $this->parseData($body);
+		return $body;
+	}
+
+	/**
+	 * Interpret the file.
+	 *
+	 * @return string Template Data
+	 */
+	protected function Interpret()
+	{
+		return $this->loadAndParse($this->File);
+	}
+}
 ?>

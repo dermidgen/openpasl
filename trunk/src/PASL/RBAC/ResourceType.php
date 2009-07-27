@@ -32,9 +32,15 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-require_once('PASL/RBAC/common.php');
+namespace PASL\RBAC;
 
-class PASL_RBAC_ResourceType extends PASL_RBAC_common
+require_once('PASL/RBAC/common.php');
+require_once('PASL/ORM/ORM.php');
+
+use common;
+use PASL\ORM;
+
+class ResourceType extends common
 {
 	public $schema = Array(
 		'table'		=> 't_resource_type',
@@ -48,7 +54,7 @@ class PASL_RBAC_ResourceType extends PASL_RBAC_common
 
 	public function __construct($id=null, $username=null)
 	{
-		$this->db = PASL_ORM::getDB('pasl_rbac');
+		$this->db = ORM::getDB('pasl_rbac');
 
 		if (!is_null($title))
 		{

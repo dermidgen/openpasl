@@ -32,30 +32,34 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-	require_once('PASL/Web/Form/Item/common.php');
+namespace PASL\Web\Form\Item;
 
-	class PASL_Web_Form_Item_Input extends PASL_Web_Form_Item_Common
+require_once('PASL/Web/Form/Item/common.php');
+
+use Common;
+
+class Input extends Common
+{
+	public function __construct()
 	{
-		public function __construct()
-		{
-			$this->setTagName('input');
-		}
-
-		public function setType($Type)
-		{
-			$this->setAttribute('type', $Type);
-		}
-
-		public function setMaxLength($Length)
-		{
-			$this->setAttribute('maxlength', $Length);
-		}
-
-		public function doSubmitAction($Name, $Value)
-		{
-			if($this->isStatic() === true) $Value = $this->getValue();
-
-			$this->setValue($Value);
-		}
+		$this->setTagName('input');
 	}
+
+	public function setType($Type)
+	{
+		$this->setAttribute('type', $Type);
+	}
+
+	public function setMaxLength($Length)
+	{
+		$this->setAttribute('maxlength', $Length);
+	}
+
+	public function doSubmitAction($Name, $Value)
+	{
+		if($this->isStatic() === true) $Value = $this->getValue();
+
+		$this->setValue($Value);
+	}
+}
 ?>

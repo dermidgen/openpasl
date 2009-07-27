@@ -32,7 +32,11 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
+namespace PASL\Web;
+
 require_once('PASL/Web/Service/Request.php');
+
+use PASL\Web\Service\Request;
 
 
 /**
@@ -45,7 +49,7 @@ require_once('PASL/Web/Service/Request.php');
  * @author Danny Graham <good.midget@gmail.com>
  */
 
-class PASL_Web_Service
+class Service
 {
 	/**
 	 * String name of the type of service we've said we want to run.
@@ -97,7 +101,7 @@ class PASL_Web_Service
 	 */
 	private function providerFactory($strModeType)
 	{
-		$className = 'PASL_Web_Service_Provider_' . $strModeType;
+		$className = $strModeType;
 
 		if(!class_exists($className, false))
 		{
@@ -109,7 +113,7 @@ class PASL_Web_Service
 
 		$provider = new $className();
 
-		if (!($provider instanceof PASL_Web_Service_iServiceProvider))
+		if (!($provider instanceof PASL\Web\Service\iServiceResponder))
 			throw new Exception("Provider does not implement iServiceProvider");
 
 		return $provider;
@@ -123,7 +127,7 @@ class PASL_Web_Service
 	 */
 	private function responderFactory($strModeType)
 	{
-		$className = 'PASL_Web_Service_Responder_' . $strModeType;
+		$className = 'PASL\Web\Service\Responder\\' . $strModeType;
 
 		if(!class_exists($className, false))
 		{
@@ -135,7 +139,7 @@ class PASL_Web_Service
 
 		$responder = new $className();
 
-		if (!($responder instanceof PASL_Web_Service_iServiceResponder))
+		if (!($responder instanceof PASL\Web\Service\iServiceResponder))
 			throw new Exception("Responder does not implement iServiceResponder");
 
 		return $responder;

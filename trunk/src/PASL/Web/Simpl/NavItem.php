@@ -32,6 +32,8 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
+namespace PASL\Web\Simpl;
+
 /**
  * NavItem provides an item for NavMenus
 
@@ -41,7 +43,7 @@
  * @author Danny Graham <good.midget@gmail.com>
  */
 
-class PASL_Web_Simpl_NavItem
+class NavItem
 {
 	public $title;
 	public $caption;

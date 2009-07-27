@@ -32,9 +32,9 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
+namespace PASL\Data\Validation;
 
-
-interface PASL_Data_Validation_iValidator
+interface iValidator
 {
 }
 

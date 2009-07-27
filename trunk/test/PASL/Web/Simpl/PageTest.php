@@ -51,7 +51,7 @@ class PASL_Web_Simpl_PageTest extends UnitTestCase
 	public function PASL_Web_Simpl_PageTest()
 	{
 		$this->UnitTestCase("PASL Web Simpl Tests");
-		$this->page = new PASL_Web_Simpl_Page();
+		$this->page = new \PASL\Web\Simpl\Page();
 	}
 
 	public function TestPage()

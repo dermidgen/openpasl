@@ -32,9 +32,13 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
+namespace PASL\Web\Service;
+
 require_once('PASL/Web/Service/Service.php');
 
-class PASL_Web_Service_Gateway
+use PASL\Web\Service;
+
+class Gateway
 {
 	private static $instance = null;
 
@@ -47,12 +51,12 @@ class PASL_Web_Service_Gateway
 
 	public function __construct()
 	{
-		$this->service = new PASL_Web_Service();
+		$this->service = new Service();
 	}
 
 	public static function Main($strBasePath)
 	{
-		$gateway = PASL_Web_Service_Gateway::GetInstance();
+		$gateway = Gateway::GetInstance();
 		$gateway->service->sBaseClassPath = $strBasePath;
 		$gateway->service->handle();
 	}
@@ -64,8 +68,8 @@ class PASL_Web_Service_Gateway
 	 */
 	public static function GetInstance()
 	{
-		if (PASL_Web_Service_Gateway::$instance == null) PASL_Web_Service_Gateway::$instance = new PASL_Web_Service_Gateway();
-		return PASL_Web_Service_Gateway::$instance;
+		if (Gateway::$instance == null) Gateway::$instance = new Gateway();
+		return Gateway::$instance;
 	}
 }
 
