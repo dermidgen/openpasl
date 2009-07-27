@@ -64,7 +64,7 @@
 	 *
 	 * @author Scott Thundercloud
 	 */
-	class PASL_Web_Template_Type_Code extends PASL_Web_Template
+	class PASL_Web_Template_Type_PHP extends PASL_Web_Template
 	{
 		/**
 		 * Interprets the template using PHP.

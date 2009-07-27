@@ -67,7 +67,7 @@
 		 */
 		public function loadAndParse($url, $template=true)
 		{
-			ereg("http://",$url) ? $local = FALSE : $local = TRUE;
+			preg_match("http://", $url) ? $local = FALSE : $local = TRUE;
 
 			$body = "";
 

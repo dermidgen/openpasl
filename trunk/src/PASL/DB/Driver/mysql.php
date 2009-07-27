@@ -72,7 +72,7 @@ class PASL_DB_Driver_mysql extends PASL_DB_Driver_Common
 	 */
 	public function __construct($Host, $Username, $Password, $Database)
 	{
-		$this->db = mysqli_connect($Host, $Username, $Password, $Database);
+		$this->db = new mysqli($Host, $Username, $Password, $Database);
 	}
 
 	private function statementFetchRow($statement)

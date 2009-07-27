@@ -31,32 +31,58 @@
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
+ 
+require_once('PASL/Web/Template/Template.php');
+require_once('PASL/Interpreter/JavaScript/SpiderMonkey.php');
+require_once('PASL/Log.php');
+
+/**
+ * Class that provides an interface to create a web template using the JavaScript language
+ * 
+ * !!!!! THIS CLASS REQUIRES THE PECL-SPIDERMONKEY PACKAGE !!!!!
+ * 
+ * Find it at http://pecl.php.net/package/spidermonkey/
+ * More information at http://www.bombstrike.org/2009/02/bringing-javascript-to-the-server/
+ * 
+ * @package PASL_Web_Template_Type
+ * @category JavaScript Interpeter
+ * @author Scott Thundercloud <scott.tc@gmail.com>
+ */
 
 
-class PASL_Event
+function __php_print($input)
 {
-	/**
-	 * The event ID
-	 *
-	 * @var int
-	 */
-	public $id;
-	/**
-	 * The event name/type
-	 *
-	 * @var string
-	 */
-	public $name;
-	/**
-	 * Objects observing this event
-	 *
-	 * @var array
-	 */
-	public $observers = Array();
+	print $input;
+}
 
-	public function __construct($strType)
+class PASL_Web_Template_Type_JavaScript extends PASL_Web_Template
+{
+	private $JSInterpreter = null;
+
+	protected function Interpret()
 	{
-		$this->name = $strType;
+		$JSInterpreter = $this->getJSInterpreter();
+		$JSInterpreter->registerFunction('__php_print', 'print');
+
+		foreach($this->Variables AS $key=>$val)
+		{
+			$JSInterpreter->assignVariable($key, $val);
+		}
+
+		$JSInterpreter->setFile($this->File);
+		$Content = (string) $JSInterpreter->Run();
+
+		return $Content;
+	}
+	
+	public function getJSInterpreter()
+	{
+		return $this->JSInterpreter;
+	}
+	
+	public function setJSInterpreter(PASL_Interpreter_iInterpreter $Interpreter)
+	{
+		$this->JSInterpreter = $Interpreter;
 	}
 }
 ?>
