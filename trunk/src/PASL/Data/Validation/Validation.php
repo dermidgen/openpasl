@@ -1,4 +1,5 @@
 <?php
+
 /**
  * OpenPASL
  *
@@ -32,25 +33,58 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-	require_once('PASL/Web/Form/Item/common.php');
+abstract class PASL_Data_Validation
+{
+	abstract function Validate();
 
-	class PASL_Web_Form_Item_TextArea extends PASL_Web_Form_Item_Common
+	private $Validated = false;
+	private $Data = null;
+	private $Errors = Array();
+	
+	protected function addError($Value)
 	{
-		public function __construct()
-		{
-			$this->setTagName('textarea');
-		}
-
-		public function setValue($Value)
-		{
-			$this->internalData = $Value;
-			$this->setInnerHTML($Value);
-		}
-
-		public function doSubmitAction($Name, $Value)
-		{
-			if($this->isStatic() === true) $Value = $this->getValue();
-			$this->setValue($Value);
-		}
+		$this->Errors[] = $Value;
 	}
+	
+	public function setData($Data)
+	{
+		$this->Data = $Data;
+	}
+
+	public function getData()
+	{
+		return $this->Data;
+	}
+	
+	public function getErrors()
+	{
+		return $this->Errors;
+	}
+	
+	public function isError()
+	{
+		if(count($this->Errors) > 0) return true;
+		else return false;
+	}
+	
+	public function setValidated($validated)
+	{
+		$this->Validated = $validated;
+	}
+	
+	public function getErrorByName($ErrorName)
+	{
+		foreach($this->Errors AS $Error)
+		{
+			if($Error->Name == $ErrorName) return $Error;
+		}
+		return false;
+	}
+
+	public function isValidated()
+	{
+		return $this->Validated;
+	}
+}
+
 ?>

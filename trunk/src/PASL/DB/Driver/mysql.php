@@ -77,11 +77,13 @@ class PASL_DB_Driver_mysql extends PASL_DB_Driver_Common
 
 	private function statementFetchRow($statement)
 	{
-		if (!$statement->num_rows()) return null;
-
+		if(!$statement->bind) return false;
+		
 		$statement->fetch();
+		
 		$row = Array();
-		foreach($statement->bind as $key=>$val) $row[$key] = $val;
+		while(list($key, $val) = each($statement->bind)) $row[$key] = $val;
+
 		return $row;
 	}
 
@@ -110,6 +112,7 @@ class PASL_DB_Driver_mysql extends PASL_DB_Driver_Common
 
 			$types[] = $type;
 		}
+
 		return join('',$types);
 	}
 
@@ -128,19 +131,20 @@ class PASL_DB_Driver_mysql extends PASL_DB_Driver_Common
 			// should be replaced as 'select * from table where `c_key` = ?'
 			$statement = $this->db->prepare($query);
 			array_unshift($bind, $this->getDataTypes($bind));
-
+			
 			if (!$statement) return $statement;
 
-			call_user_func_array(array($statement,'bind_param'), $bind);
+			$result = call_user_func_array(array($statement,'bind_param'), $bind);
 
 			@$statement->execute();
 			$statement->store_result();
 
 			$bind = Array();
-
+			
 			if ($statement->num_rows())
 			{
 				$fields = $statement->result_metadata()->fetch_fields();
+
 				foreach($fields as $field)
 				{
 					$bind[] = &$row[$field->name];
@@ -149,6 +153,8 @@ class PASL_DB_Driver_mysql extends PASL_DB_Driver_Common
 				@$statement->bind = $row;
 				call_user_func_array(array($statement,'bind_result'),$bind);
 			}
+
+
 
 			return $statement;
 		}
@@ -225,6 +231,7 @@ class PASL_DB_Driver_mysql extends PASL_DB_Driver_Common
 	public function fetchAll($result)
 	{
 		$AssocNew = Array();
+		
 		while($AssocArray = (get_class($result) == 'mysqli_stmt') ? $this->statementFetchRow($result) : mysqli_fetch_array($result, MYSQL_ASSOC))
 		{
 			$AssocNew[] = $AssocArray;

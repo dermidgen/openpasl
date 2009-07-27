@@ -32,25 +32,10 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-	require_once('PASL/Web/Form/Item/common.php');
-
-	class PASL_Web_Form_Item_TextArea extends PASL_Web_Form_Item_Common
-	{
-		public function __construct()
-		{
-			$this->setTagName('textarea');
-		}
-
-		public function setValue($Value)
-		{
-			$this->internalData = $Value;
-			$this->setInnerHTML($Value);
-		}
-
-		public function doSubmitAction($Name, $Value)
-		{
-			if($this->isStatic() === true) $Value = $this->getValue();
-			$this->setValue($Value);
-		}
-	}
+class PASL_Data_Validation_Error
+{
+	public $Message;
+	public $Name;
+	public $Value;
+}
 ?>

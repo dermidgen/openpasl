@@ -42,11 +42,6 @@ class PASL_Web_Form
 	private $Items = Array();
 
 	/**
-	 * The form errors from item objects
-	 */
-	private $Error = Array();
-
-	/**
 	 * The form element attributes
 	 */
 	private $Attributes = Array();
@@ -67,7 +62,7 @@ class PASL_Web_Form
 	private $Id;
 
 	/**
-	 * Validator for each form item.  Setting this won't override a validator set on a form item
+	 * Validator class to handle errors
 	 */
 	private $Validator;
 
@@ -75,35 +70,6 @@ class PASL_Web_Form
 	 * Changes form items class name on error
 	 */
 	private $ErrorClassName = null;
-
-	/**
-	 * Handles validation on each input
-	 *
-	 * @return boolean
-	 */
-	public function Validate()
-	{
-		$Items = $this->Items;
-
-		foreach($Items AS $Item)
-		{
-			$I = $Item->Item;
-
-			if(!$I->getValidator() && !empty($this->Validator)) $I->setValidator($this->Validator);
-
-			if(!$I->Validate())
-			{
-				$Name = $I->getName();
-				$this->Error[$Name] = $I->getErrorMessage();
-
-				if($this->ErrorClassName)
-				{
-					$class = $I->getClassName();
-					$I->setClassName($this->ErrorClassName);
-				}
-			}
-		}
-	}
 
 	/**
 	 * Set an attribute on the form element
@@ -121,18 +87,7 @@ class PASL_Web_Form
 		$this->Attributes[$Name] = $Value;
 	}
 
-	/**
-	 * Returns whether or not the form is validated.
-	 *
-	 * @return boolean
-	 */
-	public function isValidated()
-	{
-		if(count($this->Error) >= 1) return false;
-		return true;
-	}
-
-	public function setValidator($Validator)
+	public function setDataValidator(PASL_Data_Validation_iValidator $Validator)
 	{
 		$this->Validator = $Validator;
 	}
@@ -146,8 +101,8 @@ class PASL_Web_Form
 	 */
 	public function addItem($FormItemObj, $FormItemName)
 	{
-		$ObjInfo = new ReflectionObject($FormItemObj);
-		$ParentClass = $ObjInfo->getParentClass()->getName();
+//		$ObjInfo = new ReflectionObject($FormItemObj);
+//		$ParentClass = $ObjInfo->getParentClass()->getName();
 
 //		if($ParentClass != 'PASL_Web_Form_Item_Common') throw new Exception('Invalid item object.  The object must extend '.$ParentClass);
 
@@ -243,10 +198,9 @@ class PASL_Web_Form
 	 */
 	public function __toString()
 	{
-		if(!empty($this->FormData[$this->GetId()]))
+		if(!empty($this->FormData))
 		{
 			$this->triggerSubmitAction();
-			$this->Validate();
 		}
 
 		$Variables = Array();
@@ -257,16 +211,25 @@ class PASL_Web_Form
 
 			$Variables[$Item->Name] = (string) $I;
 
-			if(!empty($this->Error[$Name]))
+			if(!empty($this->Validator))
 			{
-				$Variables[$Name.'_error'] = end($this->Error[$Name]);
+				$Error = $this->Validator->getErrorByName($Name);
+
+				if($Error)
+				{
+					$I->setAttribute('class', $this->ErrorClassName);
+					$Variables[$Error->Name.'_error'] = (is_array($Error->Message)) ? end($Error->Message) : $Error->Message;
+				}
 			}
 		}
 
-		if(!empty($this->Error))
+		if(!empty($this->Validator))
 		{
-			$error = current($this->Error);
-			$Variables['first_error'] = current($error);
+			if($this->Validator->isError())
+			{
+				$Errors = $this->Validator->getErrors();
+				$Variables['first_error'] = $Errors[0]->Message;
+			}
 		}
 
 		$this->Template->setVariables($Variables);

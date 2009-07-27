@@ -147,9 +147,9 @@ abstract class PASL_DB_Driver_Common
 	 * @param   String  the SELECT query statement to be executed.
 	 * @return  Array   data array
 	 */
-	function queryAll($query)
+	function queryAll($query, $bind = null)
 	{
-		$result = $this->query($query);
+		$result = $this->query($query, $bind);
 		$all = $this->fetchAll($result);
 		$this->free($result);
 		return $all;

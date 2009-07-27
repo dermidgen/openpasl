@@ -32,25 +32,82 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-	require_once('PASL/Web/Form/Item/common.php');
+require_once('PASL/Data/Validation/Validation.php');
+require_once('PASL/Log.php');
+require_once('PASL/Data/Validation/iValidator.php');
+require_once('PASL/Data/Validation/Error.php');
 
-	class PASL_Web_Form_Item_TextArea extends PASL_Web_Form_Item_Common
+class PASL_Data_Validation_Array extends PASL_Data_Validation implements PASL_Data_Validation_iValidator
+{
+	private $Callback = Array();
+	private $GlobalCallback = null;
+
+	public function addCallback($Key, $Callback)
 	{
-		public function __construct()
+		$this->Callback[$Key] = $Callback;
+	}
+
+	public function setGlobalCallback($Callback)
+	{
+		$this->GlobalCallback = $Callback;
+	}
+
+	public function Validate()
+	{
+		$Data = $this->getData();
+
+		foreach($Data AS $key=>$val)
 		{
-			$this->setTagName('textarea');
+			$Callback = (!empty($this->Callback[$key])) ? $this->Callback[$key] : ($this->GlobalCallback !== null) ? $this->GlobalCallback : false;
+			if($Callback === false)
+			{
+				PASL::Log(__CLASS__.': Callback not set for "{$key}"');
+				continue;
+			}
+
+			if(is_array($Callback))
+			{
+				$obj = $Callback[0];
+				$method = $Callback[1];
+
+				// Method
+				if(!is_object($obj))
+				{
+					$Object = new ReflectionClass($obj);
+					$obj = $Object->newInstance();
+				} else $Object = new ReflectionObject($obj); // Object
+
+				$Method = $Object->getMethod($method);
+				$Data = $Method->invoke($obj, $key, $val);
+			}
+			else
+			{
+				// Run function
+				$Function = new ReflectionFunction($Callback);
+				$Data = $Function->invoke($key, $val);
+			}
+
+			if($Data !== true)
+			{
+				$Error = new PASL_Data_Validation_Error;
+				$Error->Message = $Data;
+				$Error->Name = $key;
+				$Error->Value = $val;
+
+				$this->addError($Error);
+			}
 		}
 
-		public function setValue($Value)
+		if(count($this->getErrors()) == 0)
 		{
-			$this->internalData = $Value;
-			$this->setInnerHTML($Value);
+			$this->setValidated(true);
+			return true;
 		}
-
-		public function doSubmitAction($Name, $Value)
+		else
 		{
-			if($this->isStatic() === true) $Value = $this->getValue();
-			$this->setValue($Value);
+			$this->setValidated(false);
+			return false;
 		}
 	}
+}
 ?>

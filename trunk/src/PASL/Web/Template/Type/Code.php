@@ -48,7 +48,7 @@
 			${$key} = $val;
 		}
 		$_PASL_VARIABLES = $vars;
-		require_once($file);
+		include($file);
 
 		$contents = ob_get_contents();
 
