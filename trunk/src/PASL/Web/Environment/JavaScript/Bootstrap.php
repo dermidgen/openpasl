@@ -118,22 +118,22 @@ class PASL_Web_Environment_JavaScript_Bootstrap extends PASL_Web_aEnvironment
 
 				$jsobjstr .= $str . " = {}; \n";
 			}
-			
+
 			switch($Import->Type)
 			{
 				case 'function':
 					$Interpreter->registerFunction($php_class_name, $php_class_name);
 				break;
-				
+
 				case 'class':
 					$Interpreter->registerClass($php_class_name, $php_class_name);
 				break;
-				
+
 				case 'object':
 					$Interpreter->registerObject($php_class_name, $js_object_name);
 					$js_object_name = $php_class_name;
 				break;
-				
+
 				default:
 					continue;
 				break;
@@ -144,9 +144,7 @@ class PASL_Web_Environment_JavaScript_Bootstrap extends PASL_Web_aEnvironment
 		}
 
 		$bootstrap_str .= $jsobjstr;
-		
-		var_dump($bootstrap_str);
-		
+
 		return $bootstrap_str;
 	}
 }

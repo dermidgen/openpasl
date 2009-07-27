@@ -37,6 +37,13 @@ require_once('PASL/Log.php');
 require_once('PASL/Data/Validation/iValidator.php');
 require_once('PASL/Data/Validation/Error.php');
 
+/**
+ * Class to validate an data in an array.
+ * 
+ * @package PASL_Data_Validation
+ * @category Data Validation
+ * @author Scott Thundercloud <scott.tc@gmail.com>
+ */
 class PASL_Data_Validation_Array extends PASL_Data_Validation implements PASL_Data_Validation_iValidator
 {
 	private $Callback = Array();
