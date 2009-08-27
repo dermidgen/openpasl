@@ -127,8 +127,8 @@ $UserTable = new PASL_RBAC_User;
 // Check to see if the user can 'write' to the user table
 $can = $User->can('write', $UserTable);
 
-if($can) echo 'User can write to the user table';
-else echo 'User can't write to the user table';
+if($can) echo "User can write to the user table";
+else echo "User can't write to the user table";
 
 
 ?>
@@ -155,11 +155,11 @@ $User = new PASL_RBAC_User(9, 'thundercloud');
 // Grab the user
 $UserEntry = new PASL_RBAC_User(8, 'someuser');
 
-// Check to see if the user can 'write' to the user table
+// Check to see if the user can modify someuser's account information
 $can = $User->can('write', $UserEntry);
 
-if($can) echo 'User can modify the user's information';
-else echo 'User can't modify the user's information';
+if($can) echo "User can modify the user's information";
+else echo "User can't modify the user's information";
 
 
 ?>
@@ -169,5 +169,3 @@ else echo 'User can't modify the user's information';
 
 
 == The DB schema ==
-
-
