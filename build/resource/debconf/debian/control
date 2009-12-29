@@ -1,0 +1,12 @@
+Source: openpasl
+Section: Development
+Priority: optional
+Maintainer: Danny Graham <good.midget@gmail.com>
+Build-Depends: debhelper (>= 5)
+Standards-Version: 3.7.2
+
+Package: openpasl
+Version: 0.1a
+Architecture: any
+Depends: php5 (>=5.1)
+Description: Open PHP Application Support Libraries. Simple, loosely-coupled libraries to get common architectural concerns out of the way.

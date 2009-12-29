@@ -1,0 +1,159 @@
+<?xml version="1.0"?>
+
+<!--
+
+ OpenPASL
+
+ LICENSE
+
+ This source file is subject to the new BSD license that is bundled
+ with this package in the file LICENSE.txt.
+
+ @copyright  Copyright (c) 2008 Danny Graham, Scott Thundercloud. (http://code.google.com/p/openpasl)
+ @license <http://www.opensource.org/licenses/bsd-license.php> New BSD License
+
+ Requirements:
+
+ * Phing 2.2.0
+ * VersionControl_SVN-alpha 0.3.1
+ * PHP 5.1.x +
+ * PHPDocumentor 1.3.1
+
+ Usage:
+
+   phing [ <options> ] [ <targets> ]
+
+ Options:
+
+   -D<property>={value}
+     Override a property in build.properties
+-->
+
+<project name="openpasl package builds" default="all" basedir="../">
+
+	<property file="build.properties"/>
+	<property file="${path.build}/build.properties"/>
+
+	<target name="all" depends="clean, package, archive">
+	</target>
+
+	<target name="clean">
+		<delete dir="${path.tmp.release.archive}" includeemptydirs="true" verbose="true" failonerror="true" />
+
+		<!-- Gotta use exec cause building debs always creates files as root -->
+		<exec command="sudo rm -rf ${path.tmp.release.deb}" passthru="true" checkreturn="true"/>
+
+		<delete verbose="true" failonerror="true">
+			<fileset dir="${path.build.release.bin}">
+				<include name="**/**"/>
+			</fileset>
+		</delete>
+		<phing phingfile="${path.doc}/build.xml" target="clean"/>
+	</target>
+
+	<target name="upload-release" depends="all">
+
+		<exec command="${path.lib}/googlecode_upload.py
+						-p ${svn.project.name}
+						-s ${build.bin.release.summary}
+						-l ${build.bin.release.labels}
+						-u ${svn.auth.user}
+						-P ${svn.auth.password}
+						${build.bin.tar}"
+		passthru="true"/>
+
+	</target>
+
+	<target name="package" depends="deb.mkdeb">
+	</target>
+
+	<target name="archive" depends="src.export, api.export, pkgfiles.export">
+		<tar destfile="${build.bin.tar}" basedir="${path.tmp.release.archive}" compression="gzip"/>
+		<zip destfile="${build.bin.zip}" basedir="${path.tmp.release.archive}"/>
+	</target>
+
+	<target name="api">
+		<phing phingfile="${path.doc}/build.xml" target="all"/>
+	</target>
+
+	<target name="deb.mkdeb" depends="deb.preflight, deb.archive.create, deb.resource.export">
+		<exec command="sudo dpkg-buildpackage" dir="${build.bin.deb.basepath}" passthru="true"/>
+		<exec command="sudo mv ${path.tmp.release.deb}/${build.bin.deb.name} ${build.bin.deb}" passthru="true"/>
+	</target>
+
+	<target name="deb.archive.create" depends="deb.src.export, deb.api.export">
+		<tar destfile="${build.bin.deb.tar}" compression="gzip">
+			<fileset dir="${path.tmp.release.archive}/library">
+				<include name="**/**"/>
+			</fileset>
+			<fileset dir="${path.tmp.release.archive}/doc">
+				<include name="**/**"/>
+			</fileset>
+		</tar>
+	</target>
+
+	<target name="deb.src.export" depends="src.export, deb.preflight">
+		<copy todir="${build.bin.deb.basepath}" includeemptydirs="true" overwrite="true">
+			<fileset dir="${path.tmp.release.archive}/library">
+				<include name="**/**"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="deb.api.export" depends="api.export, deb.preflight">
+		<copy todir="${build.bin.deb.basepath}/doc" includeemptydirs="true" overwrite="true">
+			<fileset dir="${path.tmp.release.archive}/doc/api">
+				<include name="**/**"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="deb.resource.export" depends="deb.preflight">
+		<copy file="${project.license}" todir="${build.bin.deb.basepath}" overwrite="true"/>
+		<copy file="${project.readme}" todir="${build.bin.deb.basepath}" overwrite="true"/>
+		<copy file="${project.install}" todir="${build.bin.deb.basepath}" overwrite="true"/>
+
+		<copy todir="${build.bin.deb.basepath}/debian" includeemptydirs="true" overwrite="true">
+			<fileset dir="${path.build.resource}/debconf/debian">
+				<include name="**/**"/>
+			</fileset>
+		</copy>
+
+		<exec command="chmod +x ${build.bin.deb.basepath}/debian/rules" passthru="true" checkreturn="true"/>
+
+		<copy file="${project.readme}" tofile="${build.bin.deb.basepath}/debian/README.Debian" overwrite="true"/>
+	</target>
+
+	<target name="deb.preflight">
+		<mkdir dir="${build.bin.deb.basepath}"/>
+	</target>
+
+
+	<target name="src.export" depends="preflight">
+		<copy todir="${path.tmp.release.archive}/library">
+			<fileset dir="${path.src}">
+				<include name="**/**"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="api.export" depends="preflight, api">
+		<copy todir="${path.tmp.release.archive}/doc/api">
+			<fileset dir="${build.api.release}">
+				<include name="**/**"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="pkgfiles.export" depends="preflight">
+		<copy file="${project.license}" tofile="${path.tmp.release.archive}/LICENSE.txt"/>
+	</target>
+
+	<target name="preflight">
+		<!-- Build /tmp target for archives -->
+		<mkdir dir="${path.tmp.release.archive}/library"/>
+		<mkdir dir="${path.tmp.release.archive}/doc/api"/>
+	</target>
+
+
+</project>
