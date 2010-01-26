@@ -32,7 +32,7 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-namespace PASL\Web\Simpl\UserNav;
+namespace PASL\Web\Simpl;
 
 require_once("NavMenu.php");
 
