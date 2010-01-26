@@ -32,7 +32,7 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-namespace PASL\Web\Simpl\NavMenu;
+namespace PASL\Web\Simpl;
 
 /**
  * NavMenu provides a Menu of NavItems for display in a page template
@@ -142,7 +142,7 @@ class NavMenu
 	 *
 	 * @param PASL_Web_Simpl_NavItem $menuItem
 	 */
-	public function addMenuItem(PASL\Web\Simpl\NavItem $menuItem)
+	public function addMenuItem(\PASL\Web\Simpl\NavItem $menuItem)
 	{
 		array_push($this->menuItems, $menuItem);
 	}
@@ -152,7 +152,7 @@ class NavMenu
 	 *
 	 * @param PASL_Web_Simpl_NavItem $header
 	 */
-	public function addMenuHeader(PASL\Web\Simpl\NavItem $header)
+	public function addMenuHeader(\PASL\Web\Simpl\NavItem $header)
 	{
 		array_push($this->menuItems, $header);
 	}
