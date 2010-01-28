@@ -31,7 +31,7 @@
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
-namespace PASL/RBAC;
+namespace PASL\RBAC;
 
 require_once('PASL/RBAC/common.php');
 require_once('PASL/ORM/ORM.php');
