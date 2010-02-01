@@ -46,7 +46,7 @@ class Console
 	private static $instance = null;
 
 	public $argumentsLength = 0;
-	public $arugments = Array();
+	public $arguments = Array();
 
 	public function __construct()
 	{
