@@ -72,9 +72,9 @@ class MainNavItem extends NavItem
 	{
 		$requestURI = ltrim($_SERVER['REQUEST_URI'],"/");
 
-		if ($this->selected && $requestURI != $this->link) return "<li class=\"selected\"><a href=\"{$this->link}\">{$this->title}</a></li>";
+		if ($this->selected && $requestURI != $this->link) return "<li class=\"selected\"><a href=\"{$this->link}\" alt=\"{$this->caption}\">{$this->title}</a></li>";
 		else if ($this->selected) return "<li class=\"selected\">{$this->title}</li>";
-		else return "<li><a href=\"{$this->link}\">{$this->title}</a></li>";
+		else return "<li><a href=\"{$this->link}\" alt=\"{$this->caption}\">{$this->title}</a></li>";
 	}
 }
 
