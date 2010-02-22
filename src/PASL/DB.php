@@ -165,9 +165,9 @@ class DB
 
 		if(!class_exists($className, false))
 		{
-			$dPath = dirname(__FILE__)."/Driver/{$driver}.php";
+			$dPath = dirname(__FILE__)."/DB/Driver/{$driver}.php";
 
-			if (!file_exists($dPath)) throw new Exception("Driver not found at path {$dPath}");
+			if (!file_exists($dPath)) throw new \Exception("Driver not found at path {$dPath}");
 			require_once($dPath);
 		}
 

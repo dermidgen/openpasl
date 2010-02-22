@@ -126,12 +126,13 @@ class SimpleTable
 	{
 		$db = $this->getDB($params);
 
+
 		//TODO: Implement :c_key tokens
 
 		$stmtParts = $this->__stmtprep($params);
 		$query = "select * from `{$this->schema['table']}` where " . join(' AND ', $stmtParts['where']);
 
-		$res = $db->query($query, $stmtParts['bind']);
+		$res = $db->query($query, array(4, 'anonymous'));
 		if (!$res) return;
 		$res = $db->fetchRow($res);
 		if (!$res) return;

@@ -77,8 +77,9 @@ class Authentication
 			break;
 			case "mysql":
 				require_once('PASL/Authentication/Provider/mysql.php');
-				use PASL\Authentication\Provider\mysql;
-				$provider = new mysql();
+				
+				$class_str = '\PASL\Authentication\Provider\mysql';
+				$provider = new $class_str;
 			break;
 			default:
 				$provider = null;

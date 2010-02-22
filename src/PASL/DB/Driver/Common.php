@@ -45,7 +45,6 @@ namespace PASL\DB\Driver;
 
 abstract class Common
 {
-
 	/**
 	 * Send a query to the database and return any results
 	 * Provides a basic level of MDB2 api compatability.

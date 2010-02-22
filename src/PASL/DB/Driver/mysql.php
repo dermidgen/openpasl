@@ -81,13 +81,41 @@ class mysql extends Common
 	private function statementFetchRow($statement)
 	{
 		if(!$statement->bind) return false;
-		
+
 		$statement->fetch();
-		
 		$row = Array();
 		while(list($key, $val) = each($statement->bind)) $row[$key] = $val;
 
 		return $row;
+	}
+
+	private function statementFetchAll($statement)
+	{
+			$bind = Array();
+
+			if ($statement->num_rows())
+			{
+				$fields = $statement->result_metadata()->fetch_fields();
+				$row = array();
+				foreach($fields as $field)
+				{
+					$bind[] = &$row[$field->name];
+				}
+
+				call_user_func_array(array($statement,'bind_result'),$bind);
+			}
+
+			while($statement->fetch())
+			{
+				foreach($row AS $key => $val)
+				{
+					$rows[$key] = $val;
+				}
+
+				$results[] = $rows;
+			}
+
+			return $results;
 	}
 
 	private function getDataTypes(array $data)
@@ -133,31 +161,16 @@ class mysql extends Common
 			// query string should support 'select * from table where `c_key` = :c_key'
 			// should be replaced as 'select * from table where `c_key` = ?'
 			$statement = $this->db->prepare($query);
+
 			array_unshift($bind, $this->getDataTypes($bind));
-			
+
 			if (!$statement) return $statement;
 
-			$result = call_user_func_array(array($statement,'bind_param'), $bind);
+			call_user_method_array('bind_param', $statement, $bind);
 
 			@$statement->execute();
+
 			$statement->store_result();
-
-			$bind = Array();
-			
-			if ($statement->num_rows())
-			{
-				$fields = $statement->result_metadata()->fetch_fields();
-
-				foreach($fields as $field)
-				{
-					$bind[] = &$row[$field->name];
-				}
-
-				@$statement->bind = $row;
-				call_user_func_array(array($statement,'bind_result'),$bind);
-			}
-
-
 
 			return $statement;
 		}
@@ -233,16 +246,17 @@ class mysql extends Common
 	 */
 	public function fetchAll($result)
 	{
+		if(get_class($result) == 'mysqli_stmt') return $this->statementFetchAll($result);
+
 		$AssocNew = Array();
-		
-		while($AssocArray = (get_class($result) == 'mysqli_stmt') ? $this->statementFetchRow($result) : mysqli_fetch_array($result, MYSQL_ASSOC))
+		while($AssocArray = (mysqli_fetch_array($result, MYSQL_ASSOC)))
 		{
 			$AssocNew[] = $AssocArray;
 		}
 
 		return $AssocNew;
 	}
-
+	
 	/**
 	 * Returns an instance of PASL_DB_Driver_mysql (singleton)
 	 *

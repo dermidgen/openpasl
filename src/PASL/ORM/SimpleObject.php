@@ -38,7 +38,7 @@ class SimpleObject
 {
 	protected $table;
 
-	public function __construct(PASL\ORM\SimpleTable $table)
+	public function __construct($table)
 	{
 		$this->table = $table;
 	}
