@@ -92,6 +92,7 @@ class mysql extends Common
 	private function statementFetchAll($statement)
 	{
 			$bind = Array();
+			$results = Array();
 
 			if ($statement->num_rows())
 			{
@@ -105,6 +106,9 @@ class mysql extends Common
 				call_user_func_array(array($statement,'bind_result'),$bind);
 			}
 
+
+			
+			
 			while($statement->fetch())
 			{
 				foreach($row AS $key => $val)

@@ -31,9 +31,33 @@
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
+ 
+namespace PASL\Authentication\Provider;
 
-require_once('PASL/Web/Service/Gateway.php');
+require_once('PASL/Authentication/iProvider.php');
+require_once('PASL/Authentication/Provider/common.php');
 
-PASL_Web_Service_Gateway::Main(dirname(__FILE__));
 
+
+use PASL\Authentication\Provider\iProvider;
+use PASL\Authentication\Provider\common;
+
+/**
+ * Provides a SAML based authentication provider. This provider is designed to
+ * allow authentication against local and remote SAML gateways.  This has nothing
+ * to do with allowing users to authenticate with SAML credentials, this only
+ * provides authentication with providers that require/support SAML
+ *
+ * @package PASL_Authentication
+ * @subpackage PASL_Authentication_Provider
+ * @category Authentication
+ * @author Danny Graham <good.midget@gmail.com>
+ */
+class active_directory extends common implements iProvider
+{
+	public function authenticate($credentials)
+	{
+
+	}
+}
 ?>
