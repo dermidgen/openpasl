@@ -51,6 +51,77 @@ class Breadcrumb
 		$this->Template = $Template;
 	}
 	
+	public function getTemplate()
+	{
+		return $this->Template;
+	}
+	
+	public function setHierarchy(array $Hierarchy)
+	{
+		$this->Hierarchy = $Hierarchy;
+	}
+	
+	public function appendChild($Child)
+	{
+		$this->Hierarchy[] = $Child;
+	}
+	
+	public function appendChildBefore($Name, $Child)
+	{
+		$i = 0;
+		$foundIndex = false;
+		foreach($this->Hierarchy as $NavMenu)
+		{
+			if($NavMenu->name == $Name)
+			{
+				$foundIndex = $i;
+				break;
+			}
+			$i++;
+		}
+		
+		if($foundIndex === false) return false;
+		
+		for($j=count($this->Hierarchy) - 1; $j >= $foundIndex; $j--)
+		{
+			$this->Hierarchy[$j + 1] = $this->Hierarchy[$j];  
+		}
+		
+		$this->Hierarchy[$foundIndex] = $Child;
+		
+		return true;
+	}
+	
+	public function appendChildAfter($Name, $Child)
+	{
+		$i = 0;
+		$foundIndex = false;
+		foreach($this->Hierarchy as $NavMenu)
+		{
+			if($NavMenu->name == $Name)
+			{
+				$foundIndex = $i;
+				break;
+			}
+			$i++;
+		}
+		
+		if($foundIndex === false) return false;
+		$foundIndex++;
+		
+		for($j=count($this->Hierarchy) - 1; $j >= $foundIndex; $j--)
+		{
+			$this->Hierarchy[$j + 1] = $this->Hierarchy[$j];  
+		}
+		
+		
+		
+		$this->Hierarchy[$foundIndex] = $Child;
+		
+		return true;
+	}
+	
+	
 	public function getSelectedNavItemsByChildren()
 	{
 		$Children = array($this->Navigation);

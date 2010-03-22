@@ -32,9 +32,9 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-namespace PASL\Web\Template\Type;
+namespace PASL\Web\Template;
 
-require_once('PASL/Web/Template/Template.php');
+require_once('PASL/Web/Template.php');
 
 use PASL\Web\Template;
 

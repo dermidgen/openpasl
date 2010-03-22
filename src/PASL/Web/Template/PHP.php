@@ -31,7 +31,7 @@
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
-namespace PASL\Web\Template\Type;
+namespace PASL\Web\Template;
 
 /**
  * A hack to keep the loaded template's scope outside of the object.
@@ -58,7 +58,7 @@ function __load($file, $vars)
 	return $contents;
 }
 
-require_once('PASL/Web/Template/Template.php');
+require_once('PASL/Web/Template.php');
 
 use PASL\Web\Template;
 
