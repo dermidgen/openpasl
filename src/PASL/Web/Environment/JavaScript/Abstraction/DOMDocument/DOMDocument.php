@@ -38,6 +38,13 @@ require_once("PASL/Web/Environment/JavaScript/Abstraction/DOMNode.php");
 
 use PASL\Web\Environment\JavaScript\Abstraction\DOMNode;
 
+/**
+ * Provides a way to abstract the DOMDocument object to a more JavaScript style method names
+ * 
+ * @package \PASL\Web\Enviroment\JavaScript\Abstraction\DOMDocument
+ * @category Experimental
+ * @author Scott Thundercloud
+ */
 class DOMDocument extends DOMNode
 {
 	public function createElement($ElementName)

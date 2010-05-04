@@ -33,44 +33,114 @@
  */
 namespace PASL\Web\Environment;
 
+
+/**
+ * An experiment attempting to create a self containted environment inside PHP
+ * 
+ * @package \PASL\Web\Environment
+ * @category Experimental
+ * @author Scott Thundercloud <scott.tc@gmail.com>
+ */
 abstract class aEnvironment
 {
+	/**
+	 * The interpreter
+	 * 
+	 * @var Object
+	 */
 	protected $Interpreter;
+	
+	/**
+	 * The index file
+	 * 
+	 * @var object
+	 */
 	protected $IndexFile = 'index.js';
+	
+	/**
+	 * The environment directory
+	 * 
+	 * @var string
+	 */
 	protected $EnvironmentDirectory = null;
+	
+	/**
+	 * The config file
+	 * 
+	 * @var string
+	 */
 	protected $ConfigFile = null;
 
 
+	/**
+	 * Sets the interpreter
+	 * 
+	 * @param $Interpreter
+	 * @return void
+	 */
 	protected function setInterpreter($Interpreter)
 	{
 		$this->Interpreter = $Interpreter;
 	}
-
+	
+	/**
+	 * Returns the assigned interpreter
+	 * 
+	 * @return void
+	 */
 	protected function getInterpreter()
 	{
 		return $this->Interpreter;
 	}
-
+	
+	/**
+	 * Sets the index(bootstrap) filename
+	 * 
+	 * @param string $IndexFile
+	 * @return void
+	 */
 	public function setIndexFile($IndexFile)
 	{
 		$this->IndexFile = $IndexFile;
 	}
 
+	/**
+	 * Sets the path where the enviroment lies in
+	 * 
+	 * @param string $EnvironmentDirectory
+	 * @return unknown_type
+	 */
 	public function setEnvironmentDirectory($EnvironmentDirectory)
 	{
 		$this->EnvironmentDirectory = $EnvironmentDirectory;
 	}
 
+	/**
+	 * Sets the configuration file
+	 * 
+	 * @param string $configFile
+	 * @return void
+	 */
 	public function setConfigFile($configFile)
 	{
 		$this->configFile = $configFile;
 	}
 
+	/**
+	 * Returns the configuration file
+	 * 
+	 * @return unknown_type
+	 */
 	public function getConfigFile()
 	{
 		return $this->configFile;
 	}
 
+	/**
+	 * Runs the environment
+	 * 
+	 * @return string
+	 */
 	public function Run()
 	{
 		$Interpreter = $this->getInterpreter();

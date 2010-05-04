@@ -34,8 +34,23 @@
 
 namespace PASL\Web\Simpl;
 
+/**
+ * Breadcrumb controller using the existing NavMenu classes
+ * 
+ * @package PASL_Web
+ * @subpackage PASL_Web_Simpl
+ * @category Web
+ * @author Scott Thundercloud <scott.tc@gmail.com>
+ *
+ */
 class Breadcrumb
 {
+	/**
+	 * The template object
+	 * 
+	 * @var Object
+	 * @see \PASL\Web\Template
+	 */
 	private $Template = null;
 	private $Navigation = null;
 
@@ -46,26 +61,57 @@ class Breadcrumb
 		$this->Navigation = $Navigation;
 	}
 	
+	/**
+	 * Sets the template object for the breadcrumb to use
+	 * 
+	 * @param $Template
+	 * @see \PASL\Web\Template
+	 * @return void
+	 */
 	public function setTemplate($Template)
 	{
 		$this->Template = $Template;
 	}
 	
+	/**
+	 * Gets the template
+	 * 
+	 * @return unknown_type
+	 */
 	public function getTemplate()
 	{
 		return $this->Template;
 	}
 	
+	/**
+	 * Sets a hierarchy of breadcrumb items
+	 * 
+	 * @param array $Hierarchy
+	 * @return void
+	 */
 	public function setHierarchy(array $Hierarchy)
 	{
 		$this->Hierarchy = $Hierarchy;
 	}
 	
+	/**
+	 * Append a navigation menu to the breadcrumb hierarchy
+	 * 
+	 * @param \PASL\Web\MainNav $Child
+	 * @return void
+	 */
 	public function appendChild($Child)
 	{
 		$this->Hierarchy[] = $Child;
 	}
 	
+	/**
+	 * Append a navigation menu before a menu
+	 * 
+	 * @param MenuName $Name
+	 * @param $Child
+	 * @return void
+	 */
 	public function appendChildBefore($Name, $Child)
 	{
 		$i = 0;
@@ -92,6 +138,14 @@ class Breadcrumb
 		return true;
 	}
 	
+	
+	/**
+	 * Append a navigation menu after a menu
+	 * 
+	 * @param MenuName $Name
+	 * @param $Child
+	 * @return void
+	 */
 	public function appendChildAfter($Name, $Child)
 	{
 		$i = 0;
@@ -121,7 +175,11 @@ class Breadcrumb
 		return true;
 	}
 	
-	
+	/**
+	 * Return all the selected children for output
+	 * 
+	 * @return Array
+	 */
 	public function getSelectedNavItemsByChildren()
 	{
 		$Children = array($this->Navigation);

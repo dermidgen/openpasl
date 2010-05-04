@@ -33,7 +33,13 @@
  */
 
 namespace PASL\Web\Environment\JavaScript\Abstraction;
-
+/**
+ * Provides a way to abstract the DOMDocument object to a more JavaScript style method names
+ * 
+ * @package \PASL\Web\Enviroment\JavaScript\Abstraction\DOMDocument
+ * @category Experimental
+ * @author Scott Thundercloud
+ */
 class DOMNode
 {
 	public function __set($name, $value)

@@ -65,11 +65,21 @@ class JavaScript extends Template
 {
 	private $JSInterpreter = null;
 
+	/**
+	 * Defaults the interpreter to SpiderMonkey
+	 * 
+	 * @return void
+	 */
 	public function __construct()
 	{
 		$this->setJSInterpreter(new SpiderMonkey);
 	}
 	
+	/**
+	 * Interprets the JavaScript file.  Assigns a print function.  
+	 * 
+	 * @return void
+	 */
 	protected function Interpret()
 	{
 		$JSInterpreter = $this->getJSInterpreter();
@@ -86,11 +96,22 @@ class JavaScript extends Template
 		return $Content;
 	}
 	
+	/**
+	 * Returns the assigned JavaScript interpreter
+	 * 
+	 * @return Object
+	 */
 	public function getJSInterpreter()
 	{
 		return $this->JSInterpreter;
 	}
 	
+	/**
+	 * Sets the JavaScript interpreter
+	 * 
+	 * @see \PASL\Interpreter\JavaScript
+	 * @return void
+	 */
 	public function setJSInterpreter(PASL\Interpreter\iInterpreter $Interpreter)
 	{
 		$this->JSInterpreter = $Interpreter;
