@@ -38,17 +38,23 @@ require_once('PASL/Web/Form/Item/Common.php');
 
 use PASL\Web\Form\Item\Common;
 
+/**
+ * Form radio button
+ * 
+ * @package \PASL\Web\Form\Item
+ * @author Scott Thundercloud
+ */
 class Radio extends Common
 {
+	/**
+	 * Defaults the tag name to input and the type of radio
+	 * 
+	 * @return void
+	 */
 	public function __construct()
 	{
 		$this->setTagName('input');
 		$this->setAttribute('type', 'radio');
-	}
-
-	public function doSubmitAction($Name, $Value)
-	{
-		if($this->getValue() == $Value) $this->setInnerTagText('checked');
 	}
 }
 ?>

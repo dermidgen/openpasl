@@ -42,6 +42,12 @@ use PASL\Web\Template;
 use PASL\Interpreter\JavaScript\SpiderMonkey;
 use PASL\Log;
 
+
+function __php_print($input)
+{
+	print $input;
+}
+
 /**
  * Class that provides an interface to create a web template using the JavaScript language
  * 
@@ -54,15 +60,13 @@ use PASL\Log;
  * @category JavaScript Interpeter
  * @author Scott Thundercloud <scott.tc@gmail.com>
  */
-
-
-function __php_print($input)
-{
-	print $input;
-}
-
 class JavaScript extends Template
 {
+	/**
+	 * The JavaScript interpreter
+	 * 
+	 * @var object
+	 */
 	private $JSInterpreter = null;
 
 	/**

@@ -40,25 +40,42 @@ require_once('PASL/Web/Form/Item/Option.php');
 use PASL\Web\Form\Item\Common;
 use PASL\Web\Form\Item\Option;
 
+/**
+ * Form select box
+ * 
+ * @package \PASL\Web\Form\Item
+ * @author Scott Thundercloud
+ */
 class Select extends Common
 {
-	private $autoSelect = false;
-
+	/**
+	 * Sets the tag name to select
+	 * 
+	 * @return void
+	 */
 	public function __construct()
 	{
 		$this->setTagName('select');
 	}
 
+	/**
+	 * Sets the type
+	 * 
+	 * @return void
+	 */
 	public function setType($Type)
 	{
 		$this->setAttribute('type', $Type);
 	}
 
-	public function setAutoSelect($Boolean)
-	{
-		$this->autoSelect = $Boolean;
-	}
-
+	/**
+	 * Add an option item
+	 * 
+	 * @param string $Value
+	 * @param string $DisplayValue
+	 * @param boolean $Selected
+	 * @return void
+	 */
 	public function addOption($Value, $DisplayValue='', $Selected=false)
 	{
 		if(empty($DisplayValue)) $DisplayValue = $Value;
@@ -69,17 +86,6 @@ class Select extends Common
 		$Option->setValue($Value);
 
 		$this->appendChild($Option);
-	}
-
-	public function doSubmitAction($Name, $Value)
-	{
-		foreach($this->AppendedElements AS $AppendedElement)
-		{
-			if($AppendedElement->getValue() == $Value)
-			{
-				$AppendedElement->setSelected(true);
-			}
-		}
 	}
 }
 ?>

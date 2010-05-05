@@ -34,6 +34,12 @@
 
 namespace PASL\Web;
 
+/**
+ * Form control class
+ * 
+ * @package \PASL\Web
+ * @author Scott Thundercloud <scott.tc@gmail.com>
+ */
 class Form
 {
 	/**
@@ -190,11 +196,6 @@ class Form
 	 */
 	public function __toString()
 	{
-		if(!empty($this->FormData))
-		{
-			$this->triggerSubmitAction();
-		}
-
 		$Variables = Array();
 		foreach($this->Items AS $Item)
 		{
@@ -221,28 +222,18 @@ class Form
 			{
 				$Errors = $this->Validator->getErrors();
 				$Variables['first_error'] = $Errors[0]->Message;
+				$Variables['all_errors'] = $Errors;
+			}
+			else
+			{
+				$Data = $this->Validator->getData();
+				if(!empty($Data)) $Variables['_form_success'] = true;
 			}
 		}
 
 		$this->Template->setVariables($Variables);
 
-		$string = '';
-		$i=0;
-		foreach($this->Attributes AS $Name=>$Value)
-		{
-			$string .= $Name.'="'.$Value.'"';
-			if(count($this->Attributes)-1 != $i) $string .= ' ';
-
-			$i++;
-		}
-
-		$FormHTML = '<form '.$string.'>' . "\n";
-		$FormHTML .= '<input type="hidden" value="1" name="'.$this->Id.'">';
-		$FormHTML .= (string) $this->Template . "\n";
-
-		$FormHTML .= '</form>' . "\n";
-
-		return $FormHTML;
+		return (string) $this->Template;
 	}
 }
 ?>

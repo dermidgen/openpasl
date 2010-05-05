@@ -38,23 +38,34 @@ require_once('PASL/Web/Form/Item/Common.php');
 
 use PASL\Web\Form\Item\Common;
 
+/**
+ * Form textarea
+ * 
+ * @package \PASL\Web\Form\Item
+ * @author Scott Thundercloud
+ */
 class TextArea extends Common
 {
+	/**
+	 * Sets the tag name to textarea
+	 * 
+	 * @return void
+	 */
 	public function __construct()
 	{
 		$this->setTagName('textarea');
 	}
-
+	
+	/**
+	 * Sets the value for the textarea
+	 * 
+	 * @param string $Value
+	 * @return void
+	 */
 	public function setValue($Value)
 	{
 		$this->internalData = $Value;
 		$this->setInnerHTML($Value);
-	}
-
-	public function doSubmitAction($Name, $Value)
-	{
-		if($this->isStatic() === true) $Value = $this->getValue();
-		$this->setValue($Value);
 	}
 }
 ?>

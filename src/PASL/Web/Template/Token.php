@@ -38,6 +38,12 @@ require_once('PASL/Web/Template.php');
 
 use PASL\Web\Template;
 
+/**
+ * Token replacement interpreter
+ * 
+ * @package \PASL\Web\Template
+ * @author Scott Thundercloud and Danny Graham
+ */
 class Token extends Template
 {
 	/**
