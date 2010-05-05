@@ -47,6 +47,11 @@ use PASL\Web\Form\Item\Common;
 
 class Checkbox extends Common
 {
+	/**
+	 * Defaults the tag name to input and the type to checkbox
+	 * 
+	 * @return void
+	 */
 	public function __construct()
 	{
 		$this->setTagName('input');
