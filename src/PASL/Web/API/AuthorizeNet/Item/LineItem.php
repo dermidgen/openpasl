@@ -1,5 +1,4 @@
-<?php
-
+<?
 /**
  * OpenPASL
  *
@@ -33,126 +32,151 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-namespace PASL\Data;
+namespace PASL\Web\API\AuthorizeNet\Item;
 
 /**
- * Abstract class for classes wishing to validate a data set
+ * Helper class to create a line item
+ * Refer to the authorize.net documentation for more information
  * 
- * @package PASL_Data_Validation
- * @category Data Validation
+ * @category authorize.net
+ * @package PASL\Web\API\AuthorizeNet\Item
  * @author Scott Thundercloud <scott.tc@gmail.com>
  */
-abstract class Validation
+class LineItem
 {
-	/**
-	 * Each class will have its own way of validating a data set
-	 * 
-	 * @return boolean
-	 */
-	abstract function Validate();
-
-	/** 
-	 * @var boolean
-	 */
-	private $Validated = false;
-	
 	/**
 	 * @var string
 	 */
-	private $Data = null;
+	private $ID;
 	
+
 	/**
-	 * @var array
+	 * @var string
 	 */
-	private $Errors = Array();
+	private $Name;
+	
+
+	/**
+	 * @var string
+	 */
+	private $Description;
+	
+
+	/**
+	 * @var string
+	 */
+	private $Quantity;
+	
+
+	/**
+	 * @var string
+	 */
+	private $Price;
+	
+
+	/**
+	 * @var string
+	 */
+	private $Taxable;
 	
 	/**
-	 * Add an error
+	 * Accepts params for line items
 	 * 
-	 * @param string $Value
+	 * @param string $ID
+	 * @param string $Name
+	 * @param string $Description
+	 * @param string $Quantity
+	 * @param string $Price
+	 * @param string $Taxable
 	 * @return void
 	 */
-	protected function addError($Value)
+	public function __construct($ID=null, $Name=null, $Description=null, $Quantity=null, $Price=null, $Taxable=null)
 	{
-		$this->Errors[] = $Value;
-	}
-	
-	/**
-	 * Set the data to validate
-	 * 
-	 * @param mixed $Data
-	 * @return void
-	 */
-	public function setData($Data)
-	{
-		$this->Data = $Data;
+		$this->setID($ID);
+		$this->setName($Name);
+		$this->setDescription($Description);
+		$this->setQuantity($Quantity);
+		$this->setPrice($Price);
+		$this->setTaxable($Taxable);
 	}
 
 	/**
-	 * Return the data
+	 * Set the ID
 	 * 
-	 * @return mixed
-	 */
-	public function getData()
-	{
-		return $this->Data;
-	}
-	
-	/**
-	 * Return the errors
-	 * 
-	 * @return array
-	 */
-	public function getErrors()
-	{
-		return $this->Errors;
-	}
-	
-	/**
-	 * Checks to see if an error occurred
-	 * 
+	 * @param string $ID
 	 * @return void
 	 */
-	public function isError()
+	public function setID($ID)
 	{
-		if(count($this->Errors) > 0) return true;
-		else return false;
+		$this->ID = $ID;
 	}
 	
 	/**
+	 * Set the name
 	 * 
-	 * @param $validated
-	 * @return unknown_type
+	 * @param string $Name
+	 * @return void
 	 */
-	public function setValidated($validated)
+	public function setName($Name)
 	{
-		$this->Validated = $validated;
+		$this->Name = $Name;
 	}
 	
 	/**
-	 * Return an error by name
+	 * Set the description
 	 * 
-	 * @param string $ErrorName
-	 * @return string|false
+	 * @param string $Description
+	 * @return void
 	 */
-	public function getErrorByName($ErrorName)
+	public function setDescription($Description)
 	{
-		foreach($this->Errors AS $Error)
-		{
-			if($Error->Name == $ErrorName) return $Error;
-		}
-		return false;
+		$this->Description = $Description;
 	}
 
 	/**
-	 * Checks to see if the data set is validated
+	 * Set the quantity
 	 * 
-	 * @return boolean
+	 * @param string $Quantity
+	 * @return void
 	 */
-	public function isValidated()
+	public function setQuantity($Quantity)
 	{
-		return $this->Validated;
+		$this->Quantity = $Quantity;
+	}
+	
+	/**
+	 * Set the price
+	 * 
+	 * @param string $Price
+	 * @return void
+	 */
+	public function setPrice($Price)
+	{
+		$this->Price = $Price;
+	}
+	
+	/**
+	 * Sets if it's taxable
+	 * 
+	 * @param string $Taxable
+	 * @return void
+	 */
+	public function setTaxable($Taxable)
+	{
+		$this->Taxable = $Taxable;
+	}
+	
+	/**
+	 * Compiles properties into a line item
+	 * 
+	 * @return string
+	 */
+	public function __toString()
+	{
+		$q_string = sprintf('%s<|>%s<|>%s<|>%s<|>%s<|>%s', $this->ID, $this->Name, $this->Description, $this->Quantity, $this->Price, $this->Taxable);
+		return $q_string;
 	}
 }
 
-?>
+
+ ?>

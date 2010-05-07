@@ -34,6 +34,13 @@
 
 namespace PASL\Data\Validation;
 
+/**
+ * Interface in place for type checking
+ * 
+ * @package PASL_Data_Validation
+ * @category Data Validation
+ * @author Scott Thundercloud <scott.tc@gmail.com>
+ */
 interface iValidator
 {
 }

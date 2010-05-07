@@ -34,16 +34,49 @@
 
 namespace PASL\Data;
 
+/**
+ * Class for handling sessions
+ * 
+ * @package PASL\Data
+ * @category Data Handling
+ * @author Scott Thundercloud <scott.tc@gmail.com>
+ */
 class Session
 {
-	public static function GetValue($Key)
+	/**
+	 * Return a session key
+	 * 
+	 * @param string $Key
+	 * @return mixed
+	 */
+	public static function getValue($Key)
 	{
-		return $_SESSION[$Key];
+		return (!empty($_SESSION[$Key])) ? $_SESSION[$Key] : null;
 	}
-
-	public static function SetValue($Key, $Value)
+	
+	/**
+	 * Set a session key
+	 * 
+	 * @param string $Key
+	 * @param string $Value
+	 * @return void
+	 */
+	public static function setValue($Key, $Value)
 	{
 		$_SESSION[$Key] = $Value;
 	}
+
+	/**
+	 * Destroy a session key
+	 * 
+	 * @param string $Key
+	 * @return void
+	 */
+	public static function Destroy($Key)
+	{
+		session_destroy($Key);
+		unset($_SESSION[$Key]);
+	}
+	
 }
 ?>

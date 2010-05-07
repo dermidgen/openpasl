@@ -1,4 +1,4 @@
-<?php
+<?
 /**
  * OpenPASL
  *
@@ -32,36 +32,101 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-namespace PASL\Data\Validation;
+namespace PASL\Web\API;
 
 /**
- * Class for handling errors
+ * A facade class to handle an authorize.net query
  * 
- * @package PASL_Data_Validation
- * @category Data Validation
- * @author Scott Thundercloud <scott.tc@gmail.com>
+ * @category authorize.net
+ * @package PASL\Web\API
  */
-class Error
+class AuthorizeNet
 {
 	/**
-	 * The message
+	 * The authorize.net gateway URI
 	 * 
 	 * @var string
 	 */
-	public $Message;
+	private $Gateway = '';
 	
 	/**
-	 * The name of the rror
+	 * API Login credential
 	 * 
 	 * @var string
 	 */
-	public $Name;
+	protected $APILogin = '';
 	
 	/**
-	 * The value of the error
-	 * 
 	 * @var string
 	 */
-	public $Value;
+	protected $TransactionKey = '';
+	
+	/**
+	 * @var array
+	 */
+	protected $Payload = array();
+	
+	/**
+	 * @var string
+	 */
+	protected $Request;
+	
+	/**
+	 * Sets the request type
+	 * 
+	 * @param object $Request
+	 * @return void
+	 */
+	public function setRequest($Request)
+	{
+		$this->Request = $Request;
+	}
+	
+	/**
+	 * Set the payment gateway URI
+	 * 
+	 * @param string $Gateway
+	 * @return void
+	 */
+	public function setGateway($Gateway)
+	{
+		$this->Gateway = $Gateway;
+	}
+	
+	/**
+	 * Return the gateway
+	 * 
+	 * @return string
+	 */
+	public function getGateway()
+	{
+		return $this->Gateway;
+	}
+
+	/**
+	 * Execute a request to the gateway
+	 * 
+	 * @return string
+	 */
+	public function Execute()
+	{
+		$queryString = (string) $this->Request;
+
+		$options = array
+		(
+			CURLOPT_URL => $this->getGateway(),
+			CURLOPT_POST => 1,
+			CURLOPT_POSTFIELDS => $queryString,
+			CURLOPT_RETURNTRANSFER => 1
+		);
+		
+		$ch = curl_init();
+		curl_setopt_array($ch, $options);
+		$returnPayload = curl_exec($ch);
+
+		curl_close($ch);
+		
+		return $returnPayload;
+	}
 }
 ?>

@@ -1,4 +1,4 @@
-<?php
+<?
 /**
  * OpenPASL
  *
@@ -32,36 +32,24 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-namespace PASL\Data\Validation;
+namespace PASL\Web\API\AuthorizeNet;
 
 /**
- * Class for handling errors
+ * Basic item object class
  * 
- * @package PASL_Data_Validation
- * @category Data Validation
+ * @package PASL\Web\API\AuthorizeNet
+ * @category authorize.net
  * @author Scott Thundercloud <scott.tc@gmail.com>
  */
-class Error
+class Item
 {
 	/**
-	 * The message
-	 * 
-	 * @var string
-	 */
-	public $Message;
-	
-	/**
-	 * The name of the rror
-	 * 
 	 * @var string
 	 */
 	public $Name;
 	
 	/**
-	 * The value of the error
-	 * 
 	 * @var string
 	 */
 	public $Value;
 }
-?>

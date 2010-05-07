@@ -1,4 +1,4 @@
-<?php
+<?
 /**
  * OpenPASL
  *
@@ -32,36 +32,109 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-namespace PASL\Data\Validation;
+namespace PASL\Web\API\AuthorizeNet\Response;
 
 /**
- * Class for handling errors
+ * Helper class for handling an AIM response from authorize.net
+ * Refer to the authorize.net documentation for more information
  * 
- * @package PASL_Data_Validation
- * @category Data Validation
+ * @category authorize.net
+ * @package PASL\Web\API\AuthorizeNet\Response
  * @author Scott Thundercloud <scott.tc@gmail.com>
  */
-class Error
+class AIM
 {
 	/**
-	 * The message
-	 * 
 	 * @var string
 	 */
-	public $Message;
+	protected $Response = null;
 	
 	/**
-	 * The name of the rror
+	 * Sets the response 
 	 * 
-	 * @var string
+	 * @param string $Response
+	 * @return void
 	 */
-	public $Name;
+	public function __construct($Response)
+	{
+		$this->setResponse($Response);
+	}
 	
 	/**
-	 * The value of the error
+	 * Sets the response 
 	 * 
-	 * @var string
+	 * @param string $Response
+	 * @return void
 	 */
-	public $Value;
+	public function setResponse($Response)
+	{
+		$this->Response = explode(',', $Response);
+	}
+	
+	/**
+	 * Return the response 
+	 * 
+	 * @return string
+	 */
+	public function getResponse()
+	{
+		return $this->Response;
+	}
+	
+	/**
+	 * Returns the response code
+	 * 
+	 * @return string
+	 */
+	public function getCode()
+	{
+		$Response = $this->getResponse();
+		$Code = $Response[0];
+		
+		return $Code;
+	}
+	
+	/**
+	 * Returns the reason text
+	 * 
+	 * @return string
+	 */
+	public function getReasonText()
+	{
+		$Response = $this->getResponse();
+		$Reason = $Response[3];
+		
+		return $Reason;
+	}
+	
+	/**
+	 * Checks to see if the request was valid
+	 * 
+	 * @return boolean
+	 */
+	public function isValid()
+	{
+		$Response = $this->getResponse();
+		$Code = $Response[0];
+		
+		if($Code == 1) return true;
+		
+		return false;
+	}
+	
+	/**
+	 * Checks to see if the credit card credentials were declined
+	 * 
+	 * @return boolean
+	 */
+	public function isDeclined()
+	{
+		$Response = $this->getResponse();
+		$Code = $Response[0];
+		
+		if($Code == 2) return true;
+		
+		return false;
+	}
 }
 ?>
