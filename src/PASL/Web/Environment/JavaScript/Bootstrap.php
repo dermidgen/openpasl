@@ -33,10 +33,10 @@
  */
 namespace PASL\Web\Environment\JavaScript;
 
-require_once('PASL/Web/Environment/aEnvironment.php');
+require_once('PASL/Web/Environment.php');
 require_once('PASL/Interpreter/JavaScript/SpiderMonkey.php');
 
-use PASL\Web\Environment\aEnvironment;
+use PASL\Web\Environment\Environment;
 use PASL\Interpreter\JavaScript\SpiderMonkey;
 
 
@@ -47,7 +47,7 @@ use PASL\Interpreter\JavaScript\SpiderMonkey;
  * @category Experimental
  * @author Scott Thundercloud <scott.tc@gmail.com>
  */
-class Bootstrap extends aEnvironment
+class Bootstrap extends Environment
 {
 	/**
 	 * The options

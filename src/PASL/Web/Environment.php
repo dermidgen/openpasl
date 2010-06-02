@@ -37,11 +37,11 @@ namespace PASL\Web\Environment;
 /**
  * An experiment attempting to create a self containted environment inside PHP
  * 
- * @package \PASL\Web\Environment
+ * @package \PASL\Web
  * @category Experimental
  * @author Scott Thundercloud <scott.tc@gmail.com>
  */
-abstract class aEnvironment
+abstract class Environment
 {
 	/**
 	 * The interpreter
