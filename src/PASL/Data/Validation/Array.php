@@ -57,16 +57,34 @@ class DArray extends Validation implements iValidator
 	private $Callback = Array();
 	private $GlobalCallback = null;
 
+	/**
+	 * Set a callback function for a specific key
+	 * 
+	 * @param string $Key
+	 * @param string $Callback
+	 * @return void
+	 */
 	public function addCallback($Key, $Callback)
 	{
 		$this->Callback[$Key] = $Callback;
 	}
 
+	/**
+	 * Set a global callback function for each item
+	 * 
+	 * @param string|array $Callback
+	 * @return void
+	 */
 	public function setGlobalCallback($Callback)
 	{
 		$this->GlobalCallback = $Callback;
 	}
 
+	/**
+	 * Validate the items in the array
+	 * 
+	 * @return boolean
+	 */
 	public function Validate()
 	{
 		$Data = $this->getData();
@@ -78,7 +96,7 @@ class DArray extends Validation implements iValidator
 			{
 				Log::Add(__CLASS__.': Callback not set for "{$key}"');
 				continue;
- 
+			}
 			
 			if(is_array($Callback))
 			{

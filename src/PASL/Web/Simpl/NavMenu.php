@@ -50,7 +50,9 @@ class NavMenu
 	public $selectedItem = null;
 	public $menuItems = Array();
 	public $name = null;
-
+	public $children = Array();
+	public $parents = Array();
+	
 	public function __construct($name=null)
 	{
 		$this->name = $name;
@@ -155,6 +157,26 @@ class NavMenu
 	public function addMenuHeader(\PASL\Web\Simpl\NavItem $header)
 	{
 		array_push($this->menuItems, $header);
+	}
+	
+	public function addChild($Child)
+	{
+		$this->children[] = $Child;
+	}
+	
+	public function getChildren()
+	{
+		return $this->children;
+	}
+	
+	public function addParent($Parent)
+	{
+		$this->parents[] = $Parent;
+	}
+	
+	public function getParents()
+	{
+		return $this->parents;
 	}
 
 	public function display()

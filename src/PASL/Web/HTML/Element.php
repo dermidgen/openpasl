@@ -34,28 +34,81 @@
 
 namespace PASL\Web\HTML;
 
+/**
+ * Helper class to build a basic HTML Element
+ * 
+ * @package \PASL\Web\HTML
+ * @author Scott Thundercloud
+ */
 class Element
 {
+	/**
+	 * The appended elements
+	 * 
+	 * @var array
+	 */
 	protected $AppendedElements = Array();
 
+	/**
+	 * The attributes for each element
+	 * 
+	 * @var array
+	 */
 	protected $Attribute = Array();
 
+	/**
+	 * The element tag name
+	 * @var string
+	 */
 	protected $TagName = '';
 
+	/**
+	 * Is the element read only?
+	 * 
+	 * @var boolean
+	 */
 	protected $Readonly = false;
 
+	/**
+	 * The elements inner tag text ie <option name="foobar" selected>
+	 * 
+	 * @var string
+	 */
 	protected $innerTagText = '';
-
+	
+	/**
+	 * The elements inner html
+	 * 
+	 * @var string
+	 */
 	private $innerHTML = '';
 
+	/**
+	 * The appended elements
+	 * 
+	 * @var string
+	 */
 	private $Appended = null;
 
+	/**
+	 * Sets the attribute for the element
+	 * 
+	 * @param string $Name
+	 * @param string $Value
+	 * @return void
+	 */
 	public function setAttribute($Name, $Value)
 	{
 		$Name = strtolower($Name);
 		$this->Attribute[''.$Name.''] = $Value;
 	}
 
+	/**
+	 * Get an attribute of the element
+	 * 
+	 * @param string $Name
+	 * @return void
+	 */
 	public function getAttribute($Name)
 	{
 		$Name = strtolower(trim($Name));
@@ -63,27 +116,56 @@ class Element
 		return (!empty($this->Attribute[$Name])) ? $this->Attribute[$Name] : false;
 	}
 
+	/**
+	 * Set the tag name
+	 * 
+	 * @param string $TagName
+	 * @return void
+	 */
 	public function setTagName($TagName)
 	{
 		$this->TagName = $TagName;
 	}
-
+	
+	/**
+	 * Set the innerhtml for the element
+	 * 
+	 * @param string $InnerHTML
+	 * @return void
+	 */
 	public function setInnerHTML($InnerHTML)
 	{
 		$this->innerHTML = $InnerHTML;
 	}
 
+	/**
+	 * Append a child to the element 
+	 * 
+	 * @param object $Element
+	 * @return void
+	 */
 	public function appendChild($Element)
 	{
 		// Check to see if $Element is this class or extends this class
 		$this->AppendedElements[] = $Element;
 	}
 
+	/**
+	 * Set the inner tag text
+	 * 
+	 * @param string $innerTagText
+	 * @return void
+	 */
 	public function setInnerTagText($innerTagText)
 	{
 		$this->innerTagText = $innerTagText;
 	}
 
+	/**
+	 * Compiles each child and element to a string
+	 * 
+	 * @return string
+	 */
 	public function __toString()
 	{
 		$html = '<'.$this->TagName.' ';

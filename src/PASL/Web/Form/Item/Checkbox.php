@@ -38,17 +38,24 @@ require_once('PASL/Web/Form/Item/Common.php');
 
 use PASL\Web\Form\Item\Common;
 
+/**
+ * Form checkbox
+ * 
+ * @package \PASL\Web\Form\Item
+ * @author Scott Thundercloud
+ */
+
 class Checkbox extends Common
 {
+	/**
+	 * Defaults the tag name to input and the type to checkbox
+	 * 
+	 * @return void
+	 */
 	public function __construct()
 	{
 		$this->setTagName('input');
 		$this->setAttribute('type', 'checkbox');
-	}
-
-	public function doSubmitAction($Name, $Value)
-	{
-		if($this->getValue() == $Value) $this->setInnerTagText('checked');
 	}
 }
 ?>

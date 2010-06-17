@@ -33,12 +33,12 @@
  */
 namespace PASL\Authentication\Provider;
 
-require_once('PASL/DB/DB.php');
+require_once('PASL/DB.php');
 require_once('PASL/Authentication/iProvider.php');
 require_once('PASL/Authentication/Provider/common.php');
 
 use PASL\DB;
-use PASL\Autentication\iProvider;
+use PASL\Authentication\iProvider;
 use PASL\Authentication\Provider\common;
 
 /**

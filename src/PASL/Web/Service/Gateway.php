@@ -34,7 +34,7 @@
 
 namespace PASL\Web\Service;
 
-require_once('PASL/Web/Service/Service.php');
+require_once('PASL/Web/Service.php');
 
 use PASL\Web\Service;
 

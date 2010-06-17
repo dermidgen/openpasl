@@ -33,29 +33,74 @@
  */
 namespace PASL\Web\Environment\JavaScript;
 
-require_once('PASL/Web/Environment/aEnvironment.php');
+require_once('PASL/Web/Environment.php');
 require_once('PASL/Interpreter/JavaScript/SpiderMonkey.php');
 
-use PASL\Web\Environment\aEnvironment;
+use PASL\Web\Environment\Environment;
 use PASL\Interpreter\JavaScript\SpiderMonkey;
 
 
-
-class Bootstrap extends aEnvironment
+/**
+ * Bootstrap class for a JavaScript enviroment
+ * 
+ * @package \PASL\Web\Enviroment\JavaScript
+ * @category Experimental
+ * @author Scott Thundercloud <scott.tc@gmail.com>
+ */
+class Bootstrap extends Environment
 {
+	/**
+	 * The options
+	 * 
+	 * @var array
+	 */
 	protected $Options;
+	
+	/**
+	 * The interpreter
+	 * 
+	 * @var object
+	 */
 	protected $Interpreter;
+	
+	/**
+	 * The index file
+	 * 
+	 * @var string
+	 */
 	protected $IndexFile = 'index.js';
+	
+	/**
+	 * The bootstrap directory
+	 * 
+	 * @var string
+	 */
 	protected $BootstrapDirectory = '.';
+	
+	/**
+	 * The environment imports
+	 * 
+	 * @var array
+	 */
 	protected $EnvironmentImports = Array();
-
+	
+	/**
+	 * Sets the JavaScript interpreter to SpiderMonkey
+	 * 
+	 * @return void
+	 */
 	public function __construct()
 	{
 		$this->setInterpreter(new SpiderMonkey);
-
-		$Interpreter = $this->getInterpreter();
 	}
-
+	
+	/**
+	 * Register a class to be used inside of the enviroment
+	 * 
+	 * @param string $phpClassName
+	 * @param string $jsObjectName
+	 * @return object
+	 */
 	public function registerClass($phpClassName, $jsObjectName)
 	{
 		$Obj = new \stdClass;
@@ -68,11 +113,18 @@ class Bootstrap extends aEnvironment
 		return $Obj;
 	}
 	
-	public function registerFunction($phpFunctionName, $jsObjectName)
+	/**
+	 * Register a function to be used inside of the enviroment
+	 * 
+	 * @param string $phpFunctionName
+	 * @param object $jsObjectName
+	 * @return object
+	 */
+	public function registerFunction($phpFunctionName, $jsFunctionName)
 	{
 		$Obj = new \stdClass;
 		$Obj->phpName = $phpFunctionName;
-		$Obj->jsObjectName = $jsObjectName;
+		$Obj->jsObjectName = $jsFunctionName;
 		$Obj->Type = 'function';
 
 		$this->EnvironmentImports[] = $Obj;
@@ -80,6 +132,12 @@ class Bootstrap extends aEnvironment
 		return $Obj;
 	}
 	
+	/**
+	 * Register an object to be used inside of the enviroment
+	 * @param string $name
+	 * @param object $value
+	 * @return object
+	 */
 	public function registerObject($name, $value)
 	{
 		$Obj = new \stdClass;
@@ -93,6 +151,11 @@ class Bootstrap extends aEnvironment
 		return $Obj;
 	}
 	
+	/**
+	 * Registers the functions and generates the bootstrap file to be initialized before the index file
+	 * 
+	 * @return string
+	 */
 	protected function GenerateBootstrap()
 	{
 		$Interpreter = $this->getInterpreter();

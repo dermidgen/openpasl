@@ -34,11 +34,34 @@
 
 namespace PASL\Data\Validation;
 
-
+/**
+ * Class for handling errors
+ * 
+ * @package PASL_Data_Validation
+ * @category Data Validation
+ * @author Scott Thundercloud <scott.tc@gmail.com>
+ */
 class Error
 {
+	/**
+	 * The message
+	 * 
+	 * @var string
+	 */
 	public $Message;
+	
+	/**
+	 * The name of the rror
+	 * 
+	 * @var string
+	 */
 	public $Name;
+	
+	/**
+	 * The value of the error
+	 * 
+	 * @var string
+	 */
 	public $Value;
 }
 ?>

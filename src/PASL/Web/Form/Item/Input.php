@@ -38,28 +38,44 @@ require_once('PASL/Web/Form/Item/Common.php');
 
 use PASL\Web\Form\Item\Common;
 
+/**
+ * Form checkbox
+ * 
+ * @package \PASL\Web\Form\Item
+ * @author Scott Thundercloud
+ */
 class Input extends Common
 {
+	/**
+	 * Defaults the tag name to input
+	 * 
+	 * @return void
+	 */
 	public function __construct()
 	{
 		$this->setTagName('input');
 	}
 
+	/**
+	 * Set the input element type. ie text, password
+	 * 
+	 * @param $Type
+	 * @return void
+	 */
 	public function setType($Type)
 	{
 		$this->setAttribute('type', $Type);
 	}
 
+	/**
+	 * Set the input maxlength
+	 * 
+	 * @param int $Length
+	 * @return void
+	 */
 	public function setMaxLength($Length)
 	{
 		$this->setAttribute('maxlength', $Length);
-	}
-
-	public function doSubmitAction($Name, $Value)
-	{
-		if($this->isStatic() === true) $Value = $this->getValue();
-
-		$this->setValue($Value);
 	}
 }
 ?>

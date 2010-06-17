@@ -35,45 +35,106 @@
 
 namespace PASL\Data;
 
+/**
+ * Abstract class for classes wishing to validate a data set
+ * 
+ * @package PASL_Data_Validation
+ * @category Data Validation
+ * @author Scott Thundercloud <scott.tc@gmail.com>
+ */
 abstract class Validation
 {
+	/**
+	 * Each class will have its own way of validating a data set
+	 * 
+	 * @return boolean
+	 */
 	abstract function Validate();
 
+	/** 
+	 * @var boolean
+	 */
 	private $Validated = false;
+	
+	/**
+	 * @var string
+	 */
 	private $Data = null;
+	
+	/**
+	 * @var array
+	 */
 	private $Errors = Array();
 	
+	/**
+	 * Add an error
+	 * 
+	 * @param string $Value
+	 * @return void
+	 */
 	protected function addError($Value)
 	{
 		$this->Errors[] = $Value;
 	}
 	
+	/**
+	 * Set the data to validate
+	 * 
+	 * @param mixed $Data
+	 * @return void
+	 */
 	public function setData($Data)
 	{
 		$this->Data = $Data;
 	}
 
+	/**
+	 * Return the data
+	 * 
+	 * @return mixed
+	 */
 	public function getData()
 	{
 		return $this->Data;
 	}
 	
+	/**
+	 * Return the errors
+	 * 
+	 * @return array
+	 */
 	public function getErrors()
 	{
 		return $this->Errors;
 	}
 	
+	/**
+	 * Checks to see if an error occurred
+	 * 
+	 * @return void
+	 */
 	public function isError()
 	{
 		if(count($this->Errors) > 0) return true;
 		else return false;
 	}
 	
+	/**
+	 * 
+	 * @param $validated
+	 * @return unknown_type
+	 */
 	public function setValidated($validated)
 	{
 		$this->Validated = $validated;
 	}
 	
+	/**
+	 * Return an error by name
+	 * 
+	 * @param string $ErrorName
+	 * @return string|false
+	 */
 	public function getErrorByName($ErrorName)
 	{
 		foreach($this->Errors AS $Error)
@@ -83,6 +144,11 @@ abstract class Validation
 		return false;
 	}
 
+	/**
+	 * Checks to see if the data set is validated
+	 * 
+	 * @return boolean
+	 */
 	public function isValidated()
 	{
 		return $this->Validated;

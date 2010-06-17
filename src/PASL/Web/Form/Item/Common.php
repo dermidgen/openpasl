@@ -38,39 +38,30 @@ require_once("PASL/Web/HTML/Element.php");
 
 use PASL\Web\HTML\Element;
 
+/**
+ * Form element base class
+ * 
+ * @package \PASL\Web\Form\Item
+ * @author Scott Thundercloud
+ */
+
 abstract class Common extends Element
 {
 	# abstract function __toString(); // Satisfied by PASL_Web_DOM_Element
 	abstract function doSubmitAction($Name, $Value);
 
-	protected $internalData = '';
-
-	private $Validator = '';
-
-	private $Error = Array();
-
-	private $Static = false;
-
 	/**
-	 * Sets the validator for the form object.
-	 * Accepts an array to reference an object or a string to reference function name.
-	 *
-	 * @example
-	 * $FormObj->setValidator(array($object=>'method'));
-	 * $FormObj->setValidator('function_name');
-	 *
-	 * @param array|string $Validator
-	 * @return void
+	 * The internal data buffer
+	 * 
+	 * @var string
 	 */
-	public function setValidator($Validator)
-	{
-		$this->Validator = $Validator;
-	}
-
-	public function getErrorMessage()
-	{
-		return $this->Error;
-	}
+	protected $internalData = '';
+	
+	/**
+	 * 
+	 * @var unknown_type
+	 */
+	private $Static = false;
 
 	/**
 	 * Checks if the value of the element is static or not
@@ -92,38 +83,6 @@ abstract class Common extends Element
 	}
 
 	/**
-	 * Validates the element
-	 *
-	 * @return bool
-	 */
-	public function Validate()
-	{
-		if(!$this->Validator) return true;
-
-		if(!is_array($this->Validator))
-		{
-			$Function = new \ReflectionFunction($this->Validator);
-			$Data = $Function->invoke($this->getName(), $this->getValue());
-		}
-		else
-		{
-			list($ObjRef, $MethodName) = $this->Validator;
-			$Data = $ObjRef->{$MethodName}($this->getName(), $this->getValue());
-		}
-
-
-		if(is_bool($Data)) return true;
-		else
-		{
-			foreach($Data AS $Error)
-			{
-				$this->addErrorMessage($Error);
-			}
-			return false;
-		}
-	}
-
-	/**
 	 * Adds an error message
 	 */
 	private function addErrorMessage($Error)
@@ -140,36 +99,64 @@ abstract class Common extends Element
 		$this->setAttribute('value', $Value);
 	}
 
+	/**
+	 * Sets the name for the element
+	 * 
+	 * @param string $Name
+	 * @return void
+	 */
 	public function setName($Name)
 	{
 		$this->setAttribute('name', $Name);
 	}
-
+	
+	/**
+	 * Sets the ID for the element
+	 * 
+	 * @param string $ID
+	 * @return void
+	 */
 	public function setID($ID)
 	{
 		$this->setAttribute('id', $Name);
 	}
 
+	/**
+	 * Gets the name of the element
+	 * 
+	 * @return string
+	 */
 	public function getName()
 	{
 		return $this->getAttribute('name');
 	}
 
+	/**
+	 * Returns the value of the element
+	 * 
+	 * @return string
+	 */
 	public function getValue()
 	{
 		return $this->internalData;
 	}
 
-	public function getValidator()
-	{
-		return $this->Validator;
-	}
-
+	/**
+	 * Sets the class name of the element
+	 * 
+	 * @param string $ClassName
+	 * @return void
+	 */
 	public function setClassName($ClassName)
 	{
 		$this->setAttribute('class', $ClassName);
 	}
 
+	/**
+	 * Gets the class name of the element
+	 * 
+	 * @return string
+	 */
 	public function getClassName()
 	{
 		return $this->getAttribute('class');

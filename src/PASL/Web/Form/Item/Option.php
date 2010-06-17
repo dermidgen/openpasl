@@ -38,26 +38,44 @@ require_once('PASL/Web/Form/Item/Common.php');
 
 use PASL\Web\Form\Item\Common;
 
+/**
+ * Form option item
+ * 
+ * @package \PASL\Web\Form\Item
+ * @author Scott Thundercloud
+ */
 class Option extends Common
 {
+	/**
+	 * Defaults the tag name to option
+	 * 
+	 * @return void
+	 */
 	public function __construct()
 	{
 		$this->setTagName('option');
 	}
 
+	/**
+	 * Set the display value
+	 * 
+	 * @param string $DisplayValue
+	 * @return void
+	 */
 	public function setDisplayValue($DisplayValue)
 	{
 		$this->setInnerHTML($DisplayValue);
 	}
 
+	/**
+	 * Set the option element to selected
+	 * 
+	 * @param boolean $Selected
+	 * @return void
+	 */
 	public function setSelected($Selected)
 	{
 		if($Selected === true) $this->setAttribute('selected', '');
-	}
-
-	public function doSubmitAction($Name, $Value)
-	{
-
 	}
 }
 ?>
