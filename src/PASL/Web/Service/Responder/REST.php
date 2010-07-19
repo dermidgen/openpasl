@@ -48,11 +48,11 @@ use PASL\Web\Service\iServiceResponder;
  */
 class REST implements iServiceResponder
 {
-	private $response = null;
+	private $response = Array();
 
 	public function getResponse()
 	{
-		return json_encode($this->response);
+		return (count($this->response) > 1) ? json_encode($this->response) : json_encode($this->response[0]);
 	}
 
 	public function clearResponseBuffer()
@@ -62,7 +62,7 @@ class REST implements iServiceResponder
 
 	public function addPayload($payload)
 	{
-		$this->response .= $payload;
+		array_push($this->response, $payload);
 	}
 }
 ?>
