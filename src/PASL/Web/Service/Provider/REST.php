@@ -48,7 +48,7 @@ use PASL\Web\Service\Request;
  * @category Web
  * @author Danny Graham <good.midget@gmail.com>
  */
-class Rest implements iServiceProvider
+class REST implements iServiceProvider
 {
 	/**
 	 * Parse the incoming request in a RESTful way
