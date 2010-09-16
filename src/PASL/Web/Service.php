@@ -232,6 +232,7 @@ class Service
 		 */
 		$oRequestParts = explode('/',$requestURI);
 		if ($oRequestParts[0] == '') array_shift($oRequestParts);
+		if ($oRequestParts[count($oRequestParts) - 1] == '') array_pop($oRequestParts);
 
 		$oRequest->serviceType = trim(strtoupper($oRequestParts[0]));
 

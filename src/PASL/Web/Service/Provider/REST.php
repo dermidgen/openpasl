@@ -73,6 +73,10 @@ class REST implements iServiceProvider
 			break;
 		}
 
+		foreach($oRequestHash as $val)
+			if (trim($val) != "" && !is_null($val))
+				array_push($oRequest->oRequestHash, $val);
+				
 		$oRequest->requestPayload = $oRequestData;
 
 		$oRequest->method = $oRequest->oRequestHash[2];
