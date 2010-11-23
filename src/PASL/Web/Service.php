@@ -92,6 +92,7 @@ class Service
 
 	public $sBaseClassPath = null;
 	public $sClassPath = null;
+	public $defaultNamespace = null;
 
 	/**
 	 * Factory for instantiating service providers
@@ -180,7 +181,9 @@ class Service
 		if (!file_exists($classPath)) throw new \Exception('Class ' . $strClassName . ' not found at: ' . $classPath);
 
 		require_once($classPath);
-
+		
+		$strClassName = ($this->defaultNamespace) ? $this->defaultNamespace.$strClassName : $strClassName;
+		
 		return new $strClassName();
 	}
 
