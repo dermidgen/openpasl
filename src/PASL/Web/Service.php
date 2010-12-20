@@ -198,7 +198,7 @@ class Service
 	 */
 	protected function callHandler($oHandler, $oRequest)
 	{
-		if (!method_exists($oHandler, $oRequest->method)) throw new \Exception('Method not implemented');
+		if (!method_exists($oHandler, $oRequest->method)) throw new \Exception("Method: {$oRequest->method} not implemented");
 
 		$response = call_user_func_array(array($oHandler, $oRequest->method), $oRequest->methodArgs);
 
@@ -215,7 +215,7 @@ class Service
 	protected function parseRequest()
 	{
 		$requestMethod = $_SERVER['REQUEST_METHOD'];
-		$requestURI = $_SERVER['REQUEST_URI'];
+		$requestURI = parse_url($_SERVER['REQUEST_URI'],PHP_URL_PATH);
 
 		$oRequest = new Request();
 
@@ -234,11 +234,14 @@ class Service
 		 * +   http://service.company.com/amf/modulepath
 		 */
 		$oRequestParts = explode('/',$requestURI);
+		// Trim off empty leading or ending values
 		if ($oRequestParts[0] == '') array_shift($oRequestParts);
 		if ($oRequestParts[count($oRequestParts) - 1] == '') array_pop($oRequestParts);
 
+		// /{service identifier}/
 		$oRequest->serviceType = trim(strtoupper($oRequestParts[0]));
 
+		// Request URI without any querystring args
 		$oRequest->requestURI = $requestURI;
 		$oRequest->oRequestHash = $oRequestParts;
 
