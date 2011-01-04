@@ -63,10 +63,10 @@ class REST implements iServiceProvider
 		switch($_SERVER['REQUEST_METHOD'])
 		{
 			case 'GET':
-				$oRequestHash = $_GET;
+				$oRequestHash = $_REQUEST;
 			break;
 			case 'POST':
-				$oRequestHash = $_POST;
+				$oRequestHash = $_REQUEST;
 			break;
 			case 'PUT':
 				parse_str(file_get_contents("php://input"), $oRequestHash);

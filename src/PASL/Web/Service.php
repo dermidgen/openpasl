@@ -198,9 +198,10 @@ class Service
 	 */
 	protected function callHandler($oHandler, $oRequest)
 	{
-		if (!method_exists($oHandler, $oRequest->method)) throw new \Exception("Method: {$oRequest->method} not implemented");
-
-		$response = call_user_func_array(array($oHandler, $oRequest->method), $oRequest->methodArgs);
+		$method = (method_exists($oHandler, $oRequest->method)) ? $oRequest->method : 'handleRequest';
+		if (!method_exists($oHandler, $method)) throw new \Exception("Method: {$oRequest->method} not implemented and no handleRequest method available for fall back");
+		
+		$response = ($method=='handleRequest') ? call_user_func_array(array($oHandler, $method), array($oRequest->method, $oRequest->methodArgs)) : call_user_func_array(array($oHandler, $method), $oRequest->methodArgs);
 
 		return $response;
 	}
