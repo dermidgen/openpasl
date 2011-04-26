@@ -35,6 +35,7 @@
 namespace PASL\Web;
 
 require_once('PASL/Web/Service/Request.php');
+require_once('PASL/Web/Service/iServiceResponder.php');
 
 use PASL\Web\Service\Request;
 
@@ -120,6 +121,9 @@ class Service
 			case 'AMF':
 				$provider = new \PASL\Web\Service\Provider\AMF();
 			break;
+			case 'JSONP':
+				$provider = new \PASL\Web\Service\Provider\JSONP();
+			break;
 		}
 
 		if (!(in_array("PASL\\Web\\Service\\iServiceProvider", class_implements($provider))))
@@ -153,6 +157,9 @@ class Service
 			break;
 			case 'AMF':
 				$responder = new \PASL\Web\Service\Responder\AMF();
+			break;
+			case 'JSONP':
+				$responder = new \PASL\Web\Service\Responder\JSONP();
 			break;
 		}
 		
@@ -269,6 +276,19 @@ class Service
 	public function getProvider()
 	{
 		return $this->provider;
+	}
+	
+	/**
+	 * Sets the current responder and returns self
+	 * 
+	 * @param PASL_Web_Service_iServiceResponder $responder
+	 *
+	 * @return PASL_Web_Service
+	 */
+	public function setResponder(\PASL\Web\Service\iServiceResponder $responder)
+	{
+		$this->responder = $responder;
+		return $this;
 	}
 
 	/**
