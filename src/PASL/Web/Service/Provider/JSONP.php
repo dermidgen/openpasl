@@ -32,53 +32,64 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-namespace PASL\Web\Simpl;
+namespace PASL\Web\Service\Provider;
 
-require_once("NavItem.php");
+require_once('PASL/Web/Service/iServiceProvider.php');
+require_once('PASL/Web/Service/Request.php');
 
-use PASL\Web\Simpl\NavItem;
+use PASL\Web\Service\iServiceProvider;
+use PASL\Web\Service\Request;
 
 /**
- * SubNavItem provides creates an item for the SubNav
-
- * @package PASL_Web
- * @subpackage PASL_Web_Simpl
+ * Provider for REST based services.
+ *
+ * @package PASL_Web_Service
+ * @subpackage PASL_Web_Service_Provider
  * @category Web
  * @author Danny Graham <good.midget@gmail.com>
  */
-
-class SubNavItem extends NavItem
+class JSONP implements iServiceProvider
 {
 	/**
-	 * Basic constructor
+	 * Parse the incoming request in a RESTful way
 	 *
-	 * @param String $title
-	 * @param String $caption
-	 * @param String $link
-	 * @param PASL_Web_Simpl_NavItem $parent
+	 * @param \PASL\Web\Service\Request The request object
 	 */
-	public function __construct($title, $caption, $link, $parent)
+	public function parseRequest($oRequest)
 	{
-		$this->title = $title;
-		$this->caption = $caption;
-		$this->link = $link;
-		$this->parent = $parent;
-	}
 
-	/**
-	 * @return String
-	 */
-	function __toString()
-	{
-		$requestURI = ltrim($_SERVER['REQUEST_URI'],"/");
+		$oRequestData = Array();
 
-		$title = str_replace("(","<span class=\"shaded\">(",$this->title);
-		$title = str_replace(")",")</span>",$title);
+		switch($_SERVER['REQUEST_METHOD'])
+		{
+			case 'GET':
+				$oRequestHash = $_REQUEST;
+			break;
+			case 'POST':
+				$oRequestHash = $_REQUEST;
+			break;
+			case 'PUT':
+				parse_str(file_get_contents("php://input"), $oRequestHash);
+			break;
+		}
 
-		if ($this->selected && $requestURI != $this->link) return "<li class=\"selected\"><a href=\"{$this->link}\" alt=\"{$this->caption}\">{$title}</a></li>";
-		else if ($this->selected) return "<li class=\"selected\">{$title}</li>";
-		else return "<li><a href=\"{$this->link}\" alt=\"{$this->caption}\">{$title}</a></li>";
+		foreach($oRequestHash as $val)
+			if (trim($val) != "" && !is_null($val))
+				array_push($oRequest->oRequestHash, $val);
+				
+		$oRequest->requestPayload = $oRequestData;
+
+		$oRequest->method = $oRequest->oRequestHash[2];
+
+		// Grab the method arguments
+		$methodArgs = $oRequest->oRequestHash;
+		array_shift($methodArgs);
+		array_shift($methodArgs);
+		array_shift($methodArgs);
+
+		$oRequest->methodArgs = $methodArgs;
+
+		return $oRequest;
 	}
 }
-
 ?>

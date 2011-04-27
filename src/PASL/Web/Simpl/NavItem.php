@@ -81,7 +81,7 @@ class NavItem
 
 	public function __toString()
 	{
-		return "<a href=\"{$this->link}\">{$this->title}</a>";
+		return "<a href=\"{$this->link}\" alt=\"{$this->caption}\">{$this->title}</a>";
 	}
 }
 

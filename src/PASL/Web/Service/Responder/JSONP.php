@@ -32,53 +32,38 @@
  * @copyright Copyright (c) 2008, Danny Graham, Scott Thundercloud
  */
 
-namespace PASL\Web\Simpl;
+namespace PASL\Web\Service\Responder;
 
-require_once("NavItem.php");
+require_once('PASL/Web/Service/iServiceResponder.php');
 
-use PASL\Web\Simpl\NavItem;
+use PASL\Web\Service\iServiceResponder;
 
 /**
- * SubNavItem provides creates an item for the SubNav
-
- * @package PASL_Web
- * @subpackage PASL_Web_Simpl
+ * Responder for REST based services.
+ *
+ * @package PASL_Web_Service
+ * @subpackage PASL_Web_Service_Responder
  * @category Web
  * @author Danny Graham <good.midget@gmail.com>
  */
-
-class SubNavItem extends NavItem
+class JSONP implements iServiceResponder
 {
-	/**
-	 * Basic constructor
-	 *
-	 * @param String $title
-	 * @param String $caption
-	 * @param String $link
-	 * @param PASL_Web_Simpl_NavItem $parent
-	 */
-	public function __construct($title, $caption, $link, $parent)
+	private $response = Array();
+
+	public function getResponse()
 	{
-		$this->title = $title;
-		$this->caption = $caption;
-		$this->link = $link;
-		$this->parent = $parent;
+		$cb = $_GET['callback'];
+		return (count($this->response) > 1) ? $cb.'('.json_encode($this->response).');' : $cb.'('.json_encode($this->response[0]).');';
 	}
 
-	/**
-	 * @return String
-	 */
-	function __toString()
+	public function clearResponseBuffer()
 	{
-		$requestURI = ltrim($_SERVER['REQUEST_URI'],"/");
+		$this->response = null;
+	}
 
-		$title = str_replace("(","<span class=\"shaded\">(",$this->title);
-		$title = str_replace(")",")</span>",$title);
-
-		if ($this->selected && $requestURI != $this->link) return "<li class=\"selected\"><a href=\"{$this->link}\" alt=\"{$this->caption}\">{$title}</a></li>";
-		else if ($this->selected) return "<li class=\"selected\">{$title}</li>";
-		else return "<li><a href=\"{$this->link}\" alt=\"{$this->caption}\">{$title}</a></li>";
+	public function addPayload($payload)
+	{
+		array_push($this->response, $payload);
 	}
 }
-
 ?>

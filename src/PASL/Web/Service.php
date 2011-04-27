@@ -35,6 +35,7 @@
 namespace PASL\Web;
 
 require_once('PASL/Web/Service/Request.php');
+require_once('PASL/Web/Service/iServiceResponder.php');
 
 use PASL\Web\Service\Request;
 
@@ -90,8 +91,9 @@ class Service
 	 */
 	protected $oHandler = null;
 
-	public $sBaseClassBath = null;
+	public $sBaseClassPath = null;
 	public $sClassPath = null;
+	public $defaultNamespace = null;
 
 	/**
 	 * Factory for instantiating service providers
@@ -105,16 +107,27 @@ class Service
 
 		if(!class_exists($className, false))
 		{
-			$dPath = dirname(__FILE__)."/Provider/{$strModeType}.php";
+			$dPath = dirname(__FILE__)."/Service/Provider/{$strModeType}.php";
 
-			if (!file_exists($dPath)) throw new Exception("Class not found at path {$dPath}");
+			if (!file_exists($dPath)) throw new \Exception("Class not found at path {$dPath}");
 			require_once($dPath);
 		}
 
-		$provider = new $className();
+		switch($className)
+		{
+			case 'REST':
+				$provider = new \PASL\Web\Service\Provider\REST();
+			break;
+			case 'AMF':
+				$provider = new \PASL\Web\Service\Provider\AMF();
+			break;
+			case 'JSONP':
+				$provider = new \PASL\Web\Service\Provider\JSONP();
+			break;
+		}
 
-		if (!($provider instanceof PASL\Web\Service\iServiceResponder))
-			throw new Exception("Provider does not implement iServiceProvider");
+		if (!(in_array("PASL\\Web\\Service\\iServiceProvider", class_implements($provider))))
+			throw new \Exception("Provider does not implement iServiceProvider");
 
 		return $provider;
 	}
@@ -127,20 +140,31 @@ class Service
 	 */
 	private function responderFactory($strModeType)
 	{
-		$className = 'PASL\Web\Service\Responder\\' . $strModeType;
+		$className = $strModeType;
 
 		if(!class_exists($className, false))
 		{
-			$dPath = dirname(__FILE__)."/Responder/{$strModeType}.php";
+			$dPath = dirname(__FILE__)."/Service/Responder/{$strModeType}.php";
 
-			if (!file_exists($dPath)) throw new Exception("Class not found at path {$dPath}");
+			if (!file_exists($dPath)) throw new \Exception("Class not found at path {$dPath}");
 			require_once($dPath);
 		}
 
-		$responder = new $className();
-
-		if (!($responder instanceof PASL\Web\Service\iServiceResponder))
-			throw new Exception("Responder does not implement iServiceResponder");
+		switch($className)
+		{
+			case 'REST':
+				$responder = new \PASL\Web\Service\Responder\REST();
+			break;
+			case 'AMF':
+				$responder = new \PASL\Web\Service\Responder\AMF();
+			break;
+			case 'JSONP':
+				$responder = new \PASL\Web\Service\Responder\JSONP();
+			break;
+		}
+		
+		if (!(in_array("PASL\\Web\\Service\\iServiceResponder", class_implements($responder))))
+			throw new \Exception("Responder does not implement iServiceResponder");
 
 		return $responder;
 	}
@@ -161,10 +185,12 @@ class Service
 		$classPath = join('/',$pathParts);
 		$classPath = ($classPath != '') ? $this->sBaseClassPath . '/' . $classPath . '/' : $this->sBaseClassPath . '/';
 		$classPath = $classPath . $strClassName . '.php';
-		if (!file_exists($classPath)) throw new Exception('Class ' . $strClassName . ' not found at: ' . $classPath);
+		if (!file_exists($classPath)) throw new \Exception('Class ' . $strClassName . ' not found at: ' . $classPath);
 
 		require_once($classPath);
-
+		
+		$strClassName = ($this->defaultNamespace) ? $this->defaultNamespace.$strClassName : $strClassName;
+		
 		return new $strClassName();
 	}
 
@@ -179,9 +205,10 @@ class Service
 	 */
 	protected function callHandler($oHandler, $oRequest)
 	{
-		if (!method_exists($oHandler, $oRequest->method)) throw new Exception('Method not implemented');
-
-		$response = call_user_func_array(array($oHandler, $oRequest->method), $oRequest->methodArgs);
+		$method = (method_exists($oHandler, $oRequest->method)) ? $oRequest->method : 'handleRequest';
+		if (!method_exists($oHandler, $method)) throw new \Exception("Method: {$oRequest->method} not implemented and no handleRequest method available for fall back");
+		
+		$response = ($method=='handleRequest') ? call_user_func_array(array($oHandler, $method), array($oRequest->method, $oRequest->methodArgs)) : call_user_func_array(array($oHandler, $method), $oRequest->methodArgs);
 
 		return $response;
 	}
@@ -196,7 +223,7 @@ class Service
 	protected function parseRequest()
 	{
 		$requestMethod = $_SERVER['REQUEST_METHOD'];
-		$requestURI = $_SERVER['REQUEST_URI'];
+		$requestURI = parse_url($_SERVER['REQUEST_URI'],PHP_URL_PATH);
 
 		$oRequest = new Request();
 
@@ -215,10 +242,14 @@ class Service
 		 * +   http://service.company.com/amf/modulepath
 		 */
 		$oRequestParts = explode('/',$requestURI);
+		// Trim off empty leading or ending values
 		if ($oRequestParts[0] == '') array_shift($oRequestParts);
+		if ($oRequestParts[count($oRequestParts) - 1] == '') array_pop($oRequestParts);
 
-		$oRequest->serviceType = $oRequestParts[0];
+		// /{service identifier}/
+		$oRequest->serviceType = trim(strtoupper($oRequestParts[0]));
 
+		// Request URI without any querystring args
 		$oRequest->requestURI = $requestURI;
 		$oRequest->oRequestHash = $oRequestParts;
 
@@ -229,7 +260,7 @@ class Service
 			$oRequest->operationClass = ($oRequest->serviceType == 'REST' || $oRequest->serviceType == 'AMF') ? $oRequestParts[1] : null;
 			if (is_null($this->oHandler)) $this->setHandler($this->handlerFactory($oRequest->operationClass));
 		}
-
+		
 		// Set the class path for AMF publishing
 		$oRequest->operationClassPath = $this->sBaseClassPath;
 
@@ -245,6 +276,19 @@ class Service
 	public function getProvider()
 	{
 		return $this->provider;
+	}
+	
+	/**
+	 * Sets the current responder and returns self
+	 * 
+	 * @param PASL_Web_Service_iServiceResponder $responder
+	 *
+	 * @return PASL_Web_Service
+	 */
+	public function setResponder(\PASL\Web\Service\iServiceResponder $responder)
+	{
+		$this->responder = $responder;
+		return $this;
 	}
 
 	/**
@@ -295,7 +339,7 @@ class Service
 		$this->responder = $this->responderFactory($strModeType);
 	}
 
-	public function handle()
+	public function handle($send = true)
 	{
 		$oRequest = $this->parseRequest();
 
@@ -308,7 +352,8 @@ class Service
 		else // We'll use the handler object
 			$this->responder->addPayload($this->callHandler($this->oHandler, $oRequest));
 
-		$this->send();
+		if ($send) $this->send();
+		return $this->responder->getResponse();
 	}
 
 	public function send()
