@@ -184,11 +184,11 @@ class AdobeConnect
 		
 		$response = $this->sendCommand($options);
 		
-		$doc = new DOMDocument();
+		$doc = new \DOMDocument();
 		$doc->loadXML($response);
 		
 		$elements = $doc->getElementsByTagName('principal');
-		$element = $elements[0];
+		$element = $elements->item(0);
 		
 		$principalId = $element->getAttribute('principal-id');
 		
