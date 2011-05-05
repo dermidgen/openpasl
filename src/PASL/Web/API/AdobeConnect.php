@@ -51,7 +51,13 @@ class AdobeConnect
 	 */
 	protected $URL = '';
 	
-	
+	/**
+	 * Adobe Connect cookie
+	 * 
+	 * @var string
+	 */
+	protected $Cookie = null;
+
 	/**
 	 * Set the URL
 	 * 
@@ -76,9 +82,10 @@ class AdobeConnect
 		$URL = $this->URL . '?' . $get;
 		
 		$curl = curl_init();
-
 		curl_setopt($curl, CURLOPT_URL, $URL);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($curl, CURLOPT_COOKIE, $this->Cookie);
+		if($options['action'] == 'login') curl_setopt($curl, CURLOPT_HEADER, true);
 		
 		return curl_exec($curl);
 	}
@@ -110,6 +117,10 @@ class AdobeConnect
 		
 		$response = $this->sendCommand($options);
 		
+		preg_match('/Set\-Cookie\: (.+)/', $response, $match);
+		
+		if(count($match) > 1) $this->Cookie = $match[1];
+		
 		return $response;
 	}
 	
@@ -136,12 +147,12 @@ class AdobeConnect
 			'password'    => $password,
 			'type'        => $type,
 			'send-email'  => $sendEmail,
-			'hasChildren' => $hasChildren,
+			'has-children' => $hasChildren,
 			'email'       => $emailAddress
 		);
 		
 		$response = $this->sendCommand($options);
-		
+
 		return $response;
 	}
 	
@@ -155,9 +166,8 @@ class AdobeConnect
 	{
 		$options = array(
 			'action'       => 'principal-update',
-			'principal-id' => $options['principal-id']
-		);
-		
+			'principal-id' => $argOptions['principal-id']
+		);		
 		
 		foreach($argOptions AS $key => $val)
 		{
@@ -177,6 +187,7 @@ class AdobeConnect
 	 */
 	public function getPrincipalIDByLogin($login)
 	{
+		$principalId = null;
 		$options = array(
 			'action'       => 'principal-list',
 			'filter-login' => $login
@@ -186,11 +197,10 @@ class AdobeConnect
 		
 		$doc = new \DOMDocument();
 		$doc->loadXML($response);
-		
 		$elements = $doc->getElementsByTagName('principal');
 		$element = $elements->item(0);
-		
-		$principalId = $element->getAttribute('principal-id');
+
+		if(!empty($element)) $principalId = $element->getAttribute('principal-id');
 		
 		return $principalId;
 	}
