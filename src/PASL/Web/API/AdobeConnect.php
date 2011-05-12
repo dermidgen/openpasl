@@ -153,6 +153,7 @@ class AdobeConnect
 		
 		$response = $this->sendCommand($options);
 
+		
 		return $response;
 	}
 	
@@ -205,6 +206,179 @@ class AdobeConnect
 		return $principalId;
 	}
 	
+	/**
+	 * Return the course sco id
+	 * 
+	 * @return course_sco_id
+	 */
+	public function getCourseSCOId()
+	{
+		$options = array(
+			'action' => 'sco-shortcuts'
+		);
+		
+		$response = $this->sendCommand($options);
+		
+		$doc = new \DOMDocument;
+		$doc->loadXML($response);
+		
+		$elements = $doc->getElementsByTagName('sco');
+		
+		for($i=0; $i < $elements->length; $i++)
+		{
+			$element = $elements->item($i);
+			if($element->getAttribute('type') == 'courses') 
+			{
+				return $element->getAttribute('sco-id');
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Get all courses
+	 * 
+	 * @return XML
+	 */
+	 public function getCourseSCOIdByName($name)
+	 {
+		$courseScoId = $this->getCourseSCOId();
+		 
+		$options = array();
+		$options['action'] = 'sco-contents';
+		$options['sco-id'] = $courseScoId;
+		$options['filter-name'] = $name;
+		 
+		$response = $this->sendCommand($options);
+		 
+		$doc = new \DOMDocument;
+		$doc->loadXML($response);
+		 
+		$element = $doc->getElementsByTagName('sco')->item($i);
+		$sco_id = $element->getAttribute('sco-id');
+		
+		
+		return $sco_id;
+	 }
+	 
+	/**
+	 * Get all courses
+	 * 
+	 * @return XML
+	 */
+	 public function getCourseSCOIdByScoId($id)
+	 {
+		$courseScoId = $this->getCourseSCOId();
+		 
+		$options = array();
+		$options['action'] = 'sco-contents';
+		$options['sco-id'] = $courseScoId;
+		$options['filter-sco-id'] = $id;
+		
+		$response = $this->sendCommand($options);
+		
+		$doc = new \DOMDocument;
+		$doc->loadXML($response);
+		
+		$element = $doc->getElementsByTagName('sco')->item(0);
+		$sco_id = $element->getAttribute('sco-id');
+		
+		
+		return $sco_id;
+	 }
+	 
+	 /**
+	  * Enroll a user in a training course
+	  * 
+	  * @param string $name
+	  * @param string $login
+	  * 
+	  * @return response XML
+	  */
+	 public function enrollUserByNameAndLogin($name, $login)
+	 {
+		 $sco_id = $this->getCourseSCOIdByName($name);
+		 $principal_id = $this->getPrincipalIDByLogin($login);
+		 
+		 $options = array();
+		 $options['action'] = 'permissions-update';
+		 $options['acl-id'] = $sco_id;
+		 $options['principal-id'] = $principal_id;
+		 $options['permission-id'] = 'view';
+		 
+		 $response = $this->sendCommand($options);
+		 
+		 return $response;
+	 }
+	 
+	 /**
+	  * Enroll a user in a training course
+	  * 
+	  * @param int $id
+	  * @param string $login
+	  * @return XML $response
+	  */
+	public function enrollUserByIdAndLogin($id, $login)
+	{
+		$sco_id = $this->getCourseSCOIdByScoId($id);
+		$principal_id = $this->getPrincipalIDByLogin($login);
+		
+		$options = array();
+		$options['action'] = 'permissions-update';
+		$options['acl-id'] = $sco_id;
+		$options['principal-id'] = $principal_id;
+		$options['permission-id'] = 'view';
+		
+		$response = $this->sendCommand($options);
+		
+		return $response;
+	}
+	 
+	/**
+	 * Gets the course information
+	 * 
+	 * @param int $sco_id
+	 * @return XML $response
+	 */
+	public function getCourseInformation($sco_id)
+	{
+		$options = array();
+		$options['action'] = 'permissions-info';
+		$options['acl-id'] = $sco_id;
+		$options['filter-permission-id'] = 'view';
+		
+		$response = $this->sendCommand($options);
+		
+		return $response;
+	}
+	
+	/**
+	 * Checks to see if a user is already in a course
+	 * 
+	 * @param int $sco_id
+	 * @param string $login
+	 * @return boolean
+	 */
+	public function isUserInCourseByLogin($sco_id, $login)
+	{
+		$response = $this->getCourseInformation($sco_id);
+		
+		$doc = new \DOMDocument;
+		$doc->loadXML($response);
+		
+		$elements = $doc->getElementsByTagName('principal');
+		
+		for($i=0; $i < $elements->length; $i++)
+		{
+			$element = $elements->item($i);
+			$login_name = $element->getElementsByTagName('login')->item(0)->nodeValue;
+			
+			if($login_name == $login) return true;
+		}
+		
+		return false;
+	}
 }
 
 ?>
