@@ -198,6 +198,7 @@ class AdobeConnect
 		
 		$doc = new \DOMDocument();
 		$doc->loadXML($response);
+		
 		$elements = $doc->getElementsByTagName('principal');
 		$element = $elements->item(0);
 
@@ -206,6 +207,33 @@ class AdobeConnect
 		return $principalId;
 	}
 	
+	/**
+	 * Get a principal ID by their login username
+	 * 
+	 * @param string $login
+	 * @return int $accountId
+	 */
+	public function getAccountIDByLogin($login)
+	{
+		$principalId = null;
+		$options = array(
+			'action'       => 'principal-list',
+			'filter-login' => $login
+		);
+		
+		$response = $this->sendCommand($options);
+		
+		$doc = new \DOMDocument();
+		$doc->loadXML($response);
+		
+		$elements = $doc->getElementsByTagName('principal');
+		$element = $elements->item(0);
+
+		if(!empty($element)) $accountId = $element->getAttribute('account-id');
+		
+		return $accountId;
+	}
+
 	/**
 	 * Return the course sco id
 	 * 
@@ -218,7 +246,6 @@ class AdobeConnect
 		);
 		
 		$response = $this->sendCommand($options);
-		
 		$doc = new \DOMDocument;
 		$doc->loadXML($response);
 		
@@ -277,15 +304,15 @@ class AdobeConnect
 		$options['filter-sco-id'] = $id;
 		
 		$response = $this->sendCommand($options);
-		
 		$doc = new \DOMDocument;
 		$doc->loadXML($response);
 		
-		$element = $doc->getElementsByTagName('sco')->item(0);
-		$sco_id = $element->getAttribute('sco-id');
+		if ($element = $doc->getElementsByTagName('sco')->item(0)){
+			$sco_id = $element->getAttribute('sco-id');
+			return $sco_id;
+		}
 		
-		
-		return $sco_id;
+		return false;
 	 }
 	 
 	 /**
@@ -321,18 +348,20 @@ class AdobeConnect
 	  */
 	public function enrollUserByIdAndLogin($id, $login)
 	{
-		$sco_id = $this->getCourseSCOIdByScoId($id);
-		$principal_id = $this->getPrincipalIDByLogin($login);
-		
-		$options = array();
-		$options['action'] = 'permissions-update';
-		$options['acl-id'] = $sco_id;
-		$options['principal-id'] = $principal_id;
-		$options['permission-id'] = 'view';
-		
-		$response = $this->sendCommand($options);
-		
-		return $response;
+		if ($sco_id = $this->getCourseSCOIdByScoId($id)) {
+			$principal_id = $this->getPrincipalIDByLogin($login);
+			
+			$options = array();
+			$options['action'] = 'permissions-update';
+			$options['acl-id'] = $sco_id;
+			$options['principal-id'] = $principal_id;
+			$options['permission-id'] = 'view';
+			
+			$response = $this->sendCommand($options);
+			
+			return $response;
+		}
+		return false;
 	}
 	 
 	/**
@@ -349,7 +378,6 @@ class AdobeConnect
 		$options['filter-permission-id'] = 'view';
 		
 		$response = $this->sendCommand($options);
-		
 		return $response;
 	}
 	
