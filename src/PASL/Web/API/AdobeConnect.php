@@ -370,12 +370,19 @@ class AdobeConnect
 	 * @param int $sco_id
 	 * @return XML $response
 	 */
-	public function getCourseInformation($sco_id)
+	public function getCourseInformation($sco_id, $full=false)
 	{
 		$options = array();
-		$options['action'] = 'permissions-info';
-		$options['acl-id'] = $sco_id;
-		$options['filter-permission-id'] = 'view';
+		if ($full !== true) {
+			$options['action'] = 'permissions-info';
+			$options['acl-id'] = $sco_id;
+			$options['filter-permission-id'] = 'view';
+		}
+		else {
+			$options['action'] = 'sco-expanded-contents';
+			$options['sco-id'] = $sco_id;
+			$options['depth']  = 0;
+		}
 		
 		$response = $this->sendCommand($options);
 		return $response;
