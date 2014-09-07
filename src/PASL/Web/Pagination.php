@@ -114,7 +114,7 @@ class Pagination extends Code
 		$PaginationInfo = Array();
 		for($i=$start_page; $i <= $end_page; $i++)
 		{
-			$Page = new stdClass;
+			$Page = new \stdClass;
 			$Page->Number = $i;
 			$Page->Selected = ($this->Page == $i) ? true : false;
 			$Page->GETQueryString = PASL_Data_GET::buildQueryString(array_merge( $this->PageQueryArray, Array(''.$this->GETVariableName.'' => $i)));
