@@ -1,10 +1,10 @@
 <?
-require_once('WebClient/DB.php');
-require_once('WebClient/Web/Template/Type/Code.php');
 require_once('PASL/Data/GET.php');
+require_once('PASL/Web/Template/Code.php');
 
+namespace PASL\Web;
 
-class WebClient_Web_Pagination extends WebClient_Web_Template_Type_Code
+class Pagination extends Code
 {
 	protected $PaddingLeft = 10;
 	protected $PaddingRight = 10;
@@ -20,7 +20,6 @@ class WebClient_Web_Pagination extends WebClient_Web_Template_Type_Code
 
 	public function __construct()
 	{
-		$this->SetTemplateFile('admin/pagination.phtml');
 		$this->Page = ($_GET[$this->GETVariableName]) ? $_GET[$this->GETVariableName] : $this->DefaultPage;
 	}
 
